@@ -1112,6 +1112,165 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
   0%   { opacity: 1; transform: translateY(0) rotate(0deg); }
   100% { opacity: 0; transform: translateY(-200px) rotate(360deg); }
 }
+
+/* LANGUAGE SWITCHER */
+.lang-switcher {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.lang-switcher button {
+  background: none;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Baloo 2', cursive;
+  color: #666;
+}
+.lang-switcher button:hover { border-color: #999; transform: scale(1.08); }
+.lang-switcher button.active { border-color: #1a1a2e; background: #1a1a2e; color: #fff; }
+
+.landing-lang-switcher {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 10002;
+}
+.app-lang-switcher {
+  position: fixed;
+  top: 12px;
+  right: 110px;
+  z-index: 100;
+}
+.app-lang-switcher button {
+  background: rgba(13,13,26,0.8);
+  border-color: var(--border);
+  color: var(--soft);
+}
+.app-lang-switcher button:hover { border-color: #4d96ff; color: #4d96ff; }
+.app-lang-switcher button.active { background: #4d96ff; border-color: #4d96ff; color: #fff; }
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 600px) {
+  body {
+    padding: 10px 6px 30px;
+  }
+  .chat-wrap {
+    width: calc(100% - 20px);
+    border-radius: 16px;
+  }
+  .messages {
+    max-height: calc(100vh - 280px);
+    min-height: 200px;
+    padding: 10px;
+  }
+  .vibes-label {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+  }
+  .vibe-btn {
+    min-width: 90px;
+    padding: 8px 10px;
+  }
+  .vibe-btn .vibe-emoji { font-size: 1.5rem; }
+  .vibe-btn .vibe-name { font-size: 0.85rem; }
+  .vibe-btn .vibe-sub { font-size: 0.65rem; }
+  .vibes {
+    gap: 6px;
+    max-width: 100%;
+  }
+  body.vibes-minimized .vibes {
+    position: fixed;
+    left: 0;
+    top: 70px;
+    transform: none;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 4px;
+    max-width: 100%;
+    width: 100%;
+    justify-content: center;
+    padding: 6px 4px;
+    background: rgba(13,13,26,0.92);
+    border-bottom: 1px solid var(--border);
+    z-index: 99;
+  }
+  body.vibes-minimized .vibe-btn {
+    padding: 6px 8px;
+    border-radius: 10px;
+  }
+  body.vibes-minimized .vibe-btn::after {
+    display: none;
+  }
+  .input-area {
+    padding: 10px;
+    gap: 6px;
+  }
+  .input-area input {
+    padding: 9px 14px;
+    font-size: 0.88rem;
+  }
+  .input-area button {
+    padding: 9px 14px;
+    font-size: 0.88rem;
+  }
+  #parentBtn {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+  }
+  .modal-box {
+    width: calc(100% - 24px);
+    padding: 22px 18px;
+  }
+  .modal-box h2 {
+    font-size: 1.4rem;
+  }
+  .parent-panel {
+    padding: 14px 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .parent-panel h2 {
+    font-size: 1.5rem;
+  }
+  .parent-toolbar {
+    gap: 6px;
+  }
+  .parent-toolbar .modal-btn {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+  .log-entry {
+    padding: 10px 12px;
+  }
+  .chat-header {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+  #vibeBanner {
+    font-size: 0.8rem;
+    padding: 6px 14px;
+  }
+  .app-lang-switcher {
+    right: 80px;
+    top: 10px;
+  }
+  .app-lang-switcher button {
+    padding: 2px 5px;
+    font-size: 0.6rem;
+  }
+  .landing-lang-switcher {
+    bottom: 10px;
+    right: 10px;
+  }
+  header img {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
 </style>
 </head>
 <body class="vibe-roblox">
@@ -1158,12 +1317,12 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
   </div>
   <div class="landing-right">
     <img src="claudozzo_text_transparent.png" alt="CLAUDOZZO" class="lr-title-img">
-    <p class="lr-tagline">Chat AI sicura e divertente per bambini 8-13 anni</p>
+    <p class="lr-tagline" data-i18n="lr_tagline">Chat AI sicura e divertente per bambini 8-13 anni</p>
 
     <div class="lr-divider"></div>
 
     <div class="lr-section">
-      <h3>5 personalità</h3>
+      <h3 data-i18n="lr_personalities">5 personalità</h3>
       <div class="lr-vibes">
         <span class="lr-vibe-chip" style="border-color:#00b4d8; color:#00b4d8">🎮 Roblox</span>
         <span class="lr-vibe-chip" style="border-color:#ff85a1; color:#ff85a1">🍩 Mochinut</span>
@@ -1174,18 +1333,18 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
     </div>
 
     <div class="lr-section">
-      <h3>Sicurezza integrata</h3>
+      <h3 data-i18n="lr_safety">Sicurezza integrata</h3>
       <div class="lr-safety">
-        <div class="lr-safety-item"><span class="safety-icon">&#9737;</span> Filtro automatico</div>
-        <div class="lr-safety-item"><span class="safety-icon">&#9919;</span> PIN genitori</div>
-        <div class="lr-safety-item"><span class="safety-icon">&#9776;</span> Cronologia chat</div>
-        <div class="lr-safety-item"><span class="safety-icon">&#10005;</span> Blocco contenuti</div>
+        <div class="lr-safety-item"><span class="safety-icon">&#9737;</span> <span data-i18n="lr_filter">Filtro automatico</span></div>
+        <div class="lr-safety-item"><span class="safety-icon">&#9919;</span> <span data-i18n="lr_pin">PIN genitori</span></div>
+        <div class="lr-safety-item"><span class="safety-icon">&#9776;</span> <span data-i18n="lr_history">Cronologia chat</span></div>
+        <div class="lr-safety-item"><span class="safety-icon">&#10005;</span> <span data-i18n="lr_block">Blocco contenuti</span></div>
       </div>
     </div>
 
     <div class="lr-section">
-      <h3>4 semplici passi</h3>
-      <div class="lr-steps">
+      <h3 data-i18n="lr_steps_title">4 semplici passi</h3>
+      <div class="lr-steps" data-i18n-html="lr_steps">
         1. Scegli la tua età<br>
         2. Imposta un PIN genitori<br>
         3. Scegli la personalità e chatta<br>
@@ -1193,15 +1352,16 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
       </div>
     </div>
 
-    <button class="lr-start-btn" onclick="startApp()">INIZIA</button>
+    <button class="lr-start-btn" onclick="startApp()" data-i18n="lr_start">INIZIA</button>
+    <div class="lang-switcher landing-lang-switcher" id="landingLangSwitcher"></div>
   </div>
 </div>
 
 <!-- AGE GATE -->
 <div class="modal-overlay hidden" id="ageGate">
   <div class="modal-box">
-    <h2>Ciao! Quanti anni hai?</h2>
-    <p>Claudozzo è pensato per ragazzi dagli 8 ai 13 anni. Seleziona la tua età per continuare!</p>
+    <h2 data-i18n="age_title">Ciao! Quanti anni hai?</h2>
+    <p data-i18n="age_desc">Claudozzo è pensato per ragazzi dagli 8 ai 13 anni. Seleziona la tua età per continuare!</p>
     <div class="age-options" id="ageOptions"></div>
     <div class="modal-error" id="ageError"></div>
   </div>
@@ -1210,13 +1370,13 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
 <!-- PIN SETUP (prima volta) -->
 <div class="modal-overlay hidden" id="pinSetup">
   <div class="modal-box">
-    <h2>Imposta PIN Genitori</h2>
-    <p>Crea un PIN a 4 cifre per il pannello genitori. Solo i genitori potranno vedere la cronologia chat.</p>
-    <input type="password" id="pinSetupInput" maxlength="4" placeholder="PIN a 4 cifre" pattern="[0-9]*" inputmode="numeric">
+    <h2 data-i18n="pin_setup_title">Imposta PIN Genitori</h2>
+    <p data-i18n="pin_setup_desc">Crea un PIN a 4 cifre per il pannello genitori. Solo i genitori potranno vedere la cronologia chat.</p>
+    <input type="password" id="pinSetupInput" maxlength="4" data-i18n-placeholder="pin_placeholder" placeholder="PIN a 4 cifre" pattern="[0-9]*" inputmode="numeric">
     <br>
-    <input type="password" id="pinSetupConfirm" maxlength="4" placeholder="Conferma PIN" pattern="[0-9]*" inputmode="numeric">
+    <input type="password" id="pinSetupConfirm" maxlength="4" data-i18n-placeholder="pin_confirm_placeholder" placeholder="Conferma PIN" pattern="[0-9]*" inputmode="numeric">
     <br>
-    <button class="modal-btn success" onclick="savePin()">SALVA PIN</button>
+    <button class="modal-btn success" onclick="savePin()" data-i18n="pin_save">SALVA PIN</button>
     <div class="modal-error" id="pinSetupError"></div>
   </div>
 </div>
@@ -1224,36 +1384,37 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
 <!-- PIN LOGIN (per pannello genitori) -->
 <div class="modal-overlay hidden" id="pinLogin">
   <div class="modal-box">
-    <h2>Accesso Genitori</h2>
-    <p>Inserisci il PIN a 4 cifre per accedere al pannello genitori.</p>
-    <input type="password" id="pinLoginInput" maxlength="4" placeholder="PIN" pattern="[0-9]*" inputmode="numeric" onkeydown="if(event.key==='Enter') checkPin()">
+    <h2 data-i18n="pin_login_title">Accesso Genitori</h2>
+    <p data-i18n="pin_login_desc">Inserisci il PIN a 4 cifre per accedere al pannello genitori.</p>
+    <input type="password" id="pinLoginInput" maxlength="4" data-i18n-placeholder="pin_login_placeholder" placeholder="PIN" pattern="[0-9]*" inputmode="numeric" onkeydown="if(event.key==='Enter') checkPin()">
     <br>
-    <button class="modal-btn" onclick="checkPin()">ENTRA</button>
-    <button class="modal-btn danger" onclick="closePinLogin()">ANNULLA</button>
+    <button class="modal-btn" onclick="checkPin()" data-i18n="pin_enter">ENTRA</button>
+    <button class="modal-btn danger" onclick="closePinLogin()" data-i18n="pin_cancel">ANNULLA</button>
     <div class="modal-error" id="pinLoginError"></div>
   </div>
 </div>
 
 <!-- PARENT PANEL -->
 <div class="parent-panel" id="parentPanel">
-  <h2>Pannello Genitori</h2>
-  <p class="subtitle">Cronologia completa delle chat del tuo bambino</p>
+  <h2 data-i18n="panel_title">Pannello Genitori</h2>
+  <p class="subtitle" data-i18n="panel_subtitle">Cronologia completa delle chat del tuo bambino</p>
   <div class="parent-toolbar">
-    <button class="modal-btn" onclick="closeParentPanel()">CHIUDI PANNELLO</button>
-    <button class="modal-btn danger" onclick="clearHistory()">CANCELLA CRONOLOGIA</button>
-    <button class="modal-btn danger" onclick="resetPin()">CAMBIA PIN</button>
+    <button class="modal-btn" onclick="closeParentPanel()" data-i18n="panel_close">CHIUDI PANNELLO</button>
+    <button class="modal-btn danger" onclick="clearHistory()" data-i18n="panel_clear">CANCELLA CRONOLOGIA</button>
+    <button class="modal-btn danger" onclick="resetPin()" data-i18n="panel_change_pin">CAMBIA PIN</button>
   </div>
   <div id="parentLog"></div>
 </div>
 
 <!-- PARENT BTN -->
-<button id="parentBtn" onclick="openParentPanel()">Genitori</button>
+<button id="parentBtn" onclick="openParentPanel()" data-i18n="parent_btn">Genitori</button>
+<div class="lang-switcher app-lang-switcher" id="appLangSwitcher"></div>
 
 <header style="position:fixed;top:12px;left:12px;z-index:100;text-align:left;margin:0;">
   <img src="claudozzo_mascot_v1.png" alt="Claudozzo" onclick="backToLanding()" style="width:50px;height:50px;border-radius:50%;border:3px solid #ff6b6b;box-shadow:0 0 15px rgba(255,107,107,0.3);cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
 </header>
 
-<div class="vibes-label">🎮 scegli la tua vibe 🎮</div>
+<div class="vibes-label" data-i18n="vibes_label">🎮 scegli la tua vibe 🎮</div>
 
 <div class="vibes">
   <button class="vibe-btn active" data-vibe="roblox" data-label="ROBLOX BRO" onclick="setVibe(this)">
@@ -1284,7 +1445,7 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
 </div>
 
 <div id="vibeBanner" style="--banner-glow:#00b4d888; color:#00b4d8;">
-  🎮 VIBE ATTIVA: <strong>ROBLOX BRO</strong>
+  🎮 <span data-i18n="vibe_active">VIBE ATTIVA:</span> <strong>ROBLOX BRO</strong>
 </div>
 
 <div class="chat-wrap" id="chatWrap">
@@ -1296,17 +1457,326 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
   <div class="messages" id="messages">
     <div class="welcome">
       <span class="big">🎮</span><br>
-      Yo bro! Scegli la vibe e chiedimi qualsiasi cosa!<br>
-      <strong style="color:#00b4d8">Non ho paura di nulla fr fr 💀</strong>
+      <span data-i18n="chat_welcome">Yo bro! Scegli la vibe e chiedimi qualsiasi cosa!</span><br>
+      <strong style="color:#00b4d8"><span data-i18n="chat_welcome_strong">Non ho paura di nulla fr fr</span> 💀</strong>
     </div>
   </div>
   <div class="input-area">
-    <input type="text" id="userInput" placeholder="scrivi qui bro... 💬" onkeydown="if(event.key==='Enter') send()" />
-    <button id="sendBtn" onclick="send()">INVIA 🚀</button>
+    <input type="text" id="userInput" data-i18n-placeholder="chat_placeholder" placeholder="scrivi qui bro..." onkeydown="if(event.key==='Enter') send()" />
+    <button id="sendBtn" onclick="send()" data-i18n="chat_send">INVIA</button>
   </div>
 </div>
 
 <script>
+// ==================== I18N - TRANSLATIONS ====================
+const translations = {
+  it: {
+    lr_tagline: "Chat AI sicura e divertente per bambini 8-13 anni",
+    lr_personalities: "5 personalità",
+    lr_safety: "Sicurezza integrata",
+    lr_filter: "Filtro automatico",
+    lr_pin: "PIN genitori",
+    lr_history: "Cronologia chat",
+    lr_block: "Blocco contenuti",
+    lr_steps_title: "4 semplici passi",
+    lr_steps: "1. Scegli la tua età<br>2. Imposta un PIN genitori<br>3. Scegli la personalità e chatta<br>4. Controlla tutto dal pannello Genitori",
+    lr_start: "INIZIA",
+    age_title: "Ciao! Quanti anni hai?",
+    age_desc: "Claudozzo è pensato per ragazzi dagli 8 ai 13 anni. Seleziona la tua età per continuare!",
+    age_under: "Meno di 8",
+    age_8_10: "8-10 anni",
+    age_11_13: "11-13 anni",
+    age_over: "Più di 13",
+    age_parent: "Sono un genitore",
+    age_error: "Mi dispiace! Claudozzo è per ragazzi dagli 8 anni in su. Chiedi a un genitore!",
+    pin_setup_title: "Imposta PIN Genitori",
+    pin_setup_desc: "Crea un PIN a 4 cifre per il pannello genitori. Solo i genitori potranno vedere la cronologia chat.",
+    pin_placeholder: "PIN a 4 cifre",
+    pin_confirm_placeholder: "Conferma PIN",
+    pin_save: "SALVA PIN",
+    pin_error_4digits: "Il PIN deve essere di 4 cifre!",
+    pin_error_match: "I PIN non corrispondono!",
+    pin_login_title: "Accesso Genitori",
+    pin_login_desc: "Inserisci il PIN a 4 cifre per accedere al pannello genitori.",
+    pin_login_placeholder: "PIN",
+    pin_enter: "ENTRA",
+    pin_cancel: "ANNULLA",
+    pin_wrong: "PIN errato!",
+    panel_title: "Pannello Genitori",
+    panel_subtitle: "Cronologia completa delle chat del tuo bambino",
+    panel_close: "CHIUDI PANNELLO",
+    panel_clear: "CANCELLA CRONOLOGIA",
+    panel_change_pin: "CAMBIA PIN",
+    panel_empty: "Nessuna chat ancora. La cronologia apparirà qui quando il bambino inizierà a chattare.",
+    panel_blocked: "BLOCCATO - Contenuto inappropriato rilevato",
+    panel_confirm_clear: "Sei sicuro di voler cancellare tutta la cronologia?",
+    panel_confirm_pin: "Vuoi cambiare il PIN genitori?",
+    parent_btn: "Genitori",
+    vibes_label: "🎮 scegli la tua vibe 🎮",
+    chat_placeholder: "scrivi qui bro...",
+    chat_send: "INVIA",
+    chat_welcome: "Yo bro! Scegli la vibe e chiedimi qualsiasi cosa!",
+    chat_welcome_strong: "Non ho paura di nulla fr fr",
+    chat_blocked_warning: "Ehi bro, questo messaggio contiene parole che non vanno bene. Proviamo a essere più gentili!",
+    chat_error: "Errore! Riprova fra un attimo!",
+    vibe_changed: "Vibe cambiata! Ora sono in modalità",
+    vibe_ask: "Chiedimi qualsiasi cosa bro!",
+    vibe_active: "VIBE ATTIVA:",
+    vibe_sub_roblox: "💎 fr fr no cap<br>🏆 skill issue bro",
+    vibe_sub_mochinut: "🦄 uwu bestie<br>🧋 so cute aesthetic",
+    vibe_sub_brainrot: "🍌 bombardiro croco<br>🌍 tralalelo tralala",
+    vibe_sub_minecraft: "🌲 mina e crafta<br>🐄 attento al creeper",
+    vibe_sub_anime: "💫 sugoi nakama~<br>🌸 nani?! dramma pure",
+  },
+  en: {
+    lr_tagline: "Safe and fun AI chat for kids aged 8-13",
+    lr_personalities: "5 personalities",
+    lr_safety: "Built-in safety",
+    lr_filter: "Auto filter",
+    lr_pin: "Parent PIN",
+    lr_history: "Chat history",
+    lr_block: "Content blocking",
+    lr_steps_title: "4 simple steps",
+    lr_steps: "1. Choose your age<br>2. Set a parent PIN<br>3. Pick a personality and chat<br>4. Monitor everything from the Parents panel",
+    lr_start: "START",
+    age_title: "Hi! How old are you?",
+    age_desc: "Claudozzo is designed for kids aged 8 to 13. Select your age to continue!",
+    age_under: "Under 8",
+    age_8_10: "8-10 years",
+    age_11_13: "11-13 years",
+    age_over: "Over 13",
+    age_parent: "I'm a parent",
+    age_error: "Sorry! Claudozzo is for kids 8 and older. Ask a parent!",
+    pin_setup_title: "Set Parent PIN",
+    pin_setup_desc: "Create a 4-digit PIN for the parent panel. Only parents can see the chat history.",
+    pin_placeholder: "4-digit PIN",
+    pin_confirm_placeholder: "Confirm PIN",
+    pin_save: "SAVE PIN",
+    pin_error_4digits: "PIN must be 4 digits!",
+    pin_error_match: "PINs do not match!",
+    pin_login_title: "Parent Access",
+    pin_login_desc: "Enter the 4-digit PIN to access the parent panel.",
+    pin_login_placeholder: "PIN",
+    pin_enter: "ENTER",
+    pin_cancel: "CANCEL",
+    pin_wrong: "Wrong PIN!",
+    panel_title: "Parent Panel",
+    panel_subtitle: "Full chat history of your child",
+    panel_close: "CLOSE PANEL",
+    panel_clear: "CLEAR HISTORY",
+    panel_change_pin: "CHANGE PIN",
+    panel_empty: "No chats yet. History will appear here when your child starts chatting.",
+    panel_blocked: "BLOCKED - Inappropriate content detected",
+    panel_confirm_clear: "Are you sure you want to clear all history?",
+    panel_confirm_pin: "Do you want to change the parent PIN?",
+    parent_btn: "Parents",
+    vibes_label: "🎮 choose your vibe 🎮",
+    chat_placeholder: "type here bro...",
+    chat_send: "SEND",
+    chat_welcome: "Yo bro! Pick a vibe and ask me anything!",
+    chat_welcome_strong: "I'm not afraid of anything fr fr",
+    chat_blocked_warning: "Hey bro, this message contains words that aren't ok. Let's be nicer!",
+    chat_error: "Error! Try again in a moment!",
+    vibe_changed: "Vibe changed! Now I'm in mode",
+    vibe_ask: "Ask me anything bro!",
+    vibe_active: "ACTIVE VIBE:",
+    vibe_sub_roblox: "💎 fr fr no cap<br>🏆 skill issue bro",
+    vibe_sub_mochinut: "🦄 uwu bestie<br>🧋 so cute aesthetic",
+    vibe_sub_brainrot: "🍌 bombardiro croco<br>🌍 tralalelo tralala",
+    vibe_sub_minecraft: "🌲 mine & craft<br>🐄 watch the creeper",
+    vibe_sub_anime: "💫 sugoi nakama~<br>🌸 nani?! drama too",
+  },
+  da: {
+    lr_tagline: "Sikker og sjov AI-chat for børn 8-13 år",
+    lr_personalities: "5 personligheder",
+    lr_safety: "Indbygget sikkerhed",
+    lr_filter: "Automatisk filter",
+    lr_pin: "Forældre-PIN",
+    lr_history: "Chathistorik",
+    lr_block: "Indholdsblokering",
+    lr_steps_title: "4 enkle trin",
+    lr_steps: "1. Vælg din alder<br>2. Indstil en forældre-PIN<br>3. Vælg personlighed og chat<br>4. Overvåg alt fra forældrepanelet",
+    lr_start: "START",
+    age_title: "Hej! Hvor gammel er du?",
+    age_desc: "Claudozzo er lavet til børn fra 8 til 13 år. Vælg din alder for at fortsætte!",
+    age_under: "Under 8",
+    age_8_10: "8-10 år",
+    age_11_13: "11-13 år",
+    age_over: "Over 13",
+    age_parent: "Jeg er forælder",
+    age_error: "Beklager! Claudozzo er for børn fra 8 år og op. Spørg en forælder!",
+    pin_setup_title: "Indstil forældre-PIN",
+    pin_setup_desc: "Opret en 4-cifret PIN til forældrepanelet. Kun forældre kan se chathistorikken.",
+    pin_placeholder: "4-cifret PIN",
+    pin_confirm_placeholder: "Bekræft PIN",
+    pin_save: "GEM PIN",
+    pin_error_4digits: "PIN skal være 4 cifre!",
+    pin_error_match: "PIN-koderne matcher ikke!",
+    pin_login_title: "Forældreadgang",
+    pin_login_desc: "Indtast 4-cifret PIN for at få adgang til forældrepanelet.",
+    pin_login_placeholder: "PIN",
+    pin_enter: "ENTER",
+    pin_cancel: "ANNULLER",
+    pin_wrong: "Forkert PIN!",
+    panel_title: "Forældrepanel",
+    panel_subtitle: "Komplet chathistorik for dit barn",
+    panel_close: "LUK PANEL",
+    panel_clear: "SLET HISTORIK",
+    panel_change_pin: "SKIFT PIN",
+    panel_empty: "Ingen chats endnu. Historikken vises her, når dit barn begynder at chatte.",
+    panel_blocked: "BLOKERET - Upassende indhold registreret",
+    panel_confirm_clear: "Er du sikker på, at du vil slette al historik?",
+    panel_confirm_pin: "Vil du ændre forældre-PIN?",
+    parent_btn: "Forældre",
+    vibes_label: "🎮 vælg din vibe 🎮",
+    chat_placeholder: "skriv her bro...",
+    chat_send: "SEND",
+    chat_welcome: "Yo bro! Vælg en vibe og spørg mig om hvad som helst!",
+    chat_welcome_strong: "Jeg er ikke bange for noget fr fr",
+    chat_blocked_warning: "Hey bro, denne besked indeholder ord, der ikke er ok. Lad os være pænere!",
+    chat_error: "Fejl! Prøv igen om et øjeblik!",
+    vibe_changed: "Vibe ændret! Nu er jeg i tilstand",
+    vibe_ask: "Spørg mig om hvad som helst bro!",
+    vibe_active: "AKTIV VIBE:",
+    vibe_sub_roblox: "💎 fr fr no cap<br>🏆 skill issue bro",
+    vibe_sub_mochinut: "🦄 uwu bestie<br>🧋 so cute æstetisk",
+    vibe_sub_brainrot: "🍌 bombardiro croco<br>🌍 tralalelo tralala",
+    vibe_sub_minecraft: "🌲 min & craft<br>🐄 pas på creeperen",
+    vibe_sub_anime: "💫 sugoi nakama~<br>🌸 nani?! drama også",
+  },
+  sv: {
+    lr_tagline: "Säker och rolig AI-chatt för barn 8-13 år",
+    lr_personalities: "5 personligheter",
+    lr_safety: "Inbyggd säkerhet",
+    lr_filter: "Automatiskt filter",
+    lr_pin: "Föräldra-PIN",
+    lr_history: "Chatthistorik",
+    lr_block: "Innehållsblockering",
+    lr_steps_title: "4 enkla steg",
+    lr_steps: "1. Välj din ålder<br>2. Ställ in en föräldra-PIN<br>3. Välj personlighet och chatta<br>4. Övervaka allt från föräldrapanelen",
+    lr_start: "STARTA",
+    age_title: "Hej! Hur gammal är du?",
+    age_desc: "Claudozzo är gjort för barn 8 till 13 år. Välj din ålder för att fortsätta!",
+    age_under: "Under 8",
+    age_8_10: "8-10 år",
+    age_11_13: "11-13 år",
+    age_over: "Över 13",
+    age_parent: "Jag är förälder",
+    age_error: "Tyvärr! Claudozzo är för barn från 8 år och uppåt. Fråga en förälder!",
+    pin_setup_title: "Ställ in föräldra-PIN",
+    pin_setup_desc: "Skapa en 4-siffrig PIN för föräldrapanelen. Bara föräldrar kan se chatthistoriken.",
+    pin_placeholder: "4-siffrig PIN",
+    pin_confirm_placeholder: "Bekräfta PIN",
+    pin_save: "SPARA PIN",
+    pin_error_4digits: "PIN måste vara 4 siffror!",
+    pin_error_match: "PIN-koderna matchar inte!",
+    pin_login_title: "Föräldraåtkomst",
+    pin_login_desc: "Ange 4-siffrig PIN för att komma åt föräldrapanelen.",
+    pin_login_placeholder: "PIN",
+    pin_enter: "ÖPPNA",
+    pin_cancel: "AVBRYT",
+    pin_wrong: "Fel PIN!",
+    panel_title: "Föräldrapanel",
+    panel_subtitle: "Komplett chatthistorik för ditt barn",
+    panel_close: "STÄNG PANEL",
+    panel_clear: "RENSA HISTORIK",
+    panel_change_pin: "ÄNDRA PIN",
+    panel_empty: "Inga chattar ännu. Historiken visas här när ditt barn börjar chatta.",
+    panel_blocked: "BLOCKERAD - Olämpligt innehåll upptäckt",
+    panel_confirm_clear: "Är du säker på att du vill rensa all historik?",
+    panel_confirm_pin: "Vill du ändra föräldra-PIN?",
+    parent_btn: "Föräldrar",
+    vibes_label: "🎮 välj din vibe 🎮",
+    chat_placeholder: "skriv här bro...",
+    chat_send: "SKICKA",
+    chat_welcome: "Yo bro! Välj en vibe och fråga mig vad som helst!",
+    chat_welcome_strong: "Jag är inte rädd för nåt fr fr",
+    chat_blocked_warning: "Hej bro, det här meddelandet innehåller ord som inte är ok. Låt oss vara snällare!",
+    chat_error: "Fel! Försök igen om en stund!",
+    vibe_changed: "Vibe ändrad! Nu är jag i läge",
+    vibe_ask: "Fråga mig vad som helst bro!",
+    vibe_active: "AKTIV VIBE:",
+    vibe_sub_roblox: "💎 fr fr no cap<br>🏆 skill issue bro",
+    vibe_sub_mochinut: "🦄 uwu bestie<br>🧋 so cute estetik",
+    vibe_sub_brainrot: "🍌 bombardiro croco<br>🌍 tralalelo tralala",
+    vibe_sub_minecraft: "🌲 bryt & crafta<br>🐄 akta creepern",
+    vibe_sub_anime: "💫 sugoi nakama~<br>🌸 nani?! drama med",
+  }
+};
+
+let currentLang = 'it';
+
+function detectLanguage() {
+  const saved = localStorage.getItem('claudozzo_lang');
+  if (saved && translations[saved]) return saved;
+  const nav = (navigator.language || 'it').toLowerCase().split('-')[0];
+  if (translations[nav]) return nav;
+  return 'it';
+}
+
+function t(key) {
+  return (translations[currentLang] && translations[currentLang][key]) || (translations.it[key]) || key;
+}
+
+function applyLanguage(lang) {
+  if (!translations[lang]) lang = 'it';
+  currentLang = lang;
+  localStorage.setItem('claudozzo_lang', lang);
+  document.documentElement.lang = lang;
+
+  // Apply data-i18n text
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.getAttribute('data-i18n'));
+  });
+  // Apply data-i18n-html (innerHTML)
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    el.innerHTML = t(el.getAttribute('data-i18n-html'));
+  });
+  // Apply data-i18n-placeholder
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+  });
+
+  // Update vibe sub-labels
+  const vibeSubMap = {
+    roblox: 'vibe_sub_roblox',
+    mochinut: 'vibe_sub_mochinut',
+    brainrot: 'vibe_sub_brainrot',
+    minecraft: 'vibe_sub_minecraft',
+    anime: 'vibe_sub_anime'
+  };
+  document.querySelectorAll('.vibe-btn').forEach(btn => {
+    const vibe = btn.dataset.vibe;
+    if (vibe && vibeSubMap[vibe]) {
+      const sub = btn.querySelector('.vibe-sub');
+      if (sub) sub.innerHTML = t(vibeSubMap[vibe]);
+    }
+  });
+
+  // Update lang switcher active states
+  document.querySelectorAll('.lang-switcher button').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+}
+
+function buildLangSwitchers() {
+  const langs = ['it','en','da','sv'];
+  const labels = { it:'IT', en:'EN', da:'DA', sv:'SV' };
+  ['landingLangSwitcher','appLangSwitcher'].forEach(id => {
+    const container = document.getElementById(id);
+    if (!container) return;
+    container.innerHTML = '';
+    langs.forEach(l => {
+      const btn = document.createElement('button');
+      btn.textContent = labels[l];
+      btn.dataset.lang = l;
+      btn.className = (l === currentLang) ? 'active' : '';
+      btn.onclick = () => applyLanguage(l);
+      container.appendChild(btn);
+    });
+  });
+}
+
 // ==================== FILTRO CONTENUTI ====================
 const blockedWords = [
   // parolacce italiane
@@ -1359,16 +1829,16 @@ function initAgeGate() {
   const container = document.getElementById('ageOptions');
   if (container.children.length > 0) return;
   const ranges = [
-    { label: 'Meno di 8', value: 'under', emoji: '👶' },
-    { label: '8-10 anni', value: '8-10', emoji: '🧒' },
-    { label: '11-13 anni', value: '11-13', emoji: '😎' },
-    { label: 'Più di 13', value: 'over', emoji: '🧑' },
-    { label: 'Sono un genitore', value: 'parent', emoji: '👨‍👩‍👧' }
+    { key: 'age_under', value: 'under', emoji: '👶' },
+    { key: 'age_8_10', value: '8-10', emoji: '🧒' },
+    { key: 'age_11_13', value: '11-13', emoji: '😎' },
+    { key: 'age_over', value: 'over', emoji: '🧑' },
+    { key: 'age_parent', value: 'parent', emoji: '👨‍👩‍👧' }
   ];
   ranges.forEach(r => {
     const btn = document.createElement('button');
     btn.className = 'age-btn';
-    btn.textContent = `${r.emoji} ${r.label}`;
+    btn.textContent = `${r.emoji} ${t(r.key)}`;
     btn.onclick = () => selectAge(r.value);
     container.appendChild(btn);
   });
@@ -1377,7 +1847,7 @@ function initAgeGate() {
 function selectAge(value) {
   const err = document.getElementById('ageError');
   if (value === 'under') {
-    err.textContent = 'Mi dispiace! Claudozzo è per ragazzi dagli 8 anni in su. Chiedi a un genitore!';
+    err.textContent = t('age_error');
     return;
   }
   if (value === 'over') {
@@ -1402,11 +1872,11 @@ function savePin() {
   const err = document.getElementById('pinSetupError');
 
   if (!/^\d{4}$/.test(pin)) {
-    err.textContent = 'Il PIN deve essere di 4 cifre!';
+    err.textContent = t('pin_error_4digits');
     return;
   }
   if (pin !== confirm) {
-    err.textContent = 'I PIN non corrispondono!';
+    err.textContent = t('pin_error_match');
     return;
   }
   localStorage.setItem('claudozzo_pin', pin);
@@ -1432,7 +1902,7 @@ function checkPin() {
     document.getElementById('pinLogin').classList.add('hidden');
     showParentPanel();
   } else {
-    document.getElementById('pinLoginError').textContent = 'PIN errato!';
+    document.getElementById('pinLoginError').textContent = t('pin_wrong');
   }
 }
 
@@ -1446,7 +1916,7 @@ function showParentPanel() {
   const log = getChatLog();
 
   if (log.length === 0) {
-    logDiv.innerHTML = '<div class="empty-log">Nessuna chat ancora. La cronologia apparirà qui quando il bambino inizierà a chattare.</div>';
+    logDiv.innerHTML = '<div class="empty-log">' + t('panel_empty') + '</div>';
   } else {
     logDiv.innerHTML = log.slice().reverse().map(entry => {
       const date = new Date(entry.time);
@@ -1455,7 +1925,7 @@ function showParentPanel() {
         return `<div class="log-entry">
           <div class="log-meta"><span>${entry.vibe || '?'}</span><span>${timeStr}</span></div>
           <div class="log-user">Bambino: ${escapeHtml(entry.user)}</div>
-          <div class="log-blocked">BLOCCATO - Contenuto inappropriato rilevato</div>
+          <div class="log-blocked">${t('panel_blocked')}</div>
         </div>`;
       }
       return `<div class="log-entry">
@@ -1473,14 +1943,14 @@ function closeParentPanel() {
 }
 
 function clearHistory() {
-  if (confirm('Sei sicuro di voler cancellare tutta la cronologia?')) {
+  if (confirm(t('panel_confirm_clear'))) {
     localStorage.removeItem('claudozzo_log');
     showParentPanel();
   }
 }
 
 function resetPin() {
-  if (confirm('Vuoi cambiare il PIN genitori?')) {
+  if (confirm(t('panel_confirm_pin'))) {
     localStorage.removeItem('claudozzo_pin');
     document.getElementById('parentPanel').classList.remove('open');
     document.getElementById('pinSetup').classList.remove('hidden');
@@ -1551,7 +2021,10 @@ function switchDevice(device) {
   }
 }
 
-// Init on load
+// Init i18n + landing
+currentLang = detectLanguage();
+buildLangSwitchers();
+applyLanguage(currentLang);
 initLanding();
 
 // ==================== VIBES ====================
@@ -1651,7 +2124,7 @@ function setVibe(btn) {
   const banner = document.getElementById('vibeBanner');
   banner.style.setProperty('--banner-glow', v.glow);
   banner.style.color = v.color;
-  banner.innerHTML = `${v.emoji} VIBE ATTIVA: <strong>${v.label}</strong>`;
+  banner.innerHTML = `${v.emoji} ${t('vibe_active')} <strong>${v.label}</strong>`;
 
   // Update chat title
   document.getElementById('chatTitle').textContent = v.title;
@@ -1660,8 +2133,8 @@ function setVibe(btn) {
   const msgs = document.getElementById('messages');
   msgs.innerHTML = `<div class="welcome">
     <span class="big" style="animation:none;display:inline-block">${v.emoji}</span><br>
-    <span style="color:${v.color};font-weight:700">Vibe cambiata! Ora sono in modalità ${v.label}</span><br>
-    <span style="color:var(--soft)">Chiedimi qualsiasi cosa bro! 🔥</span>
+    <span style="color:${v.color};font-weight:700">${t('vibe_changed')} ${v.label}</span><br>
+    <span style="color:var(--soft)">${t('vibe_ask')} 🔥</span>
   </div>`;
 
   // Spawn particles
@@ -1749,7 +2222,7 @@ async function send() {
     saveChatEntry({ vibe: currentVibe, user: text, blocked: true });
     const warn = document.createElement('div');
     warn.className = 'blocked-warning';
-    warn.textContent = "Ehi bro, questo messaggio contiene parole che non vanno bene. Proviamo a essere più gentili! 💛";
+    warn.textContent = t('chat_blocked_warning') + " 💛";
     msgs.appendChild(warn);
     msgs.scrollTop = msgs.scrollHeight;
     isLoading = false;
@@ -1801,7 +2274,7 @@ async function send() {
     loading.remove();
     const errMsg = document.createElement('div');
     errMsg.className = 'msg ai';
-    errMsg.textContent = "Errore! Riprova fra un attimo!";
+    errMsg.textContent = t('chat_error');
     msgs.appendChild(errMsg);
   }
 
