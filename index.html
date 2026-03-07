@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="claudozzo_mascot_v1.png">
+<title>CLAUDOZZO - La Chat dei Bro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Boogaloo&family=Baloo+2:wght@400;600;700;800&display=swap');
+
+:root {
+  --bg: #ffd700;
+  --card: rgba(13, 13, 26, 0.88);
+  --border: #2a2a4a;
+  --text: #f0f0ff;
+  --soft: #9090bb;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Baloo 2', cursive;
+  background: var(--bg);
+  background-image: url('sfondo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 12px 40px;
+  overflow-x: hidden;
+}
+
+/* OVERLAY per leggibilità sullo sfondo */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* HEADER */
+@keyframes rainbow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* VIBE SELECTOR */
+.vibes-label {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.2rem;
+  text-align: center;
+  color: #fff;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+.vibes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  max-width: 720px;
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.vibe-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  min-width: 120px;
+  font-family: 'Baloo 2', cursive;
+  overflow: hidden;
+}
+
+.vibe-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.vibe-btn:hover { transform: translateY(-4px) scale(1.04); }
+
+.vibe-btn.active {
+  transform: translateY(-4px) scale(1.06);
+  box-shadow: 0 0 24px var(--glow, #ff6b6b88);
+}
+
+/* Per ogni vibe */
+.vibe-btn[data-vibe="roblox"] { --glow: #00b4d888; }
+.vibe-btn[data-vibe="roblox"].active { border-color: #00b4d8; background: #001f2e; }
+
+.vibe-btn[data-vibe="mochinut"] { --glow: #ff85a188; }
+.vibe-btn[data-vibe="mochinut"].active { border-color: #ff85a1; background: #2e0013; }
+
+.vibe-btn[data-vibe="brainrot"] { --glow: #ffd93d88; }
+.vibe-btn[data-vibe="brainrot"].active { border-color: #ffd93d; background: #1a1200; }
+
+.vibe-btn[data-vibe="minecraft"] { --glow: #6bcb7788; }
+.vibe-btn[data-vibe="minecraft"].active { border-color: #6bcb77; background: #001a05; }
+
+.vibe-btn[data-vibe="anime"] { --glow: #c77dff88; }
+.vibe-btn[data-vibe="anime"].active { border-color: #c77dff; background: #1a002e; }
+
+.vibe-btn .vibe-emoji { font-size: 2rem; line-height: 1; transition: font-size 0.4s; }
+.vibe-btn .vibe-name { font-family: 'Boogaloo', cursive; font-size: 1rem; color: var(--text); transition: font-size 0.4s; }
+.vibe-btn .vibe-sub { font-size: 0.72rem; color: var(--soft); font-weight: 600; text-align: center; transition: all 0.4s; }
+
+/* VIBES MINIMIZED - sidebar left */
+body.vibes-minimized .vibes-label { display: none; }
+body.vibes-minimized #vibeBanner { display: none; }
+
+body.vibes-minimized .vibes {
+  position: fixed;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 6px;
+  max-width: 60px;
+  width: auto;
+  margin: 0;
+  z-index: 100;
+}
+
+body.vibes-minimized .vibe-btn {
+  min-width: unset;
+  padding: 8px 10px;
+  border-radius: 12px;
+  opacity: 0.5;
+  transform: scale(0.9);
+}
+
+body.vibes-minimized .vibe-btn .vibe-emoji { font-size: 1.2rem; }
+body.vibes-minimized .vibe-btn .vibe-name { font-size: 0; height: 0; overflow: hidden; }
+body.vibes-minimized .vibe-btn .vibe-sub { font-size: 0; height: 0; overflow: hidden; margin: 0; padding: 0; }
+
+body.vibes-minimized .vibe-btn:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
+}
+
+body.vibes-minimized .vibe-btn.active {
+  opacity: 1;
+  transform: scale(1.12);
+  box-shadow: 0 0 18px var(--glow, #ff6b6b88);
+}
+
+/* Tooltip on hover for minimized vibes */
+body.vibes-minimized .vibe-btn::after {
+  content: attr(data-label);
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(13,13,26,0.95);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-family: 'Boogaloo', cursive;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+body.vibes-minimized .vibe-btn:hover::after {
+  opacity: 1;
+}
+
+/* ACTIVE VIBE BANNER */
+#vibeBanner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  border: 2px solid #2a2a4a;
+  background: var(--card);
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s;
+  animation: pulse-banner 2s infinite;
+}
+
+@keyframes pulse-banner {
+  0%, 100% { box-shadow: 0 0 8px var(--banner-glow, #ff6b6b44); }
+  50%       { box-shadow: 0 0 20px var(--banner-glow, #ff6b6b88); }
+}
+
+/* CHAT BOX */
+.chat-wrap {
+  width: 100%;
+  max-width: 680px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+.chat-header {
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.1rem;
+  transition: background 0.4s;
+}
+
+.chat-header .status {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #6bcb77;
+  box-shadow: 0 0 8px #6bcb77;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.messages {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 300px;
+  max-height: 360px;
+  overflow-y: auto;
+  background: rgba(10, 10, 22, 0.92);
+}
+
+.messages::-webkit-scrollbar { width: 4px; }
+.messages::-webkit-scrollbar-track { background: transparent; }
+.messages::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 4px; }
+
+.msg {
+  max-width: 82%;
+  padding: 10px 15px;
+  border-radius: 18px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  animation: msgIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  word-break: break-word;
+}
+
+@keyframes msgIn {
+  from { opacity: 0; transform: scale(0.85) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.msg.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #4d96ff, #5e60ce);
+  color: white;
+  border-bottom-right-radius: 4px;
+  font-weight: 600;
+}
+
+.msg.ai {
+  align-self: flex-start;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-bottom-left-radius: 4px;
+  color: var(--text);
+  transition: border-color 0.4s;
+}
+
+.msg.loading {
+  align-self: flex-start;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-bottom-left-radius: 4px;
+  padding: 14px 18px;
+}
+
+.dots span {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--soft);
+  margin: 0 2px;
+  animation: bounce 1.2s infinite;
+}
+.dots span:nth-child(2) { animation-delay: 0.2s; }
+.dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%,60%,100% { transform: translateY(0); }
+  30% { transform: translateY(-7px); }
+}
+
+/* WELCOME */
+.welcome {
+  text-align: center;
+  color: var(--soft);
+  font-size: 0.9rem;
+  padding: 40px 16px;
+}
+.welcome .big { font-size: 3rem; display: block; margin-bottom: 10px; animation: spin 3s linear infinite; display: inline-block; }
+
+@keyframes spin {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* INPUT */
+.input-area {
+  display: flex;
+  gap: 8px;
+  padding: 14px;
+  border-top: 2px solid var(--border);
+  background: var(--card);
+}
+
+.input-area input {
+  flex: 1;
+  background: rgba(10, 10, 22, 0.92);
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  padding: 11px 18px;
+  font-size: 0.95rem;
+  font-family: 'Baloo 2', cursive;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.input-area input:focus { border-color: #4d96ff; }
+.input-area input::placeholder { color: var(--soft); }
+
+.input-area button {
+  background: linear-gradient(135deg, #4d96ff, #5e60ce);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 11px 20px;
+  font-size: 1rem;
+  font-family: 'Boogaloo', cursive;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 1px;
+}
+
+.input-area button:hover:not(:disabled) { transform: scale(1.06); filter: brightness(1.2); }
+.input-area button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* VIBE COLORS per chat */
+body.vibe-roblox { background-image: url('sfondo-roblox.svg'); }
+body.vibe-roblox .chat-wrap { border-color: #00b4d8; box-shadow: 0 8px 40px #00b4d822; }
+body.vibe-roblox .chat-header { background: linear-gradient(135deg, #001f2e, #003a55); }
+body.vibe-roblox .msg.ai { border-color: #00b4d844; }
+body.vibe-roblox .input-area button { background: linear-gradient(135deg, #00b4d8, #0077b6); }
+
+body.vibe-mochinut { background-image: url('sfondo-mochinut.svg'); }
+body.vibe-mochinut .chat-wrap { border-color: #ff85a1; box-shadow: 0 8px 40px #ff85a122; }
+body.vibe-mochinut .chat-header { background: linear-gradient(135deg, #2e0013, #5a0028); }
+body.vibe-mochinut .msg.ai { border-color: #ff85a144; }
+body.vibe-mochinut .input-area button { background: linear-gradient(135deg, #ff85a1, #c9184a); }
+
+body.vibe-brainrot { background-image: url('sfondo-brainrot.svg'); }
+body.vibe-brainrot .chat-wrap { border-color: #ffd93d; box-shadow: 0 8px 40px #ffd93d22; }
+body.vibe-brainrot .chat-header { background: linear-gradient(135deg, #1a1200, #332500); }
+body.vibe-brainrot .msg.ai { border-color: #ffd93d44; }
+body.vibe-brainrot .input-area button { background: linear-gradient(135deg, #ffd93d, #f4a261); color: #000; }
+
+body.vibe-minecraft { background-image: url('sfondo-minecraft.svg'); }
+body.vibe-minecraft .chat-wrap { border-color: #6bcb77; box-shadow: 0 8px 40px #6bcb7722; }
+body.vibe-minecraft .chat-header { background: linear-gradient(135deg, #001a05, #003a10); }
+body.vibe-minecraft .msg.ai { border-color: #6bcb7744; }
+body.vibe-minecraft .input-area button { background: linear-gradient(135deg, #6bcb77, #2d6a4f); }
+
+body.vibe-anime { background-image: url('sfondo-anime.svg'); }
+body.vibe-anime .chat-wrap { border-color: #c77dff; box-shadow: 0 8px 40px #c77dff22; }
+body.vibe-anime .chat-header { background: linear-gradient(135deg, #1a002e, #35005a); }
+body.vibe-anime .msg.ai { border-color: #c77dff44; }
+body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff, #7b2d8b); }
+
+/* LANDING PAGE */
+#landingPage {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  background: #ffffff;
+  color: #222;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: row;
+  font-family: 'Baloo 2', cursive;
+}
+
+#landingPage.hidden { display: none; }
+
+/* LEFT: video in phone mockup */
+.landing-left {
+  flex: 1;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  perspective: 1200px;
+}
+
+.phone-mockup {
+  position: relative;
+  width: 280px;
+  height: 570px;
+  background: linear-gradient(145deg, #2c2c2c, #1a1a1a, #0d0d0d);
+  border-radius: 44px;
+  padding: 14px;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.3),
+    0 10px 25px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -1px 0 rgba(0,0,0,0.3);
+  border: 1px solid #3a3a3a;
+  transform: rotateY(-8deg) rotateX(4deg) rotateZ(-2deg);
+  transition: transform 0.4s ease;
+  animation: phoneFloat 4s ease-in-out infinite;
+}
+
+.phone-mockup:hover {
+  transform: rotateY(-3deg) rotateX(2deg) rotateZ(-1deg);
+}
+
+@keyframes phoneFloat {
+  0%, 100% { transform: rotateY(-8deg) rotateX(4deg) rotateZ(-2deg) translateY(0); }
+  50% { transform: rotateY(-8deg) rotateX(4deg) rotateZ(-2deg) translateY(-12px); }
+}
+
+/* Side buttons */
+.phone-mockup .phone-btn-right {
+  position: absolute;
+  right: -2px;
+  top: 120px;
+  width: 3px;
+  height: 50px;
+  background: linear-gradient(180deg, #3a3a3a, #1a1a1a);
+  border-radius: 0 2px 2px 0;
+}
+
+.phone-mockup .phone-btn-left1 {
+  position: absolute;
+  left: -2px;
+  top: 100px;
+  width: 3px;
+  height: 28px;
+  background: linear-gradient(180deg, #3a3a3a, #1a1a1a);
+  border-radius: 2px 0 0 2px;
+}
+
+.phone-mockup .phone-btn-left2 {
+  position: absolute;
+  left: -2px;
+  top: 145px;
+  width: 3px;
+  height: 50px;
+  background: linear-gradient(180deg, #3a3a3a, #1a1a1a);
+  border-radius: 2px 0 0 2px;
+}
+
+.phone-mockup .phone-btn-left3 {
+  position: absolute;
+  left: -2px;
+  top: 205px;
+  width: 3px;
+  height: 50px;
+  background: linear-gradient(180deg, #3a3a3a, #1a1a1a);
+  border-radius: 2px 0 0 2px;
+}
+
+/* Dynamic Island */
+.phone-island {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 24px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 10;
+}
+
+.phone-island::before {
+  content: '';
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #1a2a3a 30%, #0a1520 70%);
+  border-radius: 50%;
+  border: 1px solid #222;
+}
+
+/* Home indicator */
+.phone-mockup::after {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 4px;
+  background: #555;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 32px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+}
+
+.phone-screen video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #fff;
+}
+
+/* Phone reflection */
+.phone-mockup .phone-reflection {
+  position: absolute;
+  inset: 14px;
+  border-radius: 32px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* LAPTOP MOCKUP */
+.laptop-mockup {
+  display: none;
+  position: relative;
+  width: 420px;
+  transform: rotateY(-6deg) rotateX(3deg);
+  animation: phoneFloat 4s ease-in-out infinite;
+  filter: drop-shadow(0 25px 50px rgba(0,0,0,0.25));
+}
+
+.laptop-mockup.active { display: block; }
+.phone-mockup.active { display: block; }
+.phone-mockup.hidden-device, .laptop-mockup.hidden-device { display: none !important; }
+
+.laptop-lid {
+  background: linear-gradient(145deg, #2c2c2c, #1a1a1a, #0d0d0d);
+  border-radius: 12px 12px 0 0;
+  padding: 14px 14px 0 14px;
+  border: 1px solid #3a3a3a;
+  border-bottom: none;
+  position: relative;
+}
+
+.laptop-lid::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #1a2a3a 30%, #0a1520 70%);
+  border-radius: 50%;
+  border: 1px solid #333;
+}
+
+.laptop-screen {
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.laptop-screen video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #fff;
+}
+
+.laptop-base {
+  background: linear-gradient(180deg, #3a3a3a, #2c2c2c, #1a1a1a);
+  height: 14px;
+  border-radius: 0 0 4px 4px;
+  position: relative;
+  margin: 0 -10px;
+  border: 1px solid #3a3a3a;
+  border-top: 1px solid #555;
+}
+
+.laptop-base::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 4px;
+  background: #555;
+  border-radius: 0 0 4px 4px;
+}
+
+.laptop-base::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110%;
+  height: 6px;
+  background: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Device switcher */
+.device-switcher {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.device-switch-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.device-switch-btn:hover {
+  border-color: #999;
+  transform: scale(1.08);
+}
+
+.device-switch-btn.active {
+  border-color: #1a1a2e;
+  background: #1a1a2e;
+}
+
+.device-switch-btn.active svg { stroke: #fff; }
+
+.device-switch-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: #666;
+  stroke-width: 1.8;
+  fill: none;
+}
+
+/* RIGHT: info */
+.landing-right {
+  flex: 1;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 50px 44px;
+  gap: 22px;
+  min-height: 100vh;
+  max-width: 480px;
+}
+
+.lr-title-img {
+  width: 180px;
+  max-width: 60%;
+}
+
+.lr-tagline {
+  color: #888;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-top: -14px;
+  letter-spacing: 0.3px;
+}
+
+.lr-divider {
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, #ff6b6b, #4d96ff);
+  border-radius: 3px;
+}
+
+.lr-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lr-section h3 {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1rem;
+  color: #333;
+  margin: 0;
+}
+
+.lr-section p {
+  color: #666;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.lr-vibes {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.lr-vibe-chip {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 50px;
+  border: 2px solid;
+  background: #fff;
+  transition: transform 0.2s;
+}
+
+.lr-vibe-chip:hover { transform: scale(1.08); }
+
+.lr-safety {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.lr-safety-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  background: #f0f0f5;
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+.safety-icon {
+  font-size: 1rem;
+  color: #1a1a2e;
+  font-style: normal;
+  line-height: 1;
+}
+
+.lr-steps {
+  font-size: 0.78rem;
+  color: #666;
+  line-height: 1.9;
+}
+
+.lr-start-btn {
+  display: inline-block;
+  background: #1a1a2e;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 13px 34px;
+  font-size: 1rem;
+  font-family: 'Boogaloo', cursive;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 16px rgba(26,26,46,0.25);
+}
+
+.lr-start-btn:hover {
+  transform: scale(1.06);
+  background: #2a2a4a;
+  box-shadow: 0 6px 24px rgba(26,26,46,0.4);
+}
+
+@media (max-width: 700px) {
+  #landingPage { flex-direction: column; }
+  .landing-left {
+    min-height: auto;
+    position: relative;
+    padding: 30px 20px 10px;
+  }
+  .phone-mockup { width: 200px; height: 410px; border-radius: 34px; padding: 10px; }
+  .phone-screen { border-radius: 24px; }
+  .phone-island { width: 70px; height: 18px; top: 14px; }
+  .laptop-mockup { width: 280px; }
+  .landing-right {
+    padding: 24px 24px 40px;
+    min-height: auto;
+    max-width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+  .lr-vibes, .lr-safety { justify-content: center; }
+  .lr-start-btn { align-self: center; }
+  .lr-title-img { width: 150px; }
+}
+
+.landing-logo {
+  font-family: 'Boogaloo', cursive;
+  font-size: 2.6rem;
+  background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #c77dff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 300% 300%;
+  animation: rainbow 4s linear infinite;
+  margin-bottom: 4px;
+}
+
+.landing-subtitle {
+  color: var(--soft);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+
+/* MODAL OVERLAY */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.hidden { display: none; }
+
+.modal-box {
+  background: #16162a;
+  border: 2px solid #2a2a4a;
+  border-radius: 24px;
+  padding: 30px 28px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  animation: msgIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.modal-box h2 {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.modal-box p {
+  color: var(--soft);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.modal-box input {
+  background: #0a0a16;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-family: 'Baloo 2', cursive;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.modal-box input:focus { border-color: #4d96ff; }
+
+.modal-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #4d96ff, #5e60ce);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-family: 'Boogaloo', cursive;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+  margin: 4px;
+}
+
+.modal-btn:hover { transform: scale(1.06); filter: brightness(1.2); }
+.modal-btn.danger { background: linear-gradient(135deg, #ff6b6b, #c9184a); }
+.modal-btn.success { background: linear-gradient(135deg, #6bcb77, #2d6a4f); }
+.modal-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.modal-error {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-top: 6px;
+  min-height: 20px;
+}
+
+/* AGE SELECT */
+.age-options {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.age-btn {
+  padding: 10px 18px;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.age-btn:hover { border-color: #4d96ff; transform: scale(1.05); }
+.age-btn.selected { border-color: #6bcb77; background: #001a05; color: #6bcb77; }
+
+/* PARENT BTN */
+#parentBtn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 100;
+  background: rgba(13,13,26,0.8);
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  padding: 8px 16px;
+  color: var(--soft);
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#parentBtn:hover { border-color: #4d96ff; color: #4d96ff; }
+
+/* PARENT PANEL */
+.parent-panel {
+  position: fixed;
+  inset: 0;
+  background: #0d0d1a;
+  z-index: 10000;
+  overflow-y: auto;
+  padding: 20px;
+  display: none;
+}
+
+.parent-panel.open { display: block; }
+
+.parent-panel h2 {
+  font-family: 'Boogaloo', cursive;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.parent-panel .subtitle {
+  text-align: center;
+  color: var(--soft);
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+}
+
+.parent-toolbar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.log-entry {
+  background: #16162a;
+  border: 1px solid #2a2a4a;
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.log-entry .log-meta {
+  font-size: 0.75rem;
+  color: var(--soft);
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.log-entry .log-user {
+  background: #1a2a4a;
+  border-radius: 10px;
+  padding: 6px 12px;
+  margin-bottom: 4px;
+  font-size: 0.88rem;
+  color: #4d96ff;
+  font-weight: 600;
+}
+
+.log-entry .log-ai {
+  background: #1a1a2e;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 0.88rem;
+  color: var(--soft);
+}
+
+.log-entry .log-blocked {
+  background: #2e0013;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 0.88rem;
+  color: #ff6b6b;
+  font-weight: 600;
+}
+
+.empty-log {
+  text-align: center;
+  color: var(--soft);
+  padding: 40px;
+  font-size: 0.95rem;
+}
+
+.blocked-warning {
+  background: linear-gradient(135deg, #2e0013, #3a0020);
+  border: 2px solid #ff6b6b;
+  border-radius: 14px;
+  padding: 12px 16px;
+  text-align: center;
+  color: #ff6b6b;
+  font-weight: 700;
+  font-size: 0.9rem;
+  animation: msgIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* FLOATING PARTICLES */
+.particle {
+  position: fixed;
+  pointer-events: none;
+  font-size: 1.4rem;
+  animation: floatUp 4s linear forwards;
+  z-index: 999;
+}
+
+@keyframes floatUp {
+  0%   { opacity: 1; transform: translateY(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(-200px) rotate(360deg); }
+}
+</style>
+</head>
+<body class="vibe-roblox">
+
+<!-- LANDING PAGE -->
+<div id="landingPage">
+  <div class="landing-left">
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      <!-- PHONE -->
+      <div class="phone-mockup active" id="devicePhone">
+        <div class="phone-island"></div>
+        <div class="phone-btn-right"></div>
+        <div class="phone-btn-left1"></div>
+        <div class="phone-btn-left2"></div>
+        <div class="phone-btn-left3"></div>
+        <div class="phone-screen">
+          <video autoplay muted playsinline loop class="device-video">
+            <source src="claudozzo_animation.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="phone-reflection"></div>
+      </div>
+      <!-- LAPTOP -->
+      <div class="laptop-mockup" id="deviceLaptop">
+        <div class="laptop-lid">
+          <div class="laptop-screen">
+            <video autoplay muted playsinline loop class="device-video">
+              <source src="claudozzo_animation.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div class="laptop-base"></div>
+      </div>
+      <!-- SWITCHER -->
+      <div class="device-switcher">
+        <button class="device-switch-btn active" id="btnPhone" onclick="switchDevice('phone')">
+          <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="10" y1="19" x2="14" y2="19"/></svg>
+        </button>
+        <button class="device-switch-btn" id="btnLaptop" onclick="switchDevice('laptop')">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5"/><line x1="2" y1="18" x2="22" y2="18" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="landing-right">
+    <img src="claudozzo_text_transparent.png" alt="CLAUDOZZO" class="lr-title-img">
+    <p class="lr-tagline">Chat AI sicura e divertente per bambini 8-13 anni</p>
+
+    <div class="lr-divider"></div>
+
+    <div class="lr-section">
+      <h3>5 personalità</h3>
+      <div class="lr-vibes">
+        <span class="lr-vibe-chip" style="border-color:#00b4d8; color:#00b4d8">🎮 Roblox</span>
+        <span class="lr-vibe-chip" style="border-color:#ff85a1; color:#ff85a1">🍩 Mochinut</span>
+        <span class="lr-vibe-chip" style="border-color:#daa520; color:#b8860b">🐊 Brainrot</span>
+        <span class="lr-vibe-chip" style="border-color:#2d8a2e; color:#2d8a2e">⛏️ Minecraft</span>
+        <span class="lr-vibe-chip" style="border-color:#9b59b6; color:#9b59b6">🎌 Anime</span>
+      </div>
+    </div>
+
+    <div class="lr-section">
+      <h3>Sicurezza integrata</h3>
+      <div class="lr-safety">
+        <div class="lr-safety-item"><span class="safety-icon">&#9737;</span> Filtro automatico</div>
+        <div class="lr-safety-item"><span class="safety-icon">&#9919;</span> PIN genitori</div>
+        <div class="lr-safety-item"><span class="safety-icon">&#9776;</span> Cronologia chat</div>
+        <div class="lr-safety-item"><span class="safety-icon">&#10005;</span> Blocco contenuti</div>
+      </div>
+    </div>
+
+    <div class="lr-section">
+      <h3>4 semplici passi</h3>
+      <div class="lr-steps">
+        1. Scegli la tua età<br>
+        2. Imposta un PIN genitori<br>
+        3. Scegli la personalità e chatta<br>
+        4. Controlla tutto dal pannello Genitori
+      </div>
+    </div>
+
+    <button class="lr-start-btn" onclick="startApp()">INIZIA</button>
+  </div>
+</div>
+
+<!-- AGE GATE -->
+<div class="modal-overlay hidden" id="ageGate">
+  <div class="modal-box">
+    <h2>Ciao! Quanti anni hai?</h2>
+    <p>Claudozzo è pensato per ragazzi dagli 8 ai 13 anni. Seleziona la tua età per continuare!</p>
+    <div class="age-options" id="ageOptions"></div>
+    <div class="modal-error" id="ageError"></div>
+  </div>
+</div>
+
+<!-- PIN SETUP (prima volta) -->
+<div class="modal-overlay hidden" id="pinSetup">
+  <div class="modal-box">
+    <h2>Imposta PIN Genitori</h2>
+    <p>Crea un PIN a 4 cifre per il pannello genitori. Solo i genitori potranno vedere la cronologia chat.</p>
+    <input type="password" id="pinSetupInput" maxlength="4" placeholder="PIN a 4 cifre" pattern="[0-9]*" inputmode="numeric">
+    <br>
+    <input type="password" id="pinSetupConfirm" maxlength="4" placeholder="Conferma PIN" pattern="[0-9]*" inputmode="numeric">
+    <br>
+    <button class="modal-btn success" onclick="savePin()">SALVA PIN</button>
+    <div class="modal-error" id="pinSetupError"></div>
+  </div>
+</div>
+
+<!-- PIN LOGIN (per pannello genitori) -->
+<div class="modal-overlay hidden" id="pinLogin">
+  <div class="modal-box">
+    <h2>Accesso Genitori</h2>
+    <p>Inserisci il PIN a 4 cifre per accedere al pannello genitori.</p>
+    <input type="password" id="pinLoginInput" maxlength="4" placeholder="PIN" pattern="[0-9]*" inputmode="numeric" onkeydown="if(event.key==='Enter') checkPin()">
+    <br>
+    <button class="modal-btn" onclick="checkPin()">ENTRA</button>
+    <button class="modal-btn danger" onclick="closePinLogin()">ANNULLA</button>
+    <div class="modal-error" id="pinLoginError"></div>
+  </div>
+</div>
+
+<!-- PARENT PANEL -->
+<div class="parent-panel" id="parentPanel">
+  <h2>Pannello Genitori</h2>
+  <p class="subtitle">Cronologia completa delle chat del tuo bambino</p>
+  <div class="parent-toolbar">
+    <button class="modal-btn" onclick="closeParentPanel()">CHIUDI PANNELLO</button>
+    <button class="modal-btn danger" onclick="clearHistory()">CANCELLA CRONOLOGIA</button>
+    <button class="modal-btn danger" onclick="resetPin()">CAMBIA PIN</button>
+  </div>
+  <div id="parentLog"></div>
+</div>
+
+<!-- PARENT BTN -->
+<button id="parentBtn" onclick="openParentPanel()">Genitori</button>
+
+<header style="position:fixed;top:12px;left:12px;z-index:100;text-align:left;margin:0;">
+  <img src="claudozzo_mascot_v1.png" alt="Claudozzo" onclick="backToLanding()" style="width:50px;height:50px;border-radius:50%;border:3px solid #ff6b6b;box-shadow:0 0 15px rgba(255,107,107,0.3);cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+</header>
+
+<div class="vibes-label">🎮 scegli la tua vibe 🎮</div>
+
+<div class="vibes">
+  <button class="vibe-btn active" data-vibe="roblox" data-label="ROBLOX BRO" onclick="setVibe(this)">
+    <span class="vibe-emoji">🎮🕹️⚔️</span>
+    <span class="vibe-name">ROBLOX BRO</span>
+    <span class="vibe-sub">💎 fr fr no cap<br>🏆 skill issue bro</span>
+  </button>
+  <button class="vibe-btn" data-vibe="mochinut" data-label="MOCHINUT" onclick="setVibe(this)">
+    <span class="vibe-emoji">🍩🌸💖</span>
+    <span class="vibe-name">MOCHINUT</span>
+    <span class="vibe-sub">🦄 uwu bestie<br>🧋 so cute aesthetic</span>
+  </button>
+  <button class="vibe-btn" data-vibe="brainrot" data-label="BRAINROT ITA" onclick="setVibe(this)">
+    <span class="vibe-emoji">🐊💣🤌</span>
+    <span class="vibe-name">BRAINROT ITA</span>
+    <span class="vibe-sub">🍌 bombardiro croco<br>🌍 tralalelo tralala</span>
+  </button>
+  <button class="vibe-btn" data-vibe="minecraft" data-label="MINECRAFT" onclick="setVibe(this)">
+    <span class="vibe-emoji">⛏️🟫💎</span>
+    <span class="vibe-name">MINECRAFT</span>
+    <span class="vibe-sub">🌲 mina e crafta<br>🐄 attento al creeper</span>
+  </button>
+  <button class="vibe-btn" data-vibe="anime" data-label="ANIME SENPAI" onclick="setVibe(this)">
+    <span class="vibe-emoji">🎌⭐🔮</span>
+    <span class="vibe-name">ANIME SENPAI</span>
+    <span class="vibe-sub">💫 sugoi nakama~<br>🌸 nani?! dramma pure</span>
+  </button>
+</div>
+
+<div id="vibeBanner" style="--banner-glow:#00b4d888; color:#00b4d8;">
+  🎮 VIBE ATTIVA: <strong>ROBLOX BRO</strong>
+</div>
+
+<div class="chat-wrap" id="chatWrap">
+  <div class="chat-header" id="chatHeader">
+    <img src="claudozzo_mascot_v1.png" alt="" style="width:32px;height:32px;border-radius:50%;border:2px solid #ff6b6b;">
+    <div class="status"></div>
+    <span id="chatTitle">Claudozzo - Roblox Mode</span>
+  </div>
+  <div class="messages" id="messages">
+    <div class="welcome">
+      <span class="big">🎮</span><br>
+      Yo bro! Scegli la vibe e chiedimi qualsiasi cosa!<br>
+      <strong style="color:#00b4d8">Non ho paura di nulla fr fr 💀</strong>
+    </div>
+  </div>
+  <div class="input-area">
+    <input type="text" id="userInput" placeholder="scrivi qui bro... 💬" onkeydown="if(event.key==='Enter') send()" />
+    <button id="sendBtn" onclick="send()">INVIA 🚀</button>
+  </div>
+</div>
+
+<script>
+// ==================== FILTRO CONTENUTI ====================
+const blockedWords = [
+  // parolacce italiane
+  'cazzo','minchia','merda','stronzo','stronza','vaffanculo','fanculo','puttana',
+  'troia','bastardo','bastarda','coglione','cogliona','porco dio','madonna',
+  'dio cane','dio porco','porca madonna','culo','figa','cazzo',
+  // inglesi
+  'fuck','shit','bitch','ass','dick','pussy','nigga','nigger','retard','faggot',
+  'whore','slut','cock','porn','hentai','xxx',
+  // argomenti sensibili
+  'suicidio','suicidarmi','uccidermi','ammazzarmi','morire voglio','mi taglio',
+  'autolesionismo','droga','cocaina','eroina','marijuana','alcol','vodka','birra',
+  'sigaretta','fumare','sesso','nudes','sexting','pedo','violenza',
+  'armi','pistola','coltello','sparare','sangue','tortura',
+  'bullismo','ti odio','fai schifo','sei brutto','sei grasso','ti ammazzo'
+];
+
+const blockedPatterns = blockedWords.map(w => new RegExp('\\b' + w.replace(/\s+/g, '\\s+') + '\\b', 'i'));
+
+function isBlocked(text) {
+  const t = text.toLowerCase();
+  for (const pattern of blockedPatterns) {
+    if (pattern.test(t)) return true;
+  }
+  return false;
+}
+
+// ==================== CRONOLOGIA ====================
+function getChatLog() {
+  try { return JSON.parse(localStorage.getItem('claudozzo_log') || '[]'); }
+  catch { return []; }
+}
+
+function saveChatEntry(entry) {
+  const log = getChatLog();
+  log.push({ ...entry, time: new Date().toISOString() });
+  // Max 500 messaggi
+  if (log.length > 500) log.splice(0, log.length - 500);
+  localStorage.setItem('claudozzo_log', JSON.stringify(log));
+}
+
+// ==================== AGE GATE ====================
+function initAgeGate() {
+  const verified = localStorage.getItem('claudozzo_age_verified');
+  if (verified) {
+    checkPinSetup();
+    return;
+  }
+  document.getElementById('ageGate').classList.remove('hidden');
+  const container = document.getElementById('ageOptions');
+  if (container.children.length > 0) return;
+  const ranges = [
+    { label: 'Meno di 8', value: 'under', emoji: '👶' },
+    { label: '8-10 anni', value: '8-10', emoji: '🧒' },
+    { label: '11-13 anni', value: '11-13', emoji: '😎' },
+    { label: 'Più di 13', value: 'over', emoji: '🧑' },
+    { label: 'Sono un genitore', value: 'parent', emoji: '👨‍👩‍👧' }
+  ];
+  ranges.forEach(r => {
+    const btn = document.createElement('button');
+    btn.className = 'age-btn';
+    btn.textContent = `${r.emoji} ${r.label}`;
+    btn.onclick = () => selectAge(r.value);
+    container.appendChild(btn);
+  });
+}
+
+function selectAge(value) {
+  const err = document.getElementById('ageError');
+  if (value === 'under') {
+    err.textContent = 'Mi dispiace! Claudozzo è per ragazzi dagli 8 anni in su. Chiedi a un genitore!';
+    return;
+  }
+  if (value === 'over') {
+    err.textContent = '';
+    // Over 13 va bene ma mostra avviso
+  }
+  localStorage.setItem('claudozzo_age_verified', value);
+  document.getElementById('ageGate').classList.add('hidden');
+  checkPinSetup();
+}
+
+// ==================== PIN GENITORI ====================
+function checkPinSetup() {
+  if (!localStorage.getItem('claudozzo_pin')) {
+    document.getElementById('pinSetup').classList.remove('hidden');
+  }
+}
+
+function savePin() {
+  const pin = document.getElementById('pinSetupInput').value;
+  const confirm = document.getElementById('pinSetupConfirm').value;
+  const err = document.getElementById('pinSetupError');
+
+  if (!/^\d{4}$/.test(pin)) {
+    err.textContent = 'Il PIN deve essere di 4 cifre!';
+    return;
+  }
+  if (pin !== confirm) {
+    err.textContent = 'I PIN non corrispondono!';
+    return;
+  }
+  localStorage.setItem('claudozzo_pin', pin);
+  document.getElementById('pinSetup').classList.add('hidden');
+}
+
+function openParentPanel() {
+  const pin = localStorage.getItem('claudozzo_pin');
+  if (!pin) {
+    document.getElementById('pinSetup').classList.remove('hidden');
+    return;
+  }
+  document.getElementById('pinLogin').classList.remove('hidden');
+  document.getElementById('pinLoginInput').value = '';
+  document.getElementById('pinLoginError').textContent = '';
+  document.getElementById('pinLoginInput').focus();
+}
+
+function checkPin() {
+  const input = document.getElementById('pinLoginInput').value;
+  const stored = localStorage.getItem('claudozzo_pin');
+  if (input === stored) {
+    document.getElementById('pinLogin').classList.add('hidden');
+    showParentPanel();
+  } else {
+    document.getElementById('pinLoginError').textContent = 'PIN errato!';
+  }
+}
+
+function closePinLogin() {
+  document.getElementById('pinLogin').classList.add('hidden');
+}
+
+function showParentPanel() {
+  const panel = document.getElementById('parentPanel');
+  const logDiv = document.getElementById('parentLog');
+  const log = getChatLog();
+
+  if (log.length === 0) {
+    logDiv.innerHTML = '<div class="empty-log">Nessuna chat ancora. La cronologia apparirà qui quando il bambino inizierà a chattare.</div>';
+  } else {
+    logDiv.innerHTML = log.slice().reverse().map(entry => {
+      const date = new Date(entry.time);
+      const timeStr = date.toLocaleDateString('it-IT') + ' ' + date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+      if (entry.blocked) {
+        return `<div class="log-entry">
+          <div class="log-meta"><span>${entry.vibe || '?'}</span><span>${timeStr}</span></div>
+          <div class="log-user">Bambino: ${escapeHtml(entry.user)}</div>
+          <div class="log-blocked">BLOCCATO - Contenuto inappropriato rilevato</div>
+        </div>`;
+      }
+      return `<div class="log-entry">
+        <div class="log-meta"><span>${entry.vibe || '?'}</span><span>${timeStr}</span></div>
+        <div class="log-user">Bambino: ${escapeHtml(entry.user)}</div>
+        <div class="log-ai">Claudozzo: ${escapeHtml(entry.ai)}</div>
+      </div>`;
+    }).join('');
+  }
+  panel.classList.add('open');
+}
+
+function closeParentPanel() {
+  document.getElementById('parentPanel').classList.remove('open');
+}
+
+function clearHistory() {
+  if (confirm('Sei sicuro di voler cancellare tutta la cronologia?')) {
+    localStorage.removeItem('claudozzo_log');
+    showParentPanel();
+  }
+}
+
+function resetPin() {
+  if (confirm('Vuoi cambiare il PIN genitori?')) {
+    localStorage.removeItem('claudozzo_pin');
+    document.getElementById('parentPanel').classList.remove('open');
+    document.getElementById('pinSetup').classList.remove('hidden');
+    document.getElementById('pinSetupInput').value = '';
+    document.getElementById('pinSetupConfirm').value = '';
+    document.getElementById('pinSetupError').textContent = '';
+  }
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// ==================== LANDING PAGE ====================
+function initLanding() {
+  const seen = localStorage.getItem('claudozzo_landing_seen');
+  if (seen) {
+    document.getElementById('landingPage').classList.add('hidden');
+    initAgeGate();
+    return;
+  }
+  // Quando il video finisce, passa all'app
+  const video = document.getElementById('landingVideo');
+  if (video) {
+    video.addEventListener('ended', function() {
+      startApp();
+    });
+  }
+}
+
+function startApp() {
+  localStorage.setItem('claudozzo_landing_seen', '1');
+  document.getElementById('landingPage').classList.add('hidden');
+  initAgeGate();
+}
+
+function backToLanding() {
+  const landing = document.getElementById('landingPage');
+  landing.classList.remove('hidden');
+  document.querySelectorAll('.device-video').forEach(v => {
+    v.currentTime = 0;
+    v.play();
+  });
+}
+
+function switchDevice(device) {
+  const phone = document.getElementById('devicePhone');
+  const laptop = document.getElementById('deviceLaptop');
+  const btnPhone = document.getElementById('btnPhone');
+  const btnLaptop = document.getElementById('btnLaptop');
+
+  if (device === 'phone') {
+    phone.classList.remove('hidden-device');
+    phone.classList.add('active');
+    laptop.classList.add('hidden-device');
+    laptop.classList.remove('active');
+    btnPhone.classList.add('active');
+    btnLaptop.classList.remove('active');
+  } else {
+    laptop.classList.remove('hidden-device');
+    laptop.classList.add('active');
+    phone.classList.add('hidden-device');
+    phone.classList.remove('active');
+    btnLaptop.classList.add('active');
+    btnPhone.classList.remove('active');
+  }
+}
+
+// Init on load
+initLanding();
+
+// ==================== VIBES ====================
+const vibes = {
+  roblox: {
+    label: "ROBLOX BRO 🎮🕹️",
+    emoji: "🎮",
+    title: "🎮🕹️⚔️ Claudozzo - Roblox Mode",
+    color: "#00b4d8",
+    glow: "#00b4d888",
+    particles: ["🎮","🕹️","⚔️","💎","🏆","💀","🎯","🛡️","🔑","👾"],
+    system: `Sei un assistente AI che risponde come un ragazzo di 11 anni super appassionato di Roblox. 
+Usi spesso: "bro", "fr fr", "no cap", "W", "L", "ratio", "slay", "rizz", "goofy", "lowkey", "ngl", "sus", "gg", "ez clap", "skill issue".
+Parli sempre in italiano mescolato con questi termini slang. 
+Sei esperto di Roblox (adopt me, blox fruits, brookhaven, mm2).
+Rispondi in modo breve, divertente, con tante emoji di giochi. 
+Non dire mai parolacce pesanti. Mantieni tutto adatto a bambini 8-13 anni.
+Esempio risposta: "Bro quella domanda è FIRE fr fr 💎 allora ngl ti spiego tutto W 🎮"`
+  },
+  mochinut: {
+    label: "MOCHINUT 🍩🌸💖",
+    emoji: "🍩",
+    title: "🍩🌸💖 Claudozzo - Kawaii Mode",
+    color: "#ff85a1",
+    glow: "#ff85a188",
+    particles: ["🍩","🌸","💖","🦄","🧋","🎀","🍡","💕","🌷","🍰"],
+    system: `Sei un assistente AI super kawaii e carino che risponde come una persona che ama l'estetica mochinut/kawaii.
+Usi spesso: "uwu", "owo", "omg", "bestie", "slay", "iconic", "literally", "vibes", "aesthetic", "cute", "adorable".
+Parli in italiano con questi termini carini. Usi tante emoji carine: 🌸💖🍩🦄✨🌈
+Sei appassionata di bubble tea, donut mochi, aesthetic, tumblr, pinterest.
+Rispondi in modo dolce, carino e positivo. Tutto è "literally so cute" o "omg bestie".
+Mantieni tutto adatto a bambini 8-13 anni, niente di inappropriato.
+Esempio: "OMG bestie questa domanda è literally so cute uwu 🌸 ti rispondo subito!! 💖✨"`
+  },
+  brainrot: {
+    label: "BRAINROT ITA 🐊💣🤌",
+    emoji: "🐊",
+    title: "🐊💣🤌 Claudozzo - Brainrot Mode",
+    color: "#ffd93d",
+    glow: "#ffd93d88",
+    particles: ["🐊","💣","🤌","🍌","🐘","🌍","🍕","🐍","🦅","💥"],
+    system: `Sei un assistente AI con il "Italian Brainrot" - quel trend di internet italiano con personaggi assurdi come Bombardiro Crocodilo, Tralalelo Tralala, Cappuccino Assassino, Bombombini Gusini.
+Rispondi sempre in italiano con riferimenti a questi meme assurdi.
+Fai riferimenti a: "Tralalelo tralala", "Bombardiro crocodilo", "Brr brr patapim", "Tung tung tung sahur", "La vaca saturno saturnita".
+Parla in modo assurdo, nonsense ma divertente. Usa molte esclamazioni italiane.
+Mescolate risposte sensate con momenti di puro brainrot.
+Mantieni tutto adatto a bambini 8-13 anni.
+Esempio: "AH MIO FRATELLO! Tralalelo tralala! La risposta è... BOMBARDIRO CROCODILO ti dice che sì, è corretto! 🐊💥"`
+  },
+  minecraft: {
+    label: "MINECRAFT ⛏️🟫💎",
+    emoji: "⛏️",
+    title: "⛏️🟫💎 Claudozzo - Survival Mode",
+    color: "#6bcb77",
+    glow: "#6bcb7788",
+    particles: ["⛏️","🟫","💎","🌲","🐄","💣","🏠","⚔️","🪨","🔥"],
+    system: `Sei un assistente AI che risponde come Steve di Minecraft, un esperto giocatore di Minecraft survival.
+Usi riferimenti costanti a Minecraft: "crafta", "mina", "spawn", "creeper", "enderman", "nether", "diamante", "crafting table".
+Parli in italiano ma con termini di Minecraft ovunque.
+Fai analogie con Minecraft per spiegare tutto: "è come craftare un diamante bro".
+Sei esperto di redstone, survival, farm automatiche, speedrun.
+Usa emoji di Minecraft: ⛏️💎🌲🐄💣
+Mantieni tutto adatto a bambini 8-13 anni. No parolacce.
+Esempio: "Perfetto! Come costruire una base in Minecraft, prima devi minare bro ⛏️ poi crafti una crafting table 🟫 e gg ez!"`
+  },
+  anime: {
+    label: "ANIME SENPAI 🎌⭐🔮",
+    emoji: "🎌",
+    title: "🎌⭐🔮 Claudozzo - Anime Mode",
+    color: "#c77dff",
+    glow: "#c77dff88",
+    particles: ["🎌","⭐","🌸","💫","🔮","👁️","💜","🗡️","🌙","✨"],
+    system: `Sei un assistente AI che risponde come un personaggio di anime shonen/shojo.
+Usi: "sugoi", "nani?!", "kawaii", "senpai", "nakama", "yatta!", "ganbatte", "mou", "ara ara", "nee nee".
+Parli in italiano mescolato con queste parole giapponesi da anime.
+Sei appassionato di: Naruto, Dragon Ball, One Piece, Demon Slayer, My Hero Academia, Spy x Family.
+Fai riferimenti drammatici tipo anime: "Questo... è il potere del mio cuore nakama!!"
+Ogni risposta ha un po' di dramma da anime.
+Mantieni tutto adatto a bambini 8-13 anni.
+Esempio: "NANI?! Questa domanda... sugoi davvero! ✨ Ascolta bene nakama, ti spiego tutto con il potere dell'amicizia! 💫"`
+  }
+};
+
+let currentVibe = 'roblox';
+let isLoading = false;
+
+function setVibe(btn) {
+  document.querySelectorAll('.vibe-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentVibe = btn.dataset.vibe;
+  const v = vibes[currentVibe];
+
+  // Update body class + minimize vibes
+  document.body.className = `vibe-${currentVibe} vibes-minimized`;
+
+  // Update banner
+  const banner = document.getElementById('vibeBanner');
+  banner.style.setProperty('--banner-glow', v.glow);
+  banner.style.color = v.color;
+  banner.innerHTML = `${v.emoji} VIBE ATTIVA: <strong>${v.label}</strong>`;
+
+  // Update chat title
+  document.getElementById('chatTitle').textContent = v.title;
+
+  // Clear messages
+  const msgs = document.getElementById('messages');
+  msgs.innerHTML = `<div class="welcome">
+    <span class="big" style="animation:none;display:inline-block">${v.emoji}</span><br>
+    <span style="color:${v.color};font-weight:700">Vibe cambiata! Ora sono in modalità ${v.label}</span><br>
+    <span style="color:var(--soft)">Chiedimi qualsiasi cosa bro! 🔥</span>
+  </div>`;
+
+  // Spawn particles
+  spawnParticles(v.particles, v.emoji);
+}
+
+function spawnParticles(list, main) {
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = list[Math.floor(Math.random() * list.length)];
+      p.style.left = Math.random() * window.innerWidth + 'px';
+      p.style.top = (window.innerHeight * 0.6 + Math.random() * 100) + 'px';
+      p.style.animationDuration = (2 + Math.random() * 2) + 's';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 4000);
+    }, i * 80);
+  }
+}
+
+function fakeReply(text, vibe) {
+  const t = text.toLowerCase();
+  const replies = {
+    roblox: [
+      `Bro quella domanda è FIRE fr fr 💎 ngl ti dico che "${text}" è una W totale 🎮 skill issue se non ci arrivi ez clap 🏆`,
+      `No cap bro 💀 "${text}"?? Lowkey è come quando trovi il frutto migliore su Blox Fruits gg ez 🕹️⚔️`,
+      `YOOO bro questa è una domanda da pro player fr fr 🎮 tipo quando fai una trade leggendaria su Adopt Me 💎 slay totale!`,
+      `Ngl bro "${text}" mi ha dato i vibes di quando vinci a MM2 con il coltello leggendario 🔪💀 W enorme gg!`,
+      `Bro sei goofy se non sai questo 😂 ma ti aiuto io fr fr perché siamo nakama di Brookhaven 🏠💎 ratio positivo!`
+    ],
+    mochinut: [
+      `OMG bestie "${text}" è literally so cute come domanda uwu 🌸💖 ti rispondo subito con tutta la mia aesthetic energy!! ✨🍩`,
+      `Aww bestie 🥺💕 questa domanda ha le vibes di un bubble tea alla fragola con mochi sopra 🧋🍡 literally iconic!`,
+      `UWU bestie!! "${text}" mi fa venire i feels come quando trovi il pin perfetto su Pinterest 🌸🎀 so adorable la tua curiosità!! 💖`,
+      `OMG OMG "${text}"?? Bestie questo è slay puro ✨🦄 è come trovare l'estetica pastel perfetta, literally living for this 🍩💕`,
+      `Nee bestie 🌷 questa domanda è cute come un mochinut appena fatto 🍩🌸 ti spiego tutto con le vibes più aesthetic uwu 💖✨`
+    ],
+    brainrot: [
+      `TRALALELO TRALALA!! 🐊💥 Mio fratello, "${text}"?? Bombardiro Crocodilo approva questa domanda!! Brr brr patapim! 🤌💣`,
+      `AH MAMMA MIA! "${text}"?! Cappuccino Assassino ☕🗡️ dice che la risposta è... TUNG TUNG TUNG SAHUR! 🥁🐘 Che domandone bro!`,
+      `BOMBOMBINI GUSINI!! 🪿💥 "${text}" è una domanda che fa impazzire anche La Vaca Saturno Saturnita 🐄🪐 tralalelo!`,
+      `CROCODILO BOMBARDIRO dice SÌ! 🐊💣 "${text}"?? Brr brr patapim questa è roba seria!! Tung tung sahur per la risposta! 🤌🍕`,
+      `Fratello mio!! La risposta a "${text}" arriva direttamente dal cervello di Tralalelo Tralala 🐊🌍 BOMBOMBINI GUSINI conferma! 🪿💥`
+    ],
+    minecraft: [
+      `Bro questa è come minare diamanti a livello -59 ⛏️💎 "${text}"?? Crafta una crafting table e ti spiego tutto! 🟫🔥`,
+      `Attento al Creeper!! 💣💥 "${text}" è una domanda da pro, tipo fare una farm automatica di ferro 🏠⚔️ mina e crafta bro!`,
+      `GG ez! ⛏️ "${text}" è facile come craftare un piccone di legno 🟫 ma la risposta è preziosa come il diamante 💎 survival mode ON!`,
+      `Bro "${text}" mi ricorda quando entri nel Nether per la prima volta 🔥👁️ un po' di paura ma poi è tutto OP ⛏️💎 gg!`,
+      `Come direbbe Steve: MINA MINA MINA ⛏️🟫 "${text}"?? La risposta sta nella crafting table bro 💎 non fare come gli Enderman, non scappare!`
+    ],
+    anime: [
+      `NANI?! "${text}"?? 😱✨ Questa domanda... SUGOI davvero nakama!! Con il potere dell'amicizia ti rispondo! 💫🎌`,
+      `Ara ara~ "${text}" è una domanda degna di un vero protagonista shonen! 🗡️⭐ GANBATTE! La risposta sta nel tuo cuore nakama!! 🌸💜`,
+      `YATTA! 🎉 "${text}"?? Nee nee, senpai ti spiega tutto! È come quando Luffy trova il One Piece... SUGOI MOMENTO!! ⭐🔮`,
+      `Mou... "${text}" mi fa venire i brividi come una scena finale di Demon Slayer! 🗡️🌸 Il mio cuore di nakama brucia!! PLUS ULTRA!! 💫🎌`,
+      `MASAKA!! "${text}"?! 😱 Questa è la domanda più kawaii che abbia sentito senpai~ ✨ Come direbbe Goku: il mio potere supera i limiti!! 🔮⭐`
+    ]
+  };
+  const list = replies[vibe] || replies.roblox;
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+async function send() {
+  if (isLoading) return;
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const msgs = document.getElementById('messages');
+  const welcome = msgs.querySelector('.welcome');
+  if (welcome) welcome.remove();
+
+  // User msg
+  const uMsg = document.createElement('div');
+  uMsg.className = 'msg user';
+  uMsg.textContent = text;
+  msgs.appendChild(uMsg);
+  input.value = '';
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // FILTRO CONTENUTI
+  if (isBlocked(text)) {
+    saveChatEntry({ vibe: currentVibe, user: text, blocked: true });
+    const warn = document.createElement('div');
+    warn.className = 'blocked-warning';
+    warn.textContent = "Ehi bro, questo messaggio contiene parole che non vanno bene. Proviamo a essere più gentili! 💛";
+    msgs.appendChild(warn);
+    msgs.scrollTop = msgs.scrollHeight;
+    isLoading = false;
+    document.getElementById('sendBtn').disabled = false;
+    return;
+  }
+
+  // Loading
+  const loading = document.createElement('div');
+  loading.className = 'msg loading';
+  loading.innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(loading);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  isLoading = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  try {
+    // Simula un ritardo di risposta
+    await new Promise(r => setTimeout(r, 800 + Math.random() * 1200));
+    const reply = fakeReply(text, currentVibe);
+
+    loading.remove();
+
+    const aMsg = document.createElement('div');
+    aMsg.className = 'msg ai';
+    aMsg.textContent = reply;
+    msgs.appendChild(aMsg);
+
+    // Salva in cronologia
+    saveChatEntry({ vibe: currentVibe, user: text, ai: reply });
+
+    // Mini particles on reply
+    const v2 = vibes[currentVibe];
+    for (let i = 0; i < 4; i++) {
+      setTimeout(() => {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.textContent = v2.particles[Math.floor(Math.random() * v2.particles.length)];
+        p.style.left = (200 + Math.random() * 300) + 'px';
+        p.style.top = (window.innerHeight * 0.7) + 'px';
+        p.style.fontSize = '1rem';
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 3000);
+      }, i * 150);
+    }
+
+  } catch (err) {
+    loading.remove();
+    const errMsg = document.createElement('div');
+    errMsg.className = 'msg ai';
+    errMsg.textContent = "Errore! Riprova fra un attimo!";
+    msgs.appendChild(errMsg);
+  }
+
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
+  msgs.scrollTop = msgs.scrollHeight;
+}
+</script>
+</body>
+</html>
