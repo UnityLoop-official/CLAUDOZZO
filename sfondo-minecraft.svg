@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#003a10"/>
+      <stop offset="50%" stop-color="#001a05"/>
+      <stop offset="100%" stop-color="#000d02"/>
+    </radialGradient>
+    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6bcb77" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#6bcb77" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2d6a4f" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#2d6a4f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <circle cx="200" cy="250" r="220" fill="url(#glow1)"/>
+  <circle cx="600" cy="700" r="250" fill="url(#glow2)"/>
+  <circle cx="400" cy="1000" r="200" fill="url(#glow1)"/>
+  <!-- Steve -->
+  <g transform="translate(180,320)" opacity="0.13">
+    <!-- Head -->
+    <rect x="-22" y="-60" width="44" height="44" fill="#c69c6d"/>
+    <rect x="-22" y="-60" width="44" height="14" fill="#4a3728"/>
+    <rect x="-22" y="-48" width="6" height="10" fill="#4a3728"/>
+    <rect x="16" y="-48" width="6" height="10" fill="#4a3728"/>
+    <rect x="-10" y="-44" width="7" height="7" fill="white"/>
+    <rect x="3" y="-44" width="7" height="7" fill="white"/>
+    <rect x="-8" y="-42" width="4" height="4" fill="#3d2b1f"/>
+    <rect x="5" y="-42" width="4" height="4" fill="#3d2b1f"/>
+    <rect x="-5" y="-30" width="10" height="4" fill="#b5835a"/>
+    <!-- Body -->
+    <rect x="-18" y="-14" width="36" height="36" fill="#00b4d8"/>
+    <!-- Arms -->
+    <rect x="-28" y="-14" width="10" height="30" fill="#c69c6d"/>
+    <rect x="18" y="-14" width="10" height="30" fill="#c69c6d"/>
+    <!-- Legs -->
+    <rect x="-16" y="24" width="14" height="28" fill="#3d3d7a"/>
+    <rect x="2" y="24" width="14" height="28" fill="#2d2d6a"/>
+  </g>
+  <!-- Creeper -->
+  <g transform="translate(630,250)" opacity="0.11">
+    <rect x="-18" y="-40" width="36" height="36" fill="#4a7a2e"/>
+    <rect x="-12" y="-32" width="8" height="8" fill="#1a3010"/>
+    <rect x="4" y="-32" width="8" height="8" fill="#1a3010"/>
+    <rect x="-4" y="-22" width="8" height="4" fill="#1a3010"/>
+    <rect x="-8" y="-18" width="16" height="8" fill="#1a3010"/>
+    <rect x="-4" y="-10" width="4" height="4" fill="#1a3010"/>
+    <rect x="0" y="-10" width="4" height="4" fill="#1a3010"/>
+    <rect x="-14" y="-2" width="28" height="30" fill="#4a7a2e"/>
+    <rect x="-14" y="30" width="10" height="18" fill="#3a6a1e"/>
+    <rect x="4" y="30" width="10" height="18" fill="#3a6a1e"/>
+  </g>
+  <!-- Diamond ore block -->
+  <g transform="translate(450,500)" opacity="0.12">
+    <rect x="-25" y="-25" width="50" height="50" fill="#6b6b6b"/>
+    <rect x="-22" y="-22" width="44" height="44" fill="#8a8a8a"/>
+    <polygon points="-8,-10 0,-16 8,-10 4,-2 -4,-2" fill="#00d4ff"/>
+    <polygon points="8,5 14,0 18,8 12,12 6,10" fill="#00d4ff"/>
+    <polygon points="-16,2 -10,-2 -6,4 -10,10 -14,8" fill="#00d4ff"/>
+    <polygon points="-2,12 4,8 10,14 6,18 0,16" fill="#00d4ff"/>
+  </g>
+  <!-- Pickaxe -->
+  <g transform="translate(120,650) rotate(-30)" opacity="0.12">
+    <rect x="-2" y="-50" width="4" height="55" rx="1" fill="#8B6914"/>
+    <!-- Pickaxe head -->
+    <rect x="-20" y="-55" width="40" height="8" rx="1" fill="#b0b0b0"/>
+    <polygon points="-22,-55 -28,-51 -22,-47" fill="#b0b0b0"/>
+    <polygon points="22,-55 28,-51 22,-47" fill="#b0b0b0"/>
+  </g>
+  <!-- TNT -->
+  <g transform="translate(650,600)" opacity="0.1">
+    <rect x="-20" y="-22" width="40" height="44" rx="3" fill="#cc2200"/>
+    <rect x="-20" y="-16" width="40" height="6" fill="#888"/>
+    <rect x="-20" y="4" width="40" height="6" fill="#888"/>
+    <rect x="-12" y="-8" width="24" height="14" fill="white" opacity="0.9"/>
+    <text x="0" y="2" text-anchor="middle" font-size="12" font-weight="bold" fill="#cc2200" font-family="Arial">TNT</text>
+    <rect x="-2" y="-30" width="4" height="10" rx="2" fill="#444"/>
+  </g>
+  <!-- Tree -->
+  <g transform="translate(350,800)" opacity="0.1">
+    <rect x="-5" y="0" width="10" height="40" fill="#6b4226"/>
+    <rect x="-22" y="-30" width="44" height="35" rx="2" fill="#2d8a2e"/>
+    <rect x="-18" y="-40" width="36" height="15" rx="2" fill="#38a039"/>
+    <rect x="-10" y="-46" width="20" height="10" rx="2" fill="#2d8a2e"/>
+  </g>
+  <!-- Crafting table -->
+  <g transform="translate(700,900)" opacity="0.1">
+    <rect x="-22" y="-22" width="44" height="44" fill="#8B6914"/>
+    <rect x="-22" y="-22" width="22" height="22" fill="#a07818"/>
+    <rect x="0" y="0" width="22" height="22" fill="#a07818"/>
+    <line x1="-22" y1="0" x2="22" y2="0" stroke="#654321" stroke-width="1.5"/>
+    <line x1="0" y1="-22" x2="0" y2="22" stroke="#654321" stroke-width="1.5"/>
+  </g>
+  <!-- Grass blocks ground -->
+  <g opacity="0.05">
+    <rect x="0" y="1100" width="50" height="50" fill="#4a7a2e"/>
+    <rect x="0" y="1100" width="50" height="8" fill="#6bcb77"/>
+    <rect x="50" y="1100" width="50" height="50" fill="#3a6a1e"/>
+    <rect x="50" y="1100" width="50" height="8" fill="#5bbb67"/>
+    <rect x="100" y="1100" width="50" height="50" fill="#4a7a2e"/>
+    <rect x="100" y="1100" width="50" height="8" fill="#6bcb77"/>
+    <rect x="150" y="1100" width="50" height="50" fill="#3a6a1e"/>
+    <rect x="150" y="1100" width="50" height="8" fill="#5bbb67"/>
+    <rect x="200" y="1100" width="50" height="50" fill="#4a7a2e"/>
+    <rect x="200" y="1100" width="50" height="8" fill="#6bcb77"/>
+    <rect x="250" y="1100" width="50" height="50" fill="#3a6a1e"/>
+    <rect x="250" y="1100" width="50" height="8" fill="#5bbb67"/>
+  </g>
+  <!-- Stars -->
+  <circle cx="100" cy="80" r="2" fill="#6bcb77" opacity="0.7"/>
+  <circle cx="300" cy="50" r="1.5" fill="white" opacity="0.5"/>
+  <circle cx="500" cy="90" r="2" fill="#6bcb77" opacity="0.8"/>
+  <circle cx="700" cy="60" r="1.5" fill="white" opacity="0.6"/>
+  <circle cx="200" cy="150" r="1" fill="#6bcb77" opacity="0.4"/>
+  <circle cx="550" cy="350" r="2" fill="white" opacity="0.7"/>
+  <circle cx="50" cy="400" r="1.5" fill="#6bcb77" opacity="0.5"/>
+  <circle cx="750" cy="450" r="2" fill="white" opacity="0.6"/>
+  <circle cx="300" cy="550" r="1" fill="#6bcb77" opacity="0.8"/>
+  <circle cx="450" cy="700" r="2" fill="white" opacity="0.5"/>
+  <circle cx="150" cy="900" r="1.5" fill="#6bcb77" opacity="0.7"/>
+  <circle cx="550" cy="950" r="2" fill="white" opacity="0.6"/>
+  <!-- Sparkles -->
+  <g transform="translate(500,200)" opacity="0.6" fill="#6bcb77">
+    <rect x="-1" y="-10" width="2" height="20" rx="1"/>
+    <rect x="-10" y="-1" width="20" height="2" rx="1"/>
+    <rect x="-0.7" y="-7" width="1.4" height="14" rx="1" transform="rotate(45)"/>
+    <rect x="-7" y="-0.7" width="14" height="1.4" rx="1" transform="rotate(45)"/>
+  </g>
+  <g transform="translate(80,550)" opacity="0.5" fill="#2d6a4f">
+    <rect x="-0.8" y="-8" width="1.6" height="16" rx="1"/>
+    <rect x="-8" y="-0.8" width="16" height="1.6" rx="1"/>
+    <rect x="-0.5" y="-5" width="1" height="10" rx="1" transform="rotate(45)"/>
+    <rect x="-5" y="-0.5" width="10" height="1" rx="1" transform="rotate(45)"/>
+  </g>
+</svg>

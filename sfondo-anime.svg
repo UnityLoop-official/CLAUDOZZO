@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#2d1b69"/>
+      <stop offset="50%" stop-color="#1a0a3e"/>
+      <stop offset="100%" stop-color="#0a0020"/>
+    </radialGradient>
+    <radialGradient id="star" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c77dff" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#c77dff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff6bcb" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#ff6bcb" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <!-- Big glows -->
+  <circle cx="200" cy="300" r="200" fill="url(#glow1)"/>
+  <circle cx="650" cy="800" r="250" fill="url(#glow2)"/>
+  <circle cx="400" cy="150" r="150" fill="url(#glow1)"/>
+  <!-- Stars -->
+  <circle cx="100" cy="80" r="2" fill="white" opacity="0.9"/>
+  <circle cx="250" cy="50" r="1.5" fill="white" opacity="0.7"/>
+  <circle cx="400" cy="30" r="2.5" fill="white" opacity="0.8"/>
+  <circle cx="550" cy="70" r="1.5" fill="white" opacity="0.6"/>
+  <circle cx="700" cy="40" r="2" fill="white" opacity="0.9"/>
+  <circle cx="80" cy="200" r="1.5" fill="white" opacity="0.5"/>
+  <circle cx="300" cy="180" r="2" fill="white" opacity="0.8"/>
+  <circle cx="500" cy="160" r="1" fill="white" opacity="0.7"/>
+  <circle cx="720" cy="200" r="2.5" fill="white" opacity="0.6"/>
+  <circle cx="150" cy="350" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="450" cy="320" r="2" fill="white" opacity="0.5"/>
+  <circle cx="600" cy="380" r="1" fill="white" opacity="0.8"/>
+  <circle cx="50" cy="500" r="2" fill="white" opacity="0.7"/>
+  <circle cx="350" cy="480" r="1.5" fill="white" opacity="0.6"/>
+  <circle cx="750" cy="520" r="2" fill="white" opacity="0.9"/>
+  <circle cx="200" cy="600" r="1" fill="white" opacity="0.5"/>
+  <circle cx="500" cy="650" r="2.5" fill="white" opacity="0.8"/>
+  <circle cx="100" cy="750" r="1.5" fill="white" opacity="0.7"/>
+  <circle cx="650" cy="700" r="2" fill="white" opacity="0.6"/>
+  <circle cx="400" cy="850" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="300" cy="950" r="2" fill="white" opacity="0.5"/>
+  <circle cx="700" cy="900" r="1" fill="white" opacity="0.8"/>
+  <circle cx="550" cy="1050" r="2" fill="white" opacity="0.7"/>
+  <circle cx="150" cy="1100" r="1.5" fill="white" opacity="0.6"/>
+  <!-- Sparkle crosses -->
+  <g transform="translate(400,250)" opacity="0.9" fill="#c77dff">
+    <rect x="-1" y="-12" width="2" height="24" rx="1"/>
+    <rect x="-12" y="-1" width="24" height="2" rx="1"/>
+    <rect x="-0.7" y="-8" width="1.4" height="16" rx="1" transform="rotate(45)"/>
+    <rect x="-8" y="-0.7" width="16" height="1.4" rx="1" transform="rotate(45)"/>
+  </g>
+  <g transform="translate(150,450)" opacity="0.7" fill="#ff85cb">
+    <rect x="-0.8" y="-9" width="1.6" height="18" rx="1"/>
+    <rect x="-9" y="-0.8" width="18" height="1.6" rx="1"/>
+    <rect x="-0.5" y="-6" width="1" height="12" rx="1" transform="rotate(45)"/>
+    <rect x="-6" y="-0.5" width="12" height="1" rx="1" transform="rotate(45)"/>
+  </g>
+  <g transform="translate(650,350)" opacity="0.8" fill="#ffd700">
+    <rect x="-1" y="-10" width="2" height="20" rx="1"/>
+    <rect x="-10" y="-1" width="20" height="2" rx="1"/>
+    <rect x="-0.7" y="-7" width="1.4" height="14" rx="1" transform="rotate(45)"/>
+    <rect x="-7" y="-0.7" width="14" height="1.4" rx="1" transform="rotate(45)"/>
+  </g>
+  <g transform="translate(300,700)" opacity="0.6" fill="#c77dff">
+    <rect x="-0.8" y="-8" width="1.6" height="16" rx="1"/>
+    <rect x="-8" y="-0.8" width="16" height="1.6" rx="1"/>
+    <rect x="-0.5" y="-5" width="1" height="10" rx="1" transform="rotate(45)"/>
+    <rect x="-5" y="-0.5" width="10" height="1" rx="1" transform="rotate(45)"/>
+  </g>
+  <g transform="translate(580,550)" opacity="0.7" fill="#ff85cb">
+    <rect x="-1" y="-11" width="2" height="22" rx="1"/>
+    <rect x="-11" y="-1" width="22" height="2" rx="1"/>
+    <rect x="-0.7" y="-7" width="1.4" height="14" rx="1" transform="rotate(45)"/>
+    <rect x="-7" y="-0.7" width="14" height="1.4" rx="1" transform="rotate(45)"/>
+  </g>
+  <!-- Crescent moon -->
+  <g transform="translate(620,120)">
+    <circle cx="0" cy="0" r="35" fill="#ffd700" opacity="0.15"/>
+    <circle cx="0" cy="0" r="25" fill="#ffd700" opacity="0.9"/>
+    <circle cx="10" cy="-5" r="22" fill="#1a0a3e"/>
+  </g>
+  <!-- Sakura petals -->
+  <g opacity="0.5">
+    <ellipse cx="120" cy="550" rx="6" ry="10" fill="#ff85cb" transform="rotate(30,120,550)"/>
+    <ellipse cx="500" cy="450" rx="5" ry="8" fill="#ffb7dd" transform="rotate(-20,500,450)"/>
+    <ellipse cx="680" cy="600" rx="6" ry="9" fill="#ff85cb" transform="rotate(60,680,600)"/>
+    <ellipse cx="250" cy="850" rx="5" ry="8" fill="#ffb7dd" transform="rotate(-40,250,850)"/>
+    <ellipse cx="550" cy="900" rx="6" ry="10" fill="#ff85cb" transform="rotate(15,550,900)"/>
+    <ellipse cx="80" cy="950" rx="4" ry="7" fill="#ffb7dd" transform="rotate(50,80,950)"/>
+    <ellipse cx="720" cy="1050" rx="5" ry="9" fill="#ff85cb" transform="rotate(-30,720,1050)"/>
+  </g>
+</svg>
