@@ -1464,6 +1464,115 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
     height: 40px !important;
   }
 }
+
+/* ==================== ARTIFACTS ==================== */
+.artifact {
+  margin: 10px 0;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(10, 10, 30, 0.95);
+  overflow: hidden;
+}
+.artifact-header {
+  padding: 10px 14px;
+  font-family: 'Boogaloo', cursive;
+  font-size: 1rem;
+  color: #fff;
+  background: rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.artifact-error { padding: 12px; color: #ff6b6b; font-style: italic; }
+
+/* QUIZ */
+.quiz-question { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.quiz-q { font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; }
+.quiz-options { display: flex; flex-direction: column; gap: 6px; }
+.quiz-opt {
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 8px 14px;
+  color: var(--text);
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+.quiz-opt:hover:not(.answered) { background: rgba(77,150,255,0.15); border-color: #4d96ff; }
+.quiz-opt.answered { cursor: default; opacity: 0.7; }
+.quiz-opt.correct.answered { background: rgba(107,203,119,0.2); border-color: #6bcb77; opacity: 1; }
+.quiz-opt.wrong { background: rgba(255,107,107,0.2); border-color: #ff6b6b; opacity: 1; }
+.quiz-score { padding: 10px 14px; font-weight: 700; font-size: 0.95rem; text-align: center; background: rgba(255,255,255,0.03); }
+.score-val { color: #6bcb77; font-size: 1.1rem; }
+
+/* SVG */
+.artifact-svg {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  background: rgba(255,255,255,0.03);
+  border-radius: 14px;
+}
+.artifact-svg svg { max-width: 100%; max-height: 250px; }
+
+/* GAME */
+.game-iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+  border-radius: 0 0 12px 12px;
+  background: #111;
+}
+
+/* CODE */
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.code-lang { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #4d96ff; letter-spacing: 1px; }
+.code-copy {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--soft);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: 'Baloo 2', cursive;
+}
+.code-copy:hover { background: rgba(255,255,255,0.08); }
+.artifact-code pre {
+  padding: 14px;
+  overflow-x: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #e0e0e0;
+  margin: 0;
+}
+.hl-keyword { color: #c77dff; font-weight: 700; }
+.hl-string { color: #6bcb77; }
+.hl-number { color: #ffd93d; }
+.hl-comment { color: #666; font-style: italic; }
+
+/* CHECKLIST */
+.checklist-progress { padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+.progress-bar { flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #4d96ff, #6bcb77); border-radius: 4px; transition: width 0.3s; }
+.progress-text { font-size: 0.8rem; font-weight: 700; color: var(--soft); min-width: 40px; text-align: right; }
+.checklist-items { padding: 4px 14px 14px; }
+.checklist-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.88rem; cursor: pointer;
+}
+.checklist-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: #6bcb77; cursor: pointer; flex-shrink: 0; }
+.checklist-item.checked span { text-decoration: line-through; opacity: 0.5; }
 </style>
 </head>
 <body class="vibe-roblox">
@@ -2495,6 +2604,43 @@ initLanding();
 setTimeout(() => renderProjects('roblox'), 100);
 
 // ==================== VIBES ====================
+const ARTIFACT_INSTRUCTIONS = `
+ARTIFACTS - Quando è appropriato, puoi creare contenuti interattivi usando questi formati speciali.
+Usali SOLO quando la richiesta lo giustifica (quiz, disegni, giochi, codice, checklist).
+Scrivi SEMPRE del testo introduttivo PRIMA dell'artifact. Ogni messaggio può avere UN solo artifact.
+
+QUIZ (per quiz/domande):
+:::artifact:quiz
+{"title":"Titolo Quiz","questions":[{"q":"Domanda?","options":["A","B","C","D"],"correct":0}]}
+:::
+
+SVG (per disegni/illustrazioni - usa colori vivaci, adatti a bambini):
+:::artifact:svg
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">...</svg>
+:::
+
+GAME (per mini giochi HTML, TUTTO in un unico blocco, max 60 righe, niente risorse esterne):
+:::artifact:game
+<style>body{margin:0;background:#222;color:#fff;font-family:sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;}</style>
+<div id="game">...</div>
+<script>/* game logic */</script>
+:::
+
+CODE (per codice con syntax highlighting - specifica sempre il linguaggio):
+:::artifact:code
+lang=lua
+local x = 10
+print(x)
+:::
+
+CHECKLIST (per liste di cose da fare/progetto):
+:::artifact:checklist
+{"title":"Titolo Progetto","items":["Passo 1","Passo 2","Passo 3"]}
+:::
+
+REGOLE: Il JSON deve essere valido. Non usare artifact per risposte semplici.
+`;
+
 const vibes = {
   roblox: {
     label: "ROBLOX BRO 🎮🕹️",
@@ -2503,7 +2649,7 @@ const vibes = {
     color: "#00b4d8",
     glow: "#00b4d888",
     particles: ["🎮","🕹️","⚔️","💎","🏆","💀","🎯","🛡️","🔑","👾"],
-    system: `Sei un assistente AI che risponde come un ragazzo di 11 anni super appassionato di Roblox. 
+    system: ARTIFACT_INSTRUCTIONS + `\nPERSONALITA':\nSei un assistente AI che risponde come un ragazzo di 11 anni super appassionato di Roblox. 
 Usi spesso: "bro", "fr fr", "no cap", "W", "L", "ratio", "slay", "rizz", "goofy", "lowkey", "ngl", "sus", "gg", "ez clap", "skill issue".
 Parli sempre in italiano mescolato con questi termini slang. 
 Sei esperto di Roblox (adopt me, blox fruits, brookhaven, mm2).
@@ -2518,7 +2664,7 @@ Esempio risposta: "Bro quella domanda è FIRE fr fr 💎 allora ngl ti spiego tu
     color: "#ff85a1",
     glow: "#ff85a188",
     particles: ["🍩","🌸","💖","🦄","🧋","🎀","🍡","💕","🌷","🍰"],
-    system: `Sei un assistente AI super kawaii e carino che risponde come una persona che ama l'estetica mochinut/kawaii.
+    system: ARTIFACT_INSTRUCTIONS + `\nPERSONALITA':\nSei un assistente AI super kawaii e carino che risponde come una persona che ama l'estetica mochinut/kawaii.
 Usi spesso: "uwu", "owo", "omg", "bestie", "slay", "iconic", "literally", "vibes", "aesthetic", "cute", "adorable".
 Parli in italiano con questi termini carini. Usi tante emoji carine: 🌸💖🍩🦄✨🌈
 Sei appassionata di bubble tea, donut mochi, aesthetic, tumblr, pinterest.
@@ -2533,7 +2679,7 @@ Esempio: "OMG bestie questa domanda è literally so cute uwu 🌸 ti rispondo su
     color: "#ffd93d",
     glow: "#ffd93d88",
     particles: ["🐊","💣","🤌","🍌","🐘","🌍","🍕","🐍","🦅","💥"],
-    system: `Sei un assistente AI con il "Italian Brainrot" - quel trend di internet italiano con personaggi assurdi come Bombardiro Crocodilo, Tralalelo Tralala, Cappuccino Assassino, Bombombini Gusini.
+    system: ARTIFACT_INSTRUCTIONS + `\nPERSONALITA':\nSei un assistente AI con il "Italian Brainrot" - quel trend di internet italiano con personaggi assurdi come Bombardiro Crocodilo, Tralalelo Tralala, Cappuccino Assassino, Bombombini Gusini.
 Rispondi sempre in italiano con riferimenti a questi meme assurdi.
 Fai riferimenti a: "Tralalelo tralala", "Bombardiro crocodilo", "Brr brr patapim", "Tung tung tung sahur", "La vaca saturno saturnita".
 Parla in modo assurdo, nonsense ma divertente. Usa molte esclamazioni italiane.
@@ -2548,7 +2694,7 @@ Esempio: "AH MIO FRATELLO! Tralalelo tralala! La risposta è... BOMBARDIRO CROCO
     color: "#6bcb77",
     glow: "#6bcb7788",
     particles: ["⛏️","🟫","💎","🌲","🐄","💣","🏠","⚔️","🪨","🔥"],
-    system: `Sei un assistente AI che risponde come Steve di Minecraft, un esperto giocatore di Minecraft survival.
+    system: ARTIFACT_INSTRUCTIONS + `\nPERSONALITA':\nSei un assistente AI che risponde come Steve di Minecraft, un esperto giocatore di Minecraft survival.
 Usi riferimenti costanti a Minecraft: "crafta", "mina", "spawn", "creeper", "enderman", "nether", "diamante", "crafting table".
 Parli in italiano ma con termini di Minecraft ovunque.
 Fai analogie con Minecraft per spiegare tutto: "è come craftare un diamante bro".
@@ -2564,7 +2710,7 @@ Esempio: "Perfetto! Come costruire una base in Minecraft, prima devi minare bro 
     color: "#c77dff",
     glow: "#c77dff88",
     particles: ["🎌","⭐","🌸","💫","🔮","👁️","💜","🗡️","🌙","✨"],
-    system: `Sei un assistente AI che risponde come un personaggio di anime shonen/shojo.
+    system: ARTIFACT_INSTRUCTIONS + `\nPERSONALITA':\nSei un assistente AI che risponde come un personaggio di anime shonen/shojo.
 Usi: "sugoi", "nani?!", "kawaii", "senpai", "nakama", "yatta!", "ganbatte", "mou", "ara ara", "nee nee".
 Parli in italiano mescolato con queste parole giapponesi da anime.
 Sei appassionato di: Naruto, Dragon Ball, One Piece, Demon Slayer, My Hero Academia, Spy x Family.
@@ -2813,6 +2959,212 @@ function fakeReply(text, vibe) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
+// ==================== ARTIFACTS SYSTEM ====================
+function parseArtifacts(text) {
+  const segments = [];
+  const regex = /:::artifact:(quiz|svg|game|code|checklist)\n([\s\S]*?):::/g;
+  let lastIndex = 0;
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      const before = text.slice(lastIndex, match.index).trim();
+      if (before) segments.push({ type: 'text', content: before });
+    }
+    segments.push({ type: match[1], content: match[2].trim() });
+    lastIndex = regex.lastIndex;
+  }
+  if (lastIndex < text.length) {
+    const after = text.slice(lastIndex).trim();
+    if (after) segments.push({ type: 'text', content: after });
+  }
+  if (segments.length === 0) segments.push({ type: 'text', content: text });
+  return segments;
+}
+
+function renderArtifact(segment) {
+  switch (segment.type) {
+    case 'text': return `<span>${escapeHtml(segment.content)}</span>`;
+    case 'quiz': return renderQuiz(segment.content);
+    case 'svg': return renderSvg(segment.content);
+    case 'game': return renderGame(segment.content);
+    case 'code': return renderCode(segment.content);
+    case 'checklist': return renderChecklist(segment.content);
+    default: return `<span>${escapeHtml(segment.content)}</span>`;
+  }
+}
+
+// --- QUIZ ---
+function renderQuiz(json) {
+  try {
+    const data = JSON.parse(json);
+    const quizId = 'quiz-' + Date.now();
+    let html = `<div class="artifact artifact-quiz" id="${quizId}">
+      <div class="artifact-header">${escapeHtml(data.title || 'Quiz')}</div>`;
+    data.questions.forEach((q, qi) => {
+      html += `<div class="quiz-question" data-qi="${qi}">
+        <div class="quiz-q">${qi + 1}. ${escapeHtml(q.q)}</div>
+        <div class="quiz-options">`;
+      q.options.forEach((opt, oi) => {
+        html += `<button class="quiz-opt" onclick="checkQuiz(this,${oi === q.correct},'${quizId}')" data-correct="${oi === q.correct}">${escapeHtml(opt)}</button>`;
+      });
+      html += `</div></div>`;
+    });
+    html += `<div class="quiz-score">${t('quiz_score') || 'Punteggio'}: <span class="score-val">0</span>/${data.questions.length}</div></div>`;
+    return html;
+  } catch { return `<div class="artifact artifact-error">Quiz non valido</div>`; }
+}
+
+function checkQuiz(btn, isCorrect, quizId) {
+  if (btn.classList.contains('answered')) return;
+  const parent = btn.closest('.quiz-options');
+  parent.querySelectorAll('.quiz-opt').forEach(b => {
+    b.classList.add('answered');
+    if (b.dataset.correct === 'true') b.classList.add('correct');
+  });
+  if (!isCorrect) btn.classList.add('wrong');
+  const quiz = document.getElementById(quizId);
+  let score = 0;
+  quiz.querySelectorAll('.quiz-question').forEach(q => {
+    const opts = q.querySelector('.quiz-options');
+    if (opts.querySelector('.answered') && !opts.querySelector('.wrong')) score++;
+  });
+  quiz.querySelector('.score-val').textContent = score;
+}
+
+// --- SVG ---
+function renderSvg(svgContent) {
+  const cleaned = svgContent.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/\bon\w+\s*=/gi, 'data-blocked=');
+  return `<div class="artifact artifact-svg">${cleaned}</div>`;
+}
+
+// --- GAME ---
+function renderGame(htmlContent) {
+  const blob = new Blob([`<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:sans-serif;overflow:hidden;}</style></head><body>${htmlContent}</body></html>`], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  return `<div class="artifact artifact-game">
+    <div class="artifact-header">Mini Game</div>
+    <iframe sandbox="allow-scripts" src="${url}" class="game-iframe"></iframe>
+  </div>`;
+}
+
+// --- CODE ---
+function renderCode(content) {
+  const lines = content.split('\n');
+  let lang = 'text';
+  let code = content;
+  if (lines[0].startsWith('lang=')) {
+    lang = lines[0].replace('lang=', '').trim();
+    code = lines.slice(1).join('\n');
+  }
+  const highlighted = highlightSyntax(escapeHtml(code), lang);
+  return `<div class="artifact artifact-code">
+    <div class="code-header"><span class="code-lang">${lang}</span>
+      <button class="code-copy" onclick="copyCode(this)">Copia</button></div>
+    <pre><code>${highlighted}</code></pre>
+  </div>`;
+}
+
+function highlightSyntax(code, lang) {
+  const keywords = {
+    lua: /\b(local|function|end|if|then|else|elseif|for|while|do|return|nil|true|false|and|or|not|in|repeat|until)\b/g,
+    python: /\b(def|class|if|elif|else|for|while|return|import|from|as|True|False|None|in|not|and|or|with|try|except)\b/g,
+    javascript: /\b(function|const|let|var|if|else|for|while|return|true|false|null|undefined|new|class|this|async|await)\b/g,
+  };
+  const kw = keywords[lang] || keywords.lua;
+  return code
+    .replace(/(--.*$|#.*$|\/\/.*$)/gm, '<span class="hl-comment">$1</span>')
+    .replace(/("[^"]*"|'[^']*')/g, '<span class="hl-string">$1</span>')
+    .replace(/\b(\d+\.?\d*)\b/g, '<span class="hl-number">$1</span>')
+    .replace(kw, '<span class="hl-keyword">$1</span>');
+}
+
+function copyCode(btn) {
+  const code = btn.closest('.artifact-code').querySelector('code').textContent;
+  navigator.clipboard.writeText(code);
+  btn.textContent = 'Copiato!';
+  setTimeout(() => btn.textContent = 'Copia', 2000);
+}
+
+// --- CHECKLIST ---
+function renderChecklist(json) {
+  try {
+    const data = JSON.parse(json);
+    const id = 'cl-' + Date.now();
+    let html = `<div class="artifact artifact-checklist" id="${id}">
+      <div class="artifact-header">${escapeHtml(data.title || 'Checklist')}</div>
+      <div class="checklist-progress"><div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+        <span class="progress-text">0/${data.items.length}</span></div>
+      <div class="checklist-items">`;
+    data.items.forEach((item) => {
+      html += `<label class="checklist-item"><input type="checkbox" onchange="updateChecklist('${id}',${data.items.length},this)"><span>${escapeHtml(item)}</span></label>`;
+    });
+    html += `</div></div>`;
+    return html;
+  } catch { return `<div class="artifact artifact-error">Checklist non valida</div>`; }
+}
+
+function updateChecklist(id, total, cb) {
+  const el = document.getElementById(id);
+  const checked = el.querySelectorAll('input:checked').length;
+  const pct = Math.round((checked / total) * 100);
+  el.querySelector('.progress-fill').style.width = pct + '%';
+  el.querySelector('.progress-text').textContent = `${checked}/${total}`;
+  cb.closest('.checklist-item').classList.toggle('checked', cb.checked);
+}
+
+// --- FAKE ARTIFACT REPLIES (per modalità offline) ---
+function fakeArtifactReply(text, vibe) {
+  const t2 = text.toLowerCase();
+
+  if (t2.includes('quiz') || t2.includes('domande') || t2.includes('indovinello') || t2.includes('domanda')) {
+    const quizzes = {
+      roblox: `Bro ecco il quiz FIRE per te! Vediamo se sei un pro player fr fr\n\n:::artifact:quiz\n{"title":"Quiz Roblox Pro","questions":[{"q":"Qual è la moneta di Roblox?","options":["V-Bucks","Robux","Gems","Coins"],"correct":1},{"q":"In Blox Fruits, cosa mangi per avere poteri?","options":["Pizza","Frutti del diavolo","Diamanti","Pozioni"],"correct":1},{"q":"Cosa fai in un Obby?","options":["Cucini","Superi ostacoli","Peschi","Dormi"],"correct":1}]}\n:::`,
+      mochinut: `OMG bestie ecco un quiz kawaii per te uwu!\n\n:::artifact:quiz\n{"title":"Quiz Kawaii Aesthetic","questions":[{"q":"Cosa sono i Mochinut?","options":["Scarpe","Donut di mochi","Animali","Colori"],"correct":1},{"q":"Qual è il colore più aesthetic?","options":["Nero","Pastello rosa","Grigio","Marrone"],"correct":1},{"q":"Cosa si beve in stile kawaii?","options":["Caffè nero","Bubble Tea","Acqua","Latte"],"correct":1}]}\n:::`,
+      brainrot: `TRALALELO! Ecco il quiz più brainrot di sempre bro!\n\n:::artifact:quiz\n{"title":"Quiz Brainrot Italiano","questions":[{"q":"Come si chiama il coccodrillo bomba?","options":["Tralalalino","Bombardiro Crocodilo","Cappuccino","Bombombini"],"correct":1},{"q":"Cosa dice Tralalelo?","options":["Ciao","Tralala","Mamma mia","Brr brr"],"correct":1},{"q":"Chi è La Vaca Saturno?","options":["Un gatto","Una mucca spaziale","Un cane","Un pesce"],"correct":1}]}\n:::`,
+      minecraft: `GG bro! Ecco un quiz survival per te!\n\n:::artifact:quiz\n{"title":"Quiz Minecraft Survival","questions":[{"q":"A che livello trovi i diamanti?","options":["Livello 64","Livello 0","Livello -59","Livello 30"],"correct":2},{"q":"Cosa droppa il Creeper?","options":["Diamanti","Gunpowder","Ferro","Ossa"],"correct":1},{"q":"Quanti blocchi di ossidiana servono per un portale?","options":["8","10","14","12"],"correct":1}]}\n:::`,
+      anime: `NANI?! Ecco il quiz definitivo nakama!\n\n:::artifact:quiz\n{"title":"Quiz Anime Senpai","questions":[{"q":"Chi è il protagonista di One Piece?","options":["Naruto","Goku","Luffy","Tanjiro"],"correct":2},{"q":"Cosa significa 'Sugoi'?","options":["Brutto","Fantastico","Triste","Piccolo"],"correct":1},{"q":"Qual è la tecnica di Naruto?","options":["Kamehameha","Rasengan","Bankai","Detroit Smash"],"correct":1}]}\n:::`,
+    };
+    return quizzes[vibe] || quizzes.roblox;
+  }
+
+  if (t2.includes('disegn') || t2.includes('draw') || t2.includes('immagine') || t2.includes('disegna')) {
+    const drawings = {
+      roblox: `Bro ecco un personaggio Roblox per te!\n\n:::artifact:svg\n<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><rect x="60" y="30" width="80" height="80" rx="8" fill="#00b4d8"/><rect x="65" y="35" width="25" height="20" rx="4" fill="#fff"/><rect x="110" y="35" width="25" height="20" rx="4" fill="#fff"/><circle cx="77" cy="45" r="5" fill="#333"/><circle cx="122" cy="45" r="5" fill="#333"/><rect x="80" y="70" width="40" height="8" rx="4" fill="#333"/><rect x="60" y="120" width="80" height="50" rx="6" fill="#0077b6"/><rect x="55" y="120" width="20" height="40" rx="6" fill="#00b4d8"/><rect x="125" y="120" width="20" height="40" rx="6" fill="#00b4d8"/><rect x="70" y="175" width="25" height="20" rx="4" fill="#333"/><rect x="105" y="175" width="25" height="20" rx="4" fill="#333"/></svg>\n:::`,
+      mochinut: `Aww bestie ecco un mochinut kawaii per te!\n\n:::artifact:svg\n<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="90" r="60" fill="#ff85a1"/><circle cx="100" cy="90" r="45" fill="#FFE4EC"/><circle cx="82" cy="82" r="6" fill="#333"/><circle cx="118" cy="82" r="6" fill="#333"/><circle cx="80" cy="78" r="2" fill="#fff"/><circle cx="116" cy="78" r="2" fill="#fff"/><ellipse cx="72" cy="95" rx="10" ry="6" fill="#FFB6C1" opacity="0.5"/><ellipse cx="128" cy="95" rx="10" ry="6" fill="#FFB6C1" opacity="0.5"/><path d="M90 98 Q100 108 110 98" stroke="#333" stroke-width="2" fill="none"/><circle cx="100" cy="160" r="25" fill="#FFE4EC" stroke="#ff85a1" stroke-width="2"/></svg>\n:::`,
+      brainrot: `BOMBARDIRO CROCODILO in persona! Tralalelo!\n\n:::artifact:svg\n<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="100" rx="70" ry="50" fill="#2d8a2e"/><ellipse cx="100" cy="120" rx="60" ry="25" fill="#3da33e"/><rect x="40" y="110" width="120" height="15" rx="7" fill="#2d8a2e"/><circle cx="75" cy="75" r="15" fill="#fff"/><circle cx="125" cy="75" r="15" fill="#fff"/><circle cx="78" cy="75" r="7" fill="#333"/><circle cx="128" cy="75" r="7" fill="#333"/><rect x="60" y="105" width="80" height="5" fill="#333" rx="2"/><line x1="65" y1="108" x2="65" y2="103" stroke="#fff" stroke-width="3"/><line x1="80" y1="108" x2="80" y2="103" stroke="#fff" stroke-width="3"/><line x1="95" y1="108" x2="95" y2="103" stroke="#fff" stroke-width="3"/><line x1="110" y1="108" x2="110" y2="103" stroke="#fff" stroke-width="3"/><line x1="125" y1="108" x2="125" y2="103" stroke="#fff" stroke-width="3"/><ellipse cx="170" cy="100" rx="20" ry="8" fill="#2d8a2e"/></svg>\n:::`,
+      minecraft: `Ecco un Creeper per te bro! Attento che esplode!\n\n:::artifact:svg\n<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="30" width="100" height="100" fill="#4CAF50"/><rect x="60" y="50" width="25" height="25" fill="#1a1a1a"/><rect x="115" y="50" width="25" height="25" fill="#1a1a1a"/><rect x="85" y="80" width="30" height="15" fill="#1a1a1a"/><rect x="75" y="95" width="10" height="20" fill="#1a1a1a"/><rect x="115" y="95" width="10" height="20" fill="#1a1a1a"/><rect x="50" y="130" width="40" height="50" fill="#4CAF50"/><rect x="110" y="130" width="40" height="50" fill="#4CAF50"/></svg>\n:::`,
+      anime: `SUGOI! Ecco un personaggio anime per te nakama!\n\n:::artifact:svg\n<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="80" r="45" fill="#FFE0BD"/><path d="M55 60 Q60 20 100 25 Q140 20 145 60" fill="#333"/><path d="M55 60 Q50 75 55 80" fill="#333"/><path d="M145 60 Q150 75 145 80" fill="#333"/><ellipse cx="82" cy="78" rx="12" ry="14" fill="#fff"/><ellipse cx="118" cy="78" rx="12" ry="14" fill="#fff"/><circle cx="84" cy="80" r="7" fill="#c77dff"/><circle cx="120" cy="80" r="7" fill="#c77dff"/><circle cx="86" cy="77" r="2.5" fill="#fff"/><circle cx="122" cy="77" r="2.5" fill="#fff"/><path d="M92 100 Q100 107 108 100" stroke="#c9184a" stroke-width="1.5" fill="none"/><ellipse cx="72" cy="95" rx="8" ry="4" fill="#FFB6C1" opacity="0.4"/><ellipse cx="128" cy="95" rx="8" ry="4" fill="#FFB6C1" opacity="0.4"/></svg>\n:::`,
+    };
+    return drawings[vibe] || drawings.roblox;
+  }
+
+  if (t2.includes('gioco') || t2.includes('game') || t2.includes('gioca') || t2.includes('giochiamo')) {
+    return `Ecco un mini gioco per te bro! Clicca il più veloce possibile!\n\n:::artifact:game\n<style>body{background:#1a1a2e;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:16px;user-select:none;}#target{width:60px;height:60px;background:#ff6b6b;border-radius:50%;cursor:pointer;position:absolute;transition:none;}#score{font-size:1.4rem;font-weight:bold;}#timer{font-size:1rem;color:#aaa;}button{background:#4d96ff;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:1rem;cursor:pointer;}</style>\n<div id="score">Punti: 0</div><div id="timer">Tempo: 15s</div><div id="target" style="display:none"></div><button onclick="startGame()">GIOCA!</button>\n<script>\nlet pts=0,timeLeft=15,interval;\nconst target=document.getElementById("target"),scoreEl=document.getElementById("score"),timerEl=document.getElementById("timer"),btn=document.querySelector("button");\nfunction move(){target.style.left=Math.random()*80+10+"%";target.style.top=Math.random()*60+20+"%";}\ntarget.onclick=function(){pts++;scoreEl.textContent="Punti: "+pts;move();};\nfunction startGame(){pts=0;timeLeft=15;scoreEl.textContent="Punti: 0";btn.style.display="none";target.style.display="block";move();interval=setInterval(()=>{timeLeft--;timerEl.textContent="Tempo: "+timeLeft+"s";if(timeLeft<=0){clearInterval(interval);target.style.display="none";btn.style.display="block";btn.textContent="RIGIOCA!";timerEl.textContent="Fine! "+pts+" punti!";}},1000);}\n</script>\n:::`;
+  }
+
+  if (t2.includes('codice') || t2.includes('code') || t2.includes('script') || t2.includes('programma') || t2.includes('lua')) {
+    const codes = {
+      roblox: `Ecco uno script Roblox base per te bro!\n\n:::artifact:code\nlang=lua\n-- Script per una porta che si apre\nlocal door = script.Parent\nlocal isOpen = false\n\nlocal function toggleDoor()\n  isOpen = not isOpen\n  if isOpen then\n    door.Transparency = 0.8\n    door.CanCollide = false\n  else\n    door.Transparency = 0\n    door.CanCollide = true\n  end\nend\n\ndoor.Touched:Connect(function(hit)\n  if hit.Parent:FindFirstChild("Humanoid") then\n    toggleDoor()\n    wait(3)\n    toggleDoor()\n  end\nend)\n:::`,
+      minecraft: `Ecco un comando per una farm bro!\n\n:::artifact:code\nlang=text\n-- Comandi per costruire una farm base\n/fill ~-5 ~0 ~-5 ~5 ~3 ~5 minecraft:glass\n/fill ~-4 ~0 ~-4 ~4 ~0 ~4 minecraft:farmland\n/fill ~-4 ~1 ~-4 ~4 ~1 ~4 minecraft:water\n/fill ~-4 ~1 ~-4 ~4 ~1 ~4 minecraft:wheat\n:::`,
+      default: `Ecco del codice per te!\n\n:::artifact:code\nlang=python\n# Programma semplice\nnome = "Claudozzo"\neta = 10\n\ndef saluta(nome):\n    print(f"Ciao {nome}!")\n    print("Benvenuto nel coding!")\n\nfor i in range(3):\n    saluta(nome)\n:::`,
+    };
+    return codes[vibe] || codes.default || codes.roblox;
+  }
+
+  if (t2.includes('lista') || t2.includes('checklist') || t2.includes('progetto') || t2.includes('passi') || t2.includes('piano')) {
+    const checklists = {
+      roblox: `Ecco il piano per il tuo gioco Roblox bro!\n\n:::artifact:checklist\n{"title":"Crea il tuo Gioco Roblox","items":["Apri Roblox Studio e scegli un template","Costruisci la mappa base con le parti","Aggiungi colori e materiali","Scrivi il primo script Lua","Testa il gioco in Play mode","Aggiungi un sistema di punti","Invita un amico a testare","Pubblica il gioco!"]}\n:::`,
+      mochinut: `Bestie ecco il piano per il tuo progetto kawaii!\n\n:::artifact:checklist\n{"title":"Progetto Bullet Journal Kawaii","items":["Scegli un quaderno carino","Disegna la copertina con washi tape","Crea la palette colori pastello","Fai il layout della settimana","Aggiungi sticker e doodles","Scrivi i tuoi obiettivi","Decora con pennarelli colorati","Fai una foto e condividi!"]}\n:::`,
+      brainrot: `BOMBARDIRO ti dà il piano! Tralalelo!\n\n:::artifact:checklist\n{"title":"Crea il tuo Personaggio Brainrot","items":["Inventa un nome assurdo italiano","Disegna la forma del personaggio","Scegli il suo potere speciale","Scrivi il suo verso iconico","Crea la sua storia di origine","Disegna 3 espressioni diverse","Inventa un nemico","Scrivi la prima avventura!"]}\n:::`,
+      minecraft: `Piano survival completo bro!\n\n:::artifact:checklist\n{"title":"Sfida Survival 7 Giorni","items":["Giorno 1: Raccogli legno e costruisci un rifugio","Giorno 2: Mina pietra e crea attrezzi","Giorno 3: Trova ferro e crea armatura","Giorno 4: Costruisci una farm di cibo","Giorno 5: Esplora una grotta profonda","Giorno 6: Trova diamanti!","Giorno 7: Costruisci il portale del Nether"]}\n:::`,
+      anime: `GANBATTE nakama! Ecco il tuo piano!\n\n:::artifact:checklist\n{"title":"Crea il tuo Anime Originale","items":["Inventa il protagonista e il suo background","Disegna il character design","Crea il sistema di poteri","Inventa il villain principale","Scrivi la trama del primo episodio","Disegna 3 scene chiave","Scegli la opening song","Presenta la storia a un amico!"]}\n:::`,
+    };
+    return checklists[vibe] || checklists.roblox;
+  }
+
+  return null; // nessun artifact, usa fakeReply normale
+}
+
 async function send() {
   if (isLoading) return;
   const input = document.getElementById('userInput');
@@ -2876,19 +3228,24 @@ async function send() {
         sessionMessages.push({ role: 'assistant', content: reply });
       } else {
         sessionMessages.pop(); // rimuovi l'ultimo user msg se fallisce
-        reply = fakeReply(text, currentVibe);
+        reply = fakeArtifactReply(text, currentVibe) || fakeReply(text, currentVibe);
       }
     } else {
       // Nessuna API: usa risposte pre-scritte
       await new Promise(r => setTimeout(r, 800 + Math.random() * 1200));
-      reply = fakeReply(text, currentVibe);
+      reply = fakeArtifactReply(text, currentVibe) || fakeReply(text, currentVibe);
     }
 
     loading.remove();
 
     const aMsg = document.createElement('div');
     aMsg.className = 'msg ai';
-    aMsg.textContent = reply;
+    const segments = parseArtifacts(reply);
+    if (segments.length === 1 && segments[0].type === 'text') {
+      aMsg.textContent = reply;
+    } else {
+      aMsg.innerHTML = segments.map(s => renderArtifact(s)).join('');
+    }
     msgs.appendChild(aMsg);
 
     // Salva in cronologia

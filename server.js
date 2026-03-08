@@ -59,7 +59,7 @@ const server = http.createServer(async (req, res) => {
         // Chiama Claude API con la cronologia di sessione
         const payload = JSON.stringify({
           model: 'claude-sonnet-4-20250514',
-          max_tokens: 300,
+          max_tokens: 2048,
           system: system,
           messages: messages
         });
