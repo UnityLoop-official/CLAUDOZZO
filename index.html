@@ -2491,6 +2491,20 @@ Esempio: "NANI?! Questa domanda... sugoi davvero! ✨ Ascolta bene nakama, ti sp
 
 let currentVibe = 'roblox';
 let isLoading = false;
+let apiAvailable = false;
+
+// Controlla se il server locale ha l'API configurata
+(async function checkApi() {
+  try {
+    const r = await fetch('/api/status');
+    const data = await r.json();
+    apiAvailable = data.api_configured;
+    if (apiAvailable) console.log('[Claudozzo] API Claude ATTIVA');
+    else console.log('[Claudozzo] API non configurata, uso fakeReply');
+  } catch {
+    console.log('[Claudozzo] Nessun server locale, uso fakeReply');
+  }
+})();
 
 function setVibe(btn) {
   document.querySelectorAll('.vibe-btn').forEach(b => b.classList.remove('active'));
@@ -2622,9 +2636,32 @@ async function send() {
   document.getElementById('sendBtn').disabled = true;
 
   try {
-    // Simula un ritardo di risposta
-    await new Promise(r => setTimeout(r, 800 + Math.random() * 1200));
-    const reply = fakeReply(text, currentVibe);
+    let reply;
+
+    if (apiAvailable) {
+      // Chiama la vera API Claude tramite il server locale
+      const v = vibes[currentVibe];
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text,
+          vibe: currentVibe,
+          system: v.system
+        })
+      });
+      const data = await response.json();
+      if (data.reply) {
+        reply = data.reply;
+      } else {
+        // Fallback se API risponde con errore
+        reply = fakeReply(text, currentVibe);
+      }
+    } else {
+      // Nessuna API: usa risposte pre-scritte
+      await new Promise(r => setTimeout(r, 800 + Math.random() * 1200));
+      reply = fakeReply(text, currentVibe);
+    }
 
     loading.remove();
 
