@@ -54,14 +54,14 @@ const server = http.createServer(async (req, res) => {
     req.on('data', chunk => { body += chunk; });
     req.on('end', async () => {
       try {
-        const { message, vibe, system } = JSON.parse(body);
+        const { messages, vibe, system } = JSON.parse(body);
 
-        // Chiama Claude API
+        // Chiama Claude API con la cronologia di sessione
         const payload = JSON.stringify({
           model: 'claude-sonnet-4-20250514',
           max_tokens: 300,
           system: system,
-          messages: [{ role: 'user', content: message }]
+          messages: messages
         });
 
         const options = {

@@ -2578,6 +2578,7 @@ Esempio: "NANI?! Questa domanda... sugoi davvero! ✨ Ascolta bene nakama, ti sp
 let currentVibe = 'roblox';
 let isLoading = false;
 let apiAvailable = false;
+let sessionMessages = []; // memoria temporanea chat - sparisce al refresh
 
 // ==================== PROGETTI PER VIBE ====================
 const vibeProjects = {
@@ -2744,6 +2745,9 @@ function setVibe(btn) {
     <span style="color:var(--soft)">${t('vibe_ask')} 🔥</span>
   </div>`;
 
+  // Reset memoria sessione (nuova vibe = nuovo contesto)
+  sessionMessages = [];
+
   // Spawn particles
   spawnParticles(v.particles, v.emoji);
 
@@ -2854,13 +2858,14 @@ async function send() {
     let reply;
 
     if (apiAvailable) {
-      // Chiama la vera API Claude tramite il server locale
+      // Chiama la vera API Claude con memoria di sessione
       const v = vibes[currentVibe];
+      sessionMessages.push({ role: 'user', content: text });
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: text,
+          messages: sessionMessages,
           vibe: currentVibe,
           system: v.system
         })
@@ -2868,8 +2873,9 @@ async function send() {
       const data = await response.json();
       if (data.reply) {
         reply = data.reply;
+        sessionMessages.push({ role: 'assistant', content: reply });
       } else {
-        // Fallback se API risponde con errore
+        sessionMessages.pop(); // rimuovi l'ultimo user msg se fallisce
         reply = fakeReply(text, currentVibe);
       }
     } else {
