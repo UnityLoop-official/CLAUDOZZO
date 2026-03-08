@@ -3295,11 +3295,12 @@ function renderSvg(svgContent) {
 
 // --- GAME ---
 function renderGame(htmlContent) {
-  const blob = new Blob([`<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:sans-serif;overflow:hidden;}</style></head><body>${htmlContent}</body></html>`], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
+  // Escape per srcdoc: sostituisci & " < per attributo HTML sicuro
+  const safeContent = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:sans-serif;overflow:hidden;background:#222;color:#fff;}</style></head><body>${htmlContent}</body></html>`;
+  const escaped = safeContent.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
   return `<div class="artifact artifact-game">
     <div class="artifact-header">Mini Game</div>
-    <iframe sandbox="allow-scripts" src="${url}" class="game-iframe"></iframe>
+    <iframe sandbox="allow-scripts" srcdoc="${escaped}" class="game-iframe" style="width:100%;height:300px;border:none;border-radius:0 0 12px 12px;background:#111;"></iframe>
   </div>`;
 }
 
