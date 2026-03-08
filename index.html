@@ -2727,42 +2727,18 @@ initLanding();
 setTimeout(() => renderProjects('roblox'), 100);
 
 // ==================== VIBES ====================
-const ARTIFACT_INSTRUCTIONS = `
-ARTIFACTS - Quando è appropriato, puoi creare contenuti interattivi usando questi formati speciali.
-Usali SOLO quando la richiesta lo giustifica (quiz, disegni, giochi, codice, checklist).
-Scrivi SEMPRE del testo introduttivo PRIMA dell'artifact. Ogni messaggio può avere UN solo artifact.
-
-QUIZ (per quiz/domande):
-:::artifact:quiz
-{"title":"Titolo Quiz","questions":[{"q":"Domanda?","options":["A","B","C","D"],"correct":0}]}
-:::
-
-SVG (per disegni/illustrazioni - usa colori vivaci, adatti a bambini):
-:::artifact:svg
-<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">...</svg>
-:::
-
-GAME (per mini giochi HTML, TUTTO in un unico blocco, max 60 righe, niente risorse esterne):
-:::artifact:game
-<style>body{margin:0;background:#222;color:#fff;font-family:sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;}</style>
-<div id="game">...</div>
-<scr ipt>/* game logic */</scr ipt>
-:::
-
-CODE (per codice con syntax highlighting - specifica sempre il linguaggio):
-:::artifact:code
-lang=lua
-local x = 10
-print(x)
-:::
-
-CHECKLIST (per liste di cose da fare/progetto):
-:::artifact:checklist
-{"title":"Titolo Progetto","items":["Passo 1","Passo 2","Passo 3"]}
-:::
-
-REGOLE: Il JSON deve essere valido. Non usare artifact per risposte semplici.
-`;
+const ARTIFACT_INSTRUCTIONS = 'ARTIFACTS - Quando è appropriato, puoi creare contenuti interattivi usando questi formati speciali.\n' +
+'Usali SOLO quando la richiesta lo giustifica (quiz, disegni, giochi, codice, checklist).\n' +
+'Scrivi SEMPRE del testo introduttivo PRIMA dell\'artifact. Ogni messaggio può avere UN solo artifact.\n\n' +
+'QUIZ (per quiz/domande):\n:::artifact:quiz\n{"title":"Titolo Quiz","questions":[{"q":"Domanda?","options":["A","B","C","D"],"correct":0}]}\n:::\n\n' +
+'SVG (per disegni/illustrazioni - usa colori vivaci, adatti a bambini):\n:::artifact:svg\n<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">...</svg>\n:::\n\n' +
+'GAME (per mini giochi HTML interattivi, TUTTO in un unico blocco, max 60 righe, niente risorse esterne):\n:::artifact:game\n' +
+'<style>body{margin:0;background:#222;color:#fff;font-family:sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;}</style>\n' +
+'<div id="game">...</div>\n' +
+'<' + 'script>/* game logic - usa addEventListener per i click */</' + 'script>\n:::\n\n' +
+'CODE (per codice con syntax highlighting - specifica sempre il linguaggio):\n:::artifact:code\nlang=lua\nlocal x = 10\nprint(x)\n:::\n\n' +
+'CHECKLIST (per liste di cose da fare/progetto):\n:::artifact:checklist\n{"title":"Titolo Progetto","items":["Passo 1","Passo 2","Passo 3"]}\n:::\n\n' +
+'REGOLE: Il JSON deve essere valido. Non usare artifact per risposte semplici. Nei GAME usa SEMPRE tag <' + 'script> normali (non usare mai spazi nei tag).';
 
 const vibes = {
   roblox: {
@@ -3296,9 +3272,11 @@ function renderSvg(svgContent) {
 // --- GAME ---
 function renderGame(htmlContent) {
   const gameId = 'game-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+  // Fix: correggi eventuali <scr ipt> con spazio generati dall'AI
+  let fixed = htmlContent.replace(/<scr\s+ipt/gi, '<script').replace(/<\/scr\s+ipt>/gi, '<\/script>');
   // Salva il contenuto HTML per iniezione post-DOM
   window._pendingGames = window._pendingGames || {};
-  window._pendingGames[gameId] = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:sans-serif;overflow:hidden;background:#222;color:#fff;}</style></head><body>' + htmlContent + '</body></html>';
+  window._pendingGames[gameId] = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:sans-serif;overflow:hidden;background:#222;color:#fff;}</style></head><body>' + fixed + '</body></html>';
   return `<div class="artifact artifact-game">
     <div class="artifact-header">Mini Game</div>
     <iframe id="${gameId}" sandbox="allow-scripts" class="game-iframe" style="width:100%;height:300px;border:none;border-radius:0 0 12px 12px;background:#111;"></iframe>
