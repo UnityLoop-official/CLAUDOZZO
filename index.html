@@ -2737,7 +2737,7 @@ GAME (per mini giochi HTML, TUTTO in un unico blocco, max 60 righe, niente risor
 :::artifact:game
 <style>body{margin:0;background:#222;color:#fff;font-family:sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;}</style>
 <div id="game">...</div>
-<script>/* game logic */</script>
+<scr ipt>/* game logic */</scr ipt>
 :::
 
 CODE (per codice con syntax highlighting - specifica sempre il linguaggio):
@@ -3346,7 +3346,9 @@ function fakeArtifactReply(text, vibe) {
   }
 
   if (t2.includes('gioco') || t2.includes('game') || t2.includes('gioca') || t2.includes('giochiamo')) {
-    return `Ecco un mini gioco per te bro! Clicca il più veloce possibile!\n\n:::artifact:game\n<style>body{background:#1a1a2e;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:16px;user-select:none;}#target{width:60px;height:60px;background:#ff6b6b;border-radius:50%;cursor:pointer;position:absolute;transition:none;}#score{font-size:1.4rem;font-weight:bold;}#timer{font-size:1rem;color:#aaa;}button{background:#4d96ff;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:1rem;cursor:pointer;}</style>\n<div id="score">Punti: 0</div><div id="timer">Tempo: 15s</div><div id="target" style="display:none"></div><button onclick="startGame()">GIOCA!</button>\n<script>\nlet pts=0,timeLeft=15,interval;\nconst target=document.getElementById("target"),scoreEl=document.getElementById("score"),timerEl=document.getElementById("timer"),btn=document.querySelector("button");\nfunction move(){target.style.left=Math.random()*80+10+"%";target.style.top=Math.random()*60+20+"%";}\ntarget.onclick=function(){pts++;scoreEl.textContent="Punti: "+pts;move();};\nfunction startGame(){pts=0;timeLeft=15;scoreEl.textContent="Punti: 0";btn.style.display="none";target.style.display="block";move();interval=setInterval(()=>{timeLeft--;timerEl.textContent="Tempo: "+timeLeft+"s";if(timeLeft<=0){clearInterval(interval);target.style.display="none";btn.style.display="block";btn.textContent="RIGIOCA!";timerEl.textContent="Fine! "+pts+" punti!";}},1000);}\n</script>\n:::`;
+    const scOpen = '<' + 'script>';
+    const scClose = '</' + 'script>';
+    return `Ecco un mini gioco per te bro! Clicca il più veloce possibile!\n\n:::artifact:game\n<style>body{background:#1a1a2e;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:16px;user-select:none;}#target{width:60px;height:60px;background:#ff6b6b;border-radius:50%;cursor:pointer;position:absolute;transition:none;}#score{font-size:1.4rem;font-weight:bold;}#timer{font-size:1rem;color:#aaa;}button{background:#4d96ff;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:1rem;cursor:pointer;}</style>\n<div id="score">Punti: 0</div><div id="timer">Tempo: 15s</div><div id="target" style="display:none"></div><button onclick="startGame()">GIOCA!</button>\n${scOpen}\nlet pts=0,timeLeft=15,interval;\nconst target=document.getElementById("target"),scoreEl=document.getElementById("score"),timerEl=document.getElementById("timer"),btn=document.querySelector("button");\nfunction move(){target.style.left=Math.random()*80+10+"%";target.style.top=Math.random()*60+20+"%";}\ntarget.onclick=function(){pts++;scoreEl.textContent="Punti: "+pts;move();};\nfunction startGame(){pts=0;timeLeft=15;scoreEl.textContent="Punti: 0";btn.style.display="none";target.style.display="block";move();interval=setInterval(()=>{timeLeft--;timerEl.textContent="Tempo: "+timeLeft+"s";if(timeLeft<=0){clearInterval(interval);target.style.display="none";btn.style.display="block";btn.textContent="RIGIOCA!";timerEl.textContent="Fine! "+pts+" punti!";}},1000);}\n${scClose}\n:::`;
   }
 
   if (t2.includes('codice') || t2.includes('code') || t2.includes('script') || t2.includes('programma') || t2.includes('lua')) {
