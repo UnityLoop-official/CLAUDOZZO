@@ -926,6 +926,128 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
 
 .modal-box input:focus { border-color: #4d96ff; }
 
+/* LEGAL MODAL (Privacy Policy / ToS) */
+.legal-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(6px);
+}
+.legal-modal-overlay.hidden { display: none; }
+.legal-modal {
+  background: #fff;
+  color: #222;
+  border-radius: 24px;
+  padding: 32px 30px;
+  max-width: 680px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  font-family: 'Baloo 2', cursive;
+  line-height: 1.7;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f5f5f5;
+}
+.legal-modal::-webkit-scrollbar { width: 6px; }
+.legal-modal::-webkit-scrollbar-track { background: #f5f5f5; border-radius: 3px; }
+.legal-modal::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+.legal-modal h2 {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.6rem;
+  margin-bottom: 14px;
+  color: #1a1a2e;
+}
+.legal-modal h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: 20px;
+  margin-bottom: 6px;
+  color: #1a1a2e;
+  border-left: 3px solid #4d96ff;
+  padding-left: 10px;
+}
+.legal-modal p, .legal-modal ul {
+  font-size: 0.86rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+.legal-modal ul { padding-left: 22px; }
+.legal-modal li { margin-bottom: 5px; }
+.legal-modal a { color: #4d96ff; text-decoration: none; }
+.legal-modal a:hover { text-decoration: underline; }
+.legal-modal strong { color: #1a1a2e; }
+.legal-modal-close {
+  display: inline-block;
+  background: linear-gradient(135deg, #1a1a2e, #2a2a4a);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 32px;
+  font-size: 0.95rem;
+  font-family: 'Boogaloo', cursive;
+  cursor: pointer;
+  margin-top: 16px;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 16px rgba(26,26,46,0.25);
+}
+.legal-modal-close:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 24px rgba(26,26,46,0.4);
+}
+@media (max-width: 700px) {
+  .legal-modal { padding: 22px 18px; max-height: 90vh; }
+  .legal-modal h3 { font-size: 0.95rem; }
+}
+
+/* LEGAL LINKS (landing footer) */
+.lr-legal {
+  display: flex;
+  gap: 18px;
+  margin-top: 14px;
+  font-size: 0.78rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.lr-legal a {
+  color: #888;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.lr-legal a:hover { color: #555; }
+.lr-disclaimer {
+  font-size: 0.72rem;
+  color: #aaa;
+  margin-top: 8px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* CONSENT CHECKBOX */
+.consent-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  text-align: left;
+  margin: 12px 0;
+  font-size: 0.82rem;
+  color: var(--soft);
+  line-height: 1.4;
+}
+.consent-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: #4d96ff;
+}
+
 .modal-btn {
   display: inline-block;
   background: linear-gradient(135deg, #4d96ff, #5e60ce);
@@ -1354,6 +1476,185 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
 
     <button class="lr-start-btn" onclick="startApp()" data-i18n="lr_start">INIZIA</button>
     <div class="lang-switcher landing-lang-switcher" id="landingLangSwitcher"></div>
+    <div class="lr-legal">
+      <a onclick="showLegal('privacy')" data-i18n="legal_privacy_link">Privacy Policy</a>
+      <a onclick="showLegal('tos')" data-i18n="legal_tos_link">Termini di Servizio</a>
+    </div>
+    <p class="lr-disclaimer" data-i18n="legal_disclaimer">Questo progetto non è affiliato, sponsorizzato o approvato da Anthropic, PBC. "Claude" è un marchio di Anthropic.</p>
+  </div>
+</div>
+
+<!-- PRIVACY POLICY (da Claudozzo_PrivacyPolicy.docx - UnityLoop AI) -->
+<div class="legal-modal-overlay hidden" id="privacyModal">
+  <div class="legal-modal">
+    <div style="text-align:center;margin-bottom:18px;">
+      <div style="font-size:1.8rem;">&#128272;</div>
+      <h2 style="margin-bottom:2px;">PRIVACY POLICY</h2>
+      <p style="font-size:0.95rem;color:#555;margin-bottom:2px;"><strong>Claudozzo - La Chat dei Bro</strong></p>
+      <p style="font-size:0.78rem;color:#999;">Ultimo aggiornamento: Marzo 2026 &nbsp;|&nbsp; Versione 1.0 &nbsp;|&nbsp; unityloop.ai</p>
+    </div>
+
+    <h3>1. Introduzione</h3>
+    <p>Benvenuto in Claudozzo, il servizio di chat AI sicura e divertente per ragazzi dagli 8 ai 13 anni, sviluppato da UnityLoop AI ("noi", "il titolare").</p>
+    <p>Questa Privacy Policy descrive in modo chiaro e trasparente come trattiamo le informazioni degli utenti, con particolare attenzione alla protezione dei minori, in conformità con:</p>
+    <ul>
+      <li>Regolamento UE 2016/679 (GDPR)</li>
+      <li>D.Lgs. 196/2003 - Codice Privacy italiano (come modificato dal D.Lgs. 101/2018)</li>
+      <li>Children's Online Privacy Protection Act (COPPA) - applicabile agli utenti USA</li>
+      <li>Age Appropriate Design Code (UK)</li>
+    </ul>
+
+    <h3>2. Quali dati raccogliamo</h3>
+
+    <h3 style="font-size:0.95rem;">2.1 Dati salvati localmente (nel dispositivo)</h3>
+    <p>Claudozzo funziona interamente nel browser dell'utente. I seguenti dati vengono salvati <strong>SOLO</strong> nel dispositivo locale tramite localStorage del browser, e <strong>NON</strong> vengono mai trasmessi ai nostri server:</p>
+    <ul>
+      <li>Cronologia delle conversazioni chat (testo delle domande e risposte)</li>
+      <li>PIN genitori (salvato in forma cifrata nel browser)</li>
+      <li>Fascia d'età selezionata (es. "8-10", "11-13")</li>
+      <li>Preferenze di lingua e "vibe" selezionata</li>
+    </ul>
+    <p><strong>Importante:</strong> questi dati rimangono esclusivamente sul dispositivo dell'utente. Possono essere cancellati in qualsiasi momento tramite il Pannello Genitori o cancellando i dati del browser.</p>
+
+    <h3 style="font-size:0.95rem;">2.2 Dati inviati all'AI (servizio terzo)</h3>
+    <p>Quando l'utente invia un messaggio, il testo viene elaborato da un modello di intelligenza artificiale (Anthropic Claude API). In questo caso:</p>
+    <ul>
+      <li>Il testo del messaggio viene trasmesso ai server di Anthropic per generare la risposta</li>
+      <li>Non vengono inviati dati personali identificativi (nome, email, età precisa)</li>
+      <li>Il messaggio è anonimo: non è associato ad alcun account o identità</li>
+    </ul>
+    <p>Per le politiche di Anthropic sul trattamento dei dati, consulta: <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener" style="color:#4d96ff;">anthropic.com/privacy</a></p>
+
+    <h3 style="font-size:0.95rem;">2.3 Dati che NON raccogliamo</h3>
+    <p>Claudozzo <strong>NON</strong> raccoglie:</p>
+    <ul>
+      <li>Nome, cognome o dati anagrafici</li>
+      <li>Indirizzo email o numero di telefono</li>
+      <li>Dati di geolocalizzazione</li>
+      <li>Dati di pagamento</li>
+      <li>Cookie di tracciamento o profilazione pubblicitaria</li>
+      <li>Indirizzi IP o identificatori tecnici persistenti</li>
+    </ul>
+
+    <h3>3. Protezione dei minori</h3>
+    <p>Claudozzo è progettato specificamente per minori tra gli 8 e i 13 anni. Applichiamo misure di sicurezza dedicate:</p>
+
+    <h3 style="font-size:0.95rem;">3.1 Filtro contenuti automatico</h3>
+    <p>Ogni messaggio inviato viene analizzato da un sistema di filtraggio automatico che blocca contenuti inappropriati (linguaggio offensivo, argomenti sensibili, violenza). I messaggi bloccati vengono registrati nella cronologia visibile ai genitori con indicazione di "contenuto bloccato".</p>
+
+    <h3 style="font-size:0.95rem;">3.2 Sistema PIN genitori</h3>
+    <p>Un PIN a 4 cifre protegge l'accesso al Pannello Genitori, che consente di:</p>
+    <ul>
+      <li>Visualizzare l'intera cronologia delle conversazioni</li>
+      <li>Cancellare la cronologia</li>
+      <li>Modificare il PIN di accesso</li>
+    </ul>
+    <p><strong>Raccomandazione:</strong> invitiamo i genitori a impostare personalmente il PIN e a non condividerlo con i figli, per garantire un controllo parentale efficace.</p>
+
+    <h3 style="font-size:0.95rem;">3.3 Verifica dell'età</h3>
+    <p>All'accesso viene richiesto di selezionare la propria fascia d'età. Gli utenti che selezionano "meno di 8 anni" non possono accedere al servizio. Questa verifica è un controllo di autodichiarazione.</p>
+
+    <h3>4. Base giuridica del trattamento</h3>
+    <p>Il trattamento dei dati (messaggi inviati all'AI) avviene sulla base di:</p>
+    <ul>
+      <li><strong>Legittimo interesse:</strong> miglioramento del servizio e sicurezza degli utenti</li>
+      <li><strong>Esecuzione del contratto:</strong> fornitura del servizio di chat richiesto dall'utente</li>
+    </ul>
+    <p>Per i minori sotto i 14 anni (soglia italiana ex Art. 8 GDPR), il consenso al trattamento deve essere prestato o autorizzato dai titolari della responsabilità genitoriale.</p>
+
+    <h3>5. Diritti degli utenti</h3>
+    <p>Ai sensi del GDPR, l'utente (o il suo genitore/tutore per i minori) ha il diritto di:</p>
+    <ul>
+      <li><strong>Accesso:</strong> richiedere copia dei dati trattati</li>
+      <li><strong>Rettifica:</strong> correggere dati inesatti</li>
+      <li><strong>Cancellazione ("diritto all'oblio"):</strong> eliminare i propri dati</li>
+      <li><strong>Limitazione</strong> del trattamento</li>
+      <li><strong>Portabilità</strong> dei dati</li>
+      <li><strong>Opposizione</strong> al trattamento</li>
+    </ul>
+    <p>Per esercitare questi diritti o per richieste relative ai dati dei minori, contattare: <a href="mailto:privacy@unityloop.ai" style="color:#4d96ff;">privacy@unityloop.ai</a></p>
+
+    <h3>6. Sicurezza dei dati</h3>
+    <p>Adottiamo misure tecniche e organizzative adeguate per proteggere i dati:</p>
+    <ul>
+      <li>La cronologia chat è salvata solo localmente nel browser dell'utente</li>
+      <li>Il PIN genitori è salvato in forma offuscata</li>
+      <li>Le comunicazioni con l'API AI avvengono tramite connessione HTTPS cifrata</li>
+      <li>Non esistono database centrali con dati degli utenti</li>
+    </ul>
+
+    <h3>7. Cookie e tecnologie di tracciamento</h3>
+    <p>Claudozzo utilizza esclusivamente localStorage del browser per salvare le preferenze locali dell'utente. <strong>Non utilizziamo:</strong></p>
+    <ul>
+      <li>Cookie di profilazione o tracking</li>
+      <li>Google Analytics o altri strumenti di analisi</li>
+      <li>Pixel di tracciamento pubblicitario</li>
+      <li>SDK di terze parti per il monitoraggio del comportamento</li>
+    </ul>
+
+    <h3>8. Servizi di terze parti</h3>
+    <p>Claudozzo si avvale dei seguenti servizi esterni:</p>
+    <ul>
+      <li><strong>Anthropic</strong> (elaborazione AI dei messaggi) - <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener" style="color:#4d96ff;">anthropic.com/privacy</a></li>
+      <li><strong>Google Fonts</strong> (caricamento font tipografici) - <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:#4d96ff;">policies.google.com/privacy</a></li>
+    </ul>
+    <p>Non condividiamo dati personali identificativi con terze parti per scopi commerciali o pubblicitari.</p>
+
+    <h3>9. Conservazione dei dati</h3>
+    <p>I dati salvati localmente (cronologia, PIN, preferenze) rimangono sul dispositivo dell'utente fino a quando:</p>
+    <ul>
+      <li>L'utente o il genitore li cancella tramite il Pannello Genitori</li>
+      <li>L'utente cancella i dati del browser (localStorage)</li>
+      <li>Il browser viene disinstallato o resettato</li>
+    </ul>
+    <p>Non abbiamo controllo né accesso ai dati conservati localmente sui dispositivi degli utenti.</p>
+
+    <h3>10. Modifiche alla Privacy Policy</h3>
+    <p>Ci riserviamo il diritto di aggiornare questa Privacy Policy. In caso di modifiche significative, aggiorneremo la data di revisione in cima al documento. L'uso continuato del servizio dopo le modifiche costituisce accettazione della nuova policy.</p>
+
+    <h3>11. Titolare del trattamento e contatti</h3>
+    <p><strong>Titolare del trattamento:</strong><br>
+    UnityLoop AI / unityloop.ai<br>
+    Email: <a href="mailto:privacy@unityloop.ai" style="color:#4d96ff;">privacy@unityloop.ai</a><br>
+    Sito web: <a href="https://unityloop.ai" target="_blank" rel="noopener" style="color:#4d96ff;">unityloop.ai</a></p>
+    <p>Per reclami relativi al trattamento dei dati personali, hai il diritto di proporre reclamo al <a href="https://www.garanteprivacy.it" target="_blank" rel="noopener" style="color:#4d96ff;">Garante per la Protezione dei Dati Personali</a>.</p>
+
+    <p style="text-align:center;font-size:0.75rem;color:#aaa;margin-top:20px;border-top:1px solid #eee;padding-top:12px;">Claudozzo Privacy Policy v1.0 - UnityLoop AI - unityloop.ai - Marzo 2026</p>
+
+    <div style="text-align:center;">
+      <button class="legal-modal-close" onclick="hideLegal('privacy')">CHIUDI</button>
+    </div>
+  </div>
+</div>
+
+<!-- TERMS OF SERVICE -->
+<div class="legal-modal-overlay hidden" id="tosModal">
+  <div class="legal-modal">
+    <h2 data-i18n="legal_tos_title">Termini di Servizio</h2>
+    <p><strong data-i18n="legal_last_update">Ultimo aggiornamento:</strong> 2026-03-08</p>
+
+    <h3 data-i18n="legal_tos_h1">1. Accettazione dei termini</h3>
+    <p data-i18n="legal_tos_p1">Utilizzando Claudozzo, il genitore o tutore legale del minore accetta i presenti Termini di Servizio. L'uso da parte di minori di età inferiore ai 14 anni richiede il consenso e la supervisione di un genitore o tutore legale.</p>
+
+    <h3 data-i18n="legal_tos_h2">2. Età minima</h3>
+    <p data-i18n="legal_tos_p2">Claudozzo è progettato per bambini di età compresa tra 8 e 13 anni. I bambini sotto gli 8 anni non sono autorizzati ad utilizzare il servizio. L'uso deve avvenire sotto la supervisione di un adulto.</p>
+
+    <h3 data-i18n="legal_tos_h3">3. Responsabilità del genitore/tutore</h3>
+    <p data-i18n="legal_tos_p3">Il genitore o tutore legale è responsabile di: impostare il PIN di accesso parentale, monitorare regolarmente la cronologia delle conversazioni, supervisionare l'uso dell'applicazione da parte del minore.</p>
+
+    <h3 data-i18n="legal_tos_h4">4. Contenuti e filtri</h3>
+    <p data-i18n="legal_tos_p4">Claudozzo include un sistema di filtraggio automatico dei contenuti inappropriati. Tuttavia, nessun filtro è perfetto al 100%. Il genitore/tutore è incoraggiato a controllare periodicamente la cronologia delle conversazioni.</p>
+
+    <h3 data-i18n="legal_tos_h5">5. Limitazione di responsabilità</h3>
+    <p data-i18n="legal_tos_p5">Claudozzo è fornito "così com'è" senza garanzie di alcun tipo. Non ci assumiamo responsabilità per contenuti generati dall'intelligenza artificiale. L'applicazione è intesa come strumento educativo e di intrattenimento.</p>
+
+    <h3 data-i18n="legal_tos_h6">6. Proprietà intellettuale</h3>
+    <p data-i18n="legal_tos_p6">Claudozzo è un progetto indipendente. Non è affiliato, sponsorizzato o approvato da Anthropic, PBC. "Claude" è un marchio registrato di Anthropic, PBC.</p>
+
+    <h3 data-i18n="legal_tos_h7">7. Modifiche ai termini</h3>
+    <p data-i18n="legal_tos_p7">Ci riserviamo il diritto di modificare questi termini in qualsiasi momento. L'uso continuato del servizio dopo le modifiche costituisce accettazione dei nuovi termini.</p>
+
+    <button class="legal-modal-close" onclick="hideLegal('tos')" data-i18n="legal_close">CHIUDI</button>
   </div>
 </div>
 
@@ -1367,15 +1668,19 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
   </div>
 </div>
 
-<!-- PIN SETUP (prima volta) -->
+<!-- PIN SETUP (prima volta - richiede genitore) -->
 <div class="modal-overlay hidden" id="pinSetup">
   <div class="modal-box">
     <h2 data-i18n="pin_setup_title">Imposta PIN Genitori</h2>
-    <p data-i18n="pin_setup_desc">Crea un PIN a 4 cifre per il pannello genitori. Solo i genitori potranno vedere la cronologia chat.</p>
+    <p data-i18n="pin_setup_desc2">Attenzione: questo passaggio deve essere completato da un genitore o tutore legale. Crea un PIN a 4 cifre per il pannello genitori.</p>
     <input type="password" id="pinSetupInput" maxlength="4" data-i18n-placeholder="pin_placeholder" placeholder="PIN a 4 cifre" pattern="[0-9]*" inputmode="numeric">
     <br>
     <input type="password" id="pinSetupConfirm" maxlength="4" data-i18n-placeholder="pin_confirm_placeholder" placeholder="Conferma PIN" pattern="[0-9]*" inputmode="numeric">
     <br>
+    <div class="consent-row">
+      <input type="checkbox" id="parentConsent">
+      <label for="parentConsent" data-i18n="pin_consent">Confermo di essere il genitore o tutore legale del minore e acconsento all'utilizzo di questa applicazione. Ho letto la <a onclick="showLegal('privacy')" style="color:#4d96ff;cursor:pointer;text-decoration:underline">Privacy Policy</a> e i <a onclick="showLegal('tos')" style="color:#4d96ff;cursor:pointer;text-decoration:underline">Termini di Servizio</a>.</label>
+    </div>
     <button class="modal-btn success" onclick="savePin()" data-i18n="pin_save">SALVA PIN</button>
     <div class="modal-error" id="pinSetupError"></div>
   </div>
@@ -1527,6 +1832,17 @@ const translations = {
     vibe_sub_brainrot: "🍌 bombardiro croco<br>🌍 tralalelo tralala",
     vibe_sub_minecraft: "🌲 mina e crafta<br>🐄 attento al creeper",
     vibe_sub_anime: "💫 sugoi nakama~<br>🌸 nani?! dramma pure",
+    // Legal
+    legal_privacy_link: "Privacy Policy",
+    legal_tos_link: "Termini di Servizio",
+    legal_disclaimer: "Questo progetto non è affiliato, sponsorizzato o approvato da Anthropic, PBC. \"Claude\" è un marchio di Anthropic.",
+    legal_close: "CHIUDI",
+    legal_privacy_title: "Privacy Policy",
+    legal_tos_title: "Termini di Servizio",
+    legal_last_update: "Ultimo aggiornamento:",
+    pin_setup_desc2: "Attenzione: questo passaggio deve essere completato da un genitore o tutore legale. Crea un PIN a 4 cifre per il pannello genitori.",
+    pin_consent: "Confermo di essere il genitore o tutore legale del minore e acconsento all'utilizzo di questa applicazione.",
+    pin_error_consent: "Devi confermare di essere un genitore o tutore legale per continuare.",
   },
   en: {
     lr_tagline: "Safe and fun AI chat for kids aged 8-13",
@@ -1585,6 +1901,17 @@ const translations = {
     vibe_sub_brainrot: "🍌 bombardiro croco<br>🌍 tralalelo tralala",
     vibe_sub_minecraft: "🌲 mine & craft<br>🐄 watch the creeper",
     vibe_sub_anime: "💫 sugoi nakama~<br>🌸 nani?! drama too",
+    // Legal
+    legal_privacy_link: "Privacy Policy",
+    legal_tos_link: "Terms of Service",
+    legal_disclaimer: "This project is not affiliated with, sponsored by, or endorsed by Anthropic, PBC. \"Claude\" is a trademark of Anthropic.",
+    legal_close: "CLOSE",
+    legal_privacy_title: "Privacy Policy",
+    legal_tos_title: "Terms of Service",
+    legal_last_update: "Last updated:",
+    pin_setup_desc2: "Important: this step must be completed by a parent or legal guardian. Create a 4-digit PIN for the parent panel.",
+    pin_consent: "I confirm that I am the parent or legal guardian of the child and I consent to the use of this application.",
+    pin_error_consent: "You must confirm that you are a parent or legal guardian to continue.",
   },
   da: {
     lr_tagline: "Sikker og sjov AI-chat for børn 8-13 år",
@@ -1643,6 +1970,17 @@ const translations = {
     vibe_sub_brainrot: "🍌 bombardiro croco<br>🌍 tralalelo tralala",
     vibe_sub_minecraft: "🌲 min & craft<br>🐄 pas på creeperen",
     vibe_sub_anime: "💫 sugoi nakama~<br>🌸 nani?! drama også",
+    // Legal
+    legal_privacy_link: "Privatlivspolitik",
+    legal_tos_link: "Servicevilkår",
+    legal_disclaimer: "Dette projekt er ikke tilknyttet, sponsoreret af eller godkendt af Anthropic, PBC. \"Claude\" er et varemærke tilhørende Anthropic.",
+    legal_close: "LUK",
+    legal_privacy_title: "Privatlivspolitik",
+    legal_tos_title: "Servicevilkår",
+    legal_last_update: "Sidst opdateret:",
+    pin_setup_desc2: "Vigtigt: dette trin skal udføres af en forælder eller værge. Opret en 4-cifret PIN til forældrepanelet.",
+    pin_consent: "Jeg bekræfter, at jeg er forælder eller værge for barnet og giver samtykke til brugen af denne applikation.",
+    pin_error_consent: "Du skal bekræfte, at du er forælder eller værge for at fortsætte.",
   },
   sv: {
     lr_tagline: "Säker och rolig AI-chatt för barn 8-13 år",
@@ -1701,6 +2039,17 @@ const translations = {
     vibe_sub_brainrot: "🍌 bombardiro croco<br>🌍 tralalelo tralala",
     vibe_sub_minecraft: "🌲 bryt & crafta<br>🐄 akta creepern",
     vibe_sub_anime: "💫 sugoi nakama~<br>🌸 nani?! drama med",
+    // Legal
+    legal_privacy_link: "Integritetspolicy",
+    legal_tos_link: "Användarvillkor",
+    legal_disclaimer: "Detta projekt är inte anslutet till, sponsrat av eller godkänt av Anthropic, PBC. \"Claude\" är ett varumärke som tillhör Anthropic.",
+    legal_close: "STÄNG",
+    legal_privacy_title: "Integritetspolicy",
+    legal_tos_title: "Användarvillkor",
+    legal_last_update: "Senast uppdaterad:",
+    pin_setup_desc2: "Viktigt: detta steg måste utföras av en förälder eller vårdnadshavare. Skapa en 4-siffrig PIN för föräldrapanelen.",
+    pin_consent: "Jag bekräftar att jag är förälder eller vårdnadshavare för barnet och samtycker till användningen av denna applikation.",
+    pin_error_consent: "Du måste bekräfta att du är förälder eller vårdnadshavare för att fortsätta.",
   }
 };
 
@@ -1796,10 +2145,34 @@ const blockedWords = [
 
 const blockedPatterns = blockedWords.map(w => new RegExp('\\b' + w.replace(/\s+/g, '\\s+') + '\\b', 'i'));
 
+// Normalizza leetspeak e trucchi di ortografia
+function normalizeLeet(text) {
+  const map = {
+    '0':'o','1':'i','3':'e','4':'a','5':'s','7':'t','8':'b',
+    '@':'a','$':'s','!':'i','(':'c','+':'t',
+    '&':'e','#':'h','|':'l',
+  };
+  let out = '';
+  for (const ch of text) {
+    out += map[ch] || ch;
+  }
+  // Rimuovi caratteri ripetuti per aggirare filtri (es. "f.u.c.k", "f_u_c_k")
+  out = out.replace(/[.\-_*~`'"^,;:\/\\]/g, '');
+  return out;
+}
+
 function isBlocked(text) {
   const t = text.toLowerCase();
+  // Controlla il testo originale
   for (const pattern of blockedPatterns) {
     if (pattern.test(t)) return true;
+  }
+  // Controlla la versione normalizzata (anti-leetspeak)
+  const normalized = normalizeLeet(t);
+  if (normalized !== t) {
+    for (const pattern of blockedPatterns) {
+      if (pattern.test(normalized)) return true;
+    }
   }
   return false;
 }
@@ -1868,18 +2241,24 @@ function checkPinSetup() {
 
 function savePin() {
   const pin = document.getElementById('pinSetupInput').value;
-  const confirm = document.getElementById('pinSetupConfirm').value;
+  const confirmVal = document.getElementById('pinSetupConfirm').value;
   const err = document.getElementById('pinSetupError');
+  const consent = document.getElementById('parentConsent');
 
+  if (!consent.checked) {
+    err.textContent = t('pin_error_consent');
+    return;
+  }
   if (!/^\d{4}$/.test(pin)) {
     err.textContent = t('pin_error_4digits');
     return;
   }
-  if (pin !== confirm) {
+  if (pin !== confirmVal) {
     err.textContent = t('pin_error_match');
     return;
   }
   localStorage.setItem('claudozzo_pin', pin);
+  localStorage.setItem('claudozzo_parent_consent', new Date().toISOString());
   document.getElementById('pinSetup').classList.add('hidden');
 }
 
@@ -1952,11 +2331,13 @@ function clearHistory() {
 function resetPin() {
   if (confirm(t('panel_confirm_pin'))) {
     localStorage.removeItem('claudozzo_pin');
+    localStorage.removeItem('claudozzo_parent_consent');
     document.getElementById('parentPanel').classList.remove('open');
     document.getElementById('pinSetup').classList.remove('hidden');
     document.getElementById('pinSetupInput').value = '';
     document.getElementById('pinSetupConfirm').value = '';
     document.getElementById('pinSetupError').textContent = '';
+    document.getElementById('parentConsent').checked = false;
   }
 }
 
@@ -2281,6 +2662,23 @@ async function send() {
   isLoading = false;
   document.getElementById('sendBtn').disabled = false;
   msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ==================== LEGAL MODALS ====================
+function showLegal(type) {
+  if (type === 'privacy') {
+    document.getElementById('privacyModal').classList.remove('hidden');
+  } else if (type === 'tos') {
+    document.getElementById('tosModal').classList.remove('hidden');
+  }
+}
+
+function hideLegal(type) {
+  if (type === 'privacy') {
+    document.getElementById('privacyModal').classList.add('hidden');
+  } else if (type === 'tos') {
+    document.getElementById('tosModal').classList.add('hidden');
+  }
 }
 </script>
 </body>
