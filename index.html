@@ -1573,6 +1573,56 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
 }
 .checklist-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: #6bcb77; cursor: pointer; flex-shrink: 0; }
 .checklist-item.checked span { text-decoration: line-through; opacity: 0.5; }
+
+/* API KEY BUTTON */
+#apiKeyBtn {
+  position: fixed;
+  bottom: 14px;
+  left: 14px;
+  z-index: 100;
+  background: rgba(20,20,40,0.85);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--soft);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  backdrop-filter: blur(8px);
+}
+#apiKeyBtn:hover { border-color: rgba(255,255,255,0.25); color: #fff; }
+#apiKeyBtn.active { border-color: #6bcb77; color: #6bcb77; }
+#apiKeyBtn svg { width: 18px; height: 18px; }
+
+/* API KEY MODAL */
+.apikey-modal { max-width: 400px; }
+.apikey-input {
+  background: #0a0a16;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  font-family: 'Courier New', monospace;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  margin: 10px 0;
+}
+.apikey-input:focus { border-color: #4d96ff; }
+.apikey-input::placeholder { color: rgba(255,255,255,0.2); }
+.apikey-status {
+  font-size: 0.75rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.apikey-status.connected { background: rgba(107,203,119,0.15); color: #6bcb77; }
+.apikey-status.disconnected { background: rgba(255,255,255,0.05); color: var(--soft); }
 </style>
 </head>
 <body class="vibe-roblox">
@@ -1893,6 +1943,26 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
 
 <!-- PARENT BTN -->
 <button id="parentBtn" onclick="openParentPanel()" data-i18n="parent_btn">Genitori</button>
+
+<!-- API KEY BUTTON -->
+<button id="apiKeyBtn" onclick="openApiKeyModal()" title="API Key">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+</button>
+
+<!-- API KEY MODAL -->
+<div class="modal-overlay hidden" id="apiKeyModal">
+  <div class="modal-box apikey-modal">
+    <h2 data-i18n="apikey_title">API Key</h2>
+    <p data-i18n="apikey_desc">Inserisci la tua chiave API Anthropic per attivare l'AI vera. La chiave resta solo in questa sessione del browser e non viene salvata.</p>
+    <div class="apikey-status disconnected" id="apiKeyStatus" data-i18n="apikey_status_off">AI non connessa — risposte automatiche</div>
+    <input type="password" class="apikey-input" id="apiKeyInput" placeholder="sk-ant-..." autocomplete="off" spellcheck="false">
+    <button class="modal-btn success" onclick="saveApiKey()" data-i18n="apikey_save">ATTIVA</button>
+    <button class="modal-btn" onclick="removeApiKey()" data-i18n="apikey_remove" style="margin-left:8px;">RIMUOVI</button>
+    <br><br>
+    <button class="modal-btn danger" onclick="closeApiKeyModal()" data-i18n="apikey_close">CHIUDI</button>
+    <div class="modal-error" id="apiKeyError"></div>
+  </div>
+</div>
 <div class="lang-switcher app-lang-switcher" id="appLangSwitcher"></div>
 
 <header style="position:fixed;top:12px;left:12px;z-index:100;text-align:left;margin:0;">
@@ -2029,6 +2099,17 @@ const translations = {
     pin_error_consent: "Devi confermare di essere un genitore o tutore legale per continuare.",
     // Projects
     projects_label: "Prova un progetto",
+    // API Key
+    apikey_title: "API Key",
+    apikey_desc: "Inserisci la tua chiave API Anthropic per attivare l'AI vera. La chiave resta solo in questa sessione del browser e non viene salvata.",
+    apikey_status_off: "AI non connessa — risposte automatiche",
+    apikey_status_on: "AI connessa",
+    apikey_save: "ATTIVA",
+    apikey_remove: "RIMUOVI",
+    apikey_close: "CHIUDI",
+    apikey_error_invalid: "La chiave deve iniziare con sk-ant-",
+    apikey_error_test: "Chiave non valida. Controlla e riprova.",
+    apikey_removed: "Chiave rimossa. Tornato alle risposte automatiche.",
   },
   en: {
     lr_tagline: "Safe and fun AI chat for kids aged 8-13",
@@ -2100,6 +2181,17 @@ const translations = {
     pin_error_consent: "You must confirm that you are a parent or legal guardian to continue.",
     // Projects
     projects_label: "Try a project",
+    // API Key
+    apikey_title: "API Key",
+    apikey_desc: "Enter your Anthropic API key to activate real AI. The key stays only in this browser session and is never saved.",
+    apikey_status_off: "AI not connected — automatic replies",
+    apikey_status_on: "AI connected",
+    apikey_save: "ACTIVATE",
+    apikey_remove: "REMOVE",
+    apikey_close: "CLOSE",
+    apikey_error_invalid: "Key must start with sk-ant-",
+    apikey_error_test: "Invalid key. Check and try again.",
+    apikey_removed: "Key removed. Switched to automatic replies.",
   },
   da: {
     lr_tagline: "Sikker og sjov AI-chat for børn 8-13 år",
@@ -2171,6 +2263,17 @@ const translations = {
     pin_error_consent: "Du skal bekræfte, at du er forælder eller værge for at fortsætte.",
     // Projects
     projects_label: "Prøv et projekt",
+    // API Key
+    apikey_title: "API Key",
+    apikey_desc: "Indtast din Anthropic API-nøgle for at aktivere rigtig AI. Nøglen forbliver kun i denne browsersession.",
+    apikey_status_off: "AI ikke tilsluttet — automatiske svar",
+    apikey_status_on: "AI tilsluttet",
+    apikey_save: "AKTIVER",
+    apikey_remove: "FJERN",
+    apikey_close: "LUK",
+    apikey_error_invalid: "Nøglen skal starte med sk-ant-",
+    apikey_error_test: "Ugyldig nøgle. Tjek og prøv igen.",
+    apikey_removed: "Nøgle fjernet. Skiftet til automatiske svar.",
   },
   sv: {
     lr_tagline: "Säker och rolig AI-chatt för barn 8-13 år",
@@ -2242,6 +2345,17 @@ const translations = {
     pin_error_consent: "Du måste bekräfta att du är förälder eller vårdnadshavare för att fortsätta.",
     // Projects
     projects_label: "Testa ett projekt",
+    // API Key
+    apikey_title: "API Key",
+    apikey_desc: "Ange din Anthropic API-nyckel för att aktivera riktig AI. Nyckeln stannar bara i denna webbläsarsession.",
+    apikey_status_off: "AI ej ansluten — automatiska svar",
+    apikey_status_on: "AI ansluten",
+    apikey_save: "AKTIVERA",
+    apikey_remove: "TA BORT",
+    apikey_close: "STÄNG",
+    apikey_error_invalid: "Nyckeln måste börja med sk-ant-",
+    apikey_error_test: "Ogiltig nyckel. Kontrollera och försök igen.",
+    apikey_removed: "Nyckel borttagen. Växlat till automatiska svar.",
   }
 };
 
@@ -2725,6 +2839,7 @@ let currentVibe = 'roblox';
 let isLoading = false;
 let apiAvailable = false;
 let sessionMessages = []; // memoria temporanea chat - sparisce al refresh
+let userApiKey = sessionStorage.getItem('claudozzo_apikey') || '';
 
 // ==================== PROGETTI PER VIBE ====================
 const vibeProjects = {
@@ -2852,18 +2967,110 @@ function useProject(index) {
   }
 }
 
-// Controlla se il server locale ha l'API configurata
+// Controlla se c'è un'API disponibile (chiave utente o server)
 (async function checkApi() {
+  if (userApiKey) {
+    apiAvailable = true;
+    console.log('[Claudozzo] API Claude ATTIVA (chiave utente)');
+    setTimeout(() => updateApiKeyUI(true), 200);
+    return;
+  }
   try {
     const r = await fetch('/api/status');
     const data = await r.json();
     apiAvailable = data.api_configured;
-    if (apiAvailable) console.log('[Claudozzo] API Claude ATTIVA');
+    if (apiAvailable) console.log('[Claudozzo] API Claude ATTIVA (server)');
     else console.log('[Claudozzo] API non configurata, uso fakeReply');
   } catch {
     console.log('[Claudozzo] Nessun server locale, uso fakeReply');
   }
 })();
+
+// ==================== API KEY MANAGEMENT ====================
+function openApiKeyModal() {
+  document.getElementById('apiKeyModal').classList.remove('hidden');
+  document.getElementById('apiKeyInput').value = '';
+  document.getElementById('apiKeyError').textContent = '';
+  updateApiKeyUI(!!userApiKey);
+}
+
+function closeApiKeyModal() {
+  document.getElementById('apiKeyModal').classList.add('hidden');
+}
+
+function updateApiKeyUI(connected) {
+  const status = document.getElementById('apiKeyStatus');
+  const btn = document.getElementById('apiKeyBtn');
+  if (!status || !btn) return;
+  if (connected) {
+    status.className = 'apikey-status connected';
+    status.textContent = t('apikey_status_on');
+    btn.classList.add('active');
+  } else {
+    status.className = 'apikey-status disconnected';
+    status.textContent = t('apikey_status_off');
+    btn.classList.remove('active');
+  }
+}
+
+async function saveApiKey() {
+  const input = document.getElementById('apiKeyInput');
+  const err = document.getElementById('apiKeyError');
+  const key = input.value.trim();
+
+  if (!key.startsWith('sk-ant-')) {
+    err.textContent = t('apikey_error_invalid');
+    return;
+  }
+  err.textContent = '';
+
+  // Test la chiave con una richiesta minima
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 10,
+        messages: [{ role: 'user', content: 'ciao' }]
+      })
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      if (data.error && data.error.type === 'authentication_error') {
+        err.textContent = t('apikey_error_test');
+        return;
+      }
+    }
+
+    // Chiave valida
+    userApiKey = key;
+    sessionStorage.setItem('claudozzo_apikey', key);
+    apiAvailable = true;
+    updateApiKeyUI(true);
+    closeApiKeyModal();
+  } catch (e) {
+    err.textContent = t('apikey_error_test');
+  }
+}
+
+function removeApiKey() {
+  userApiKey = '';
+  sessionStorage.removeItem('claudozzo_apikey');
+  apiAvailable = false;
+  updateApiKeyUI(false);
+  document.getElementById('apiKeyError').textContent = t('apikey_removed');
+  // Ricontrolla se c'è un server con API
+  fetch('/api/status').then(r => r.json()).then(data => {
+    if (data.api_configured) apiAvailable = true;
+  }).catch(() => {});
+}
 
 function setVibe(btn) {
   document.querySelectorAll('.vibe-btn').forEach(b => b.classList.remove('active'));
@@ -3213,22 +3420,52 @@ async function send() {
       // Chiama la vera API Claude con memoria di sessione
       const v = vibes[currentVibe];
       sessionMessages.push({ role: 'user', content: text });
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: sessionMessages,
-          vibe: currentVibe,
-          system: v.system
-        })
-      });
-      const data = await response.json();
-      if (data.reply) {
-        reply = data.reply;
-        sessionMessages.push({ role: 'assistant', content: reply });
+
+      let response;
+      if (userApiKey) {
+        // Chiave dell'utente — chiama Anthropic direttamente dal browser
+        response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': userApiKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 2048,
+            system: v.system,
+            messages: sessionMessages
+          })
+        });
+        const data = await response.json();
+        if (data.content && data.content[0]) {
+          reply = data.content[0].text;
+          sessionMessages.push({ role: 'assistant', content: reply });
+        } else {
+          sessionMessages.pop();
+          reply = fakeArtifactReply(text, currentVibe) || fakeReply(text, currentVibe);
+        }
       } else {
-        sessionMessages.pop(); // rimuovi l'ultimo user msg se fallisce
-        reply = fakeArtifactReply(text, currentVibe) || fakeReply(text, currentVibe);
+        // Server proxy (locale o Vercel con env var)
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: sessionMessages,
+            vibe: currentVibe,
+            system: v.system
+          })
+        });
+        const data = await response.json();
+        if (data.reply) {
+          reply = data.reply;
+          sessionMessages.push({ role: 'assistant', content: reply });
+        } else {
+          sessionMessages.pop();
+          reply = fakeArtifactReply(text, currentVibe) || fakeReply(text, currentVibe);
+        }
       }
     } else {
       // Nessuna API: usa risposte pre-scritte
