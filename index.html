@@ -3295,13 +3295,26 @@ function renderSvg(svgContent) {
 
 // --- GAME ---
 function renderGame(htmlContent) {
-  // Escape per srcdoc: sostituisci & " < per attributo HTML sicuro
-  const safeContent = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:sans-serif;overflow:hidden;background:#222;color:#fff;}</style></head><body>${htmlContent}</body></html>`;
-  const escaped = safeContent.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  const gameId = 'game-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+  // Salva il contenuto HTML per iniezione post-DOM
+  window._pendingGames = window._pendingGames || {};
+  window._pendingGames[gameId] = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:sans-serif;overflow:hidden;background:#222;color:#fff;}</style></head><body>' + htmlContent + '</body></html>';
   return `<div class="artifact artifact-game">
     <div class="artifact-header">Mini Game</div>
-    <iframe sandbox="allow-scripts" srcdoc="${escaped}" class="game-iframe" style="width:100%;height:300px;border:none;border-radius:0 0 12px 12px;background:#111;"></iframe>
+    <iframe id="${gameId}" sandbox="allow-scripts" class="game-iframe" style="width:100%;height:300px;border:none;border-radius:0 0 12px 12px;background:#111;"></iframe>
   </div>`;
+}
+
+// Inietta srcdoc in tutti gli iframe game pendenti (chiamato dopo appendChild)
+function activatePendingGames() {
+  if (!window._pendingGames) return;
+  Object.keys(window._pendingGames).forEach(id => {
+    const iframe = document.getElementById(id);
+    if (iframe) {
+      iframe.srcdoc = window._pendingGames[id];
+      delete window._pendingGames[id];
+    }
+  });
 }
 
 // --- CODE ---
@@ -3564,6 +3577,7 @@ async function send() {
       aMsg.innerHTML = segments.map(s => renderArtifact(s)).join('');
     }
     msgs.appendChild(aMsg);
+    activatePendingGames(); // Inietta srcdoc nei game iframe
 
     // Salva in cronologia
     saveChatEntry({ vibe: currentVibe, user: text, ai: reply });
