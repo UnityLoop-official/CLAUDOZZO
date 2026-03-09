@@ -1560,6 +1560,95 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
 .hl-number { color: #ffd93d; }
 .hl-comment { color: #666; font-style: italic; }
 
+/* ARTIFACT SIDE PANEL */
+.artifact-panel {
+  position: fixed;
+  top: 0;
+  right: -520px;
+  width: 500px;
+  height: 100vh;
+  background: rgba(10, 10, 30, 0.98);
+  border-left: 2px solid rgba(255,255,255,0.12);
+  box-shadow: -8px 0 40px rgba(0,0,0,0.6);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.artifact-panel.open {
+  right: 0;
+}
+.artifact-panel.fullscreen {
+  width: 100vw;
+  right: -100vw;
+}
+.artifact-panel.fullscreen.open {
+  right: 0;
+}
+.artifact-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.artifact-panel-title {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.1rem;
+  color: #fff;
+}
+.artifact-panel-actions {
+  display: flex;
+  gap: 8px;
+}
+.artifact-panel-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.artifact-panel-btn:hover {
+  background: rgba(255,255,255,0.18);
+}
+.artifact-panel-body {
+  flex: 1;
+  overflow: auto;
+  padding: 0;
+}
+.artifact-panel-body iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #111;
+}
+/* Shift chat left when panel open */
+body.artifact-panel-open {
+  padding-right: 510px;
+  transition: padding-right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+body.artifact-panel-fullscreen {
+  padding-right: 0 !important;
+}
+/* Mobile */
+@media (max-width: 900px) {
+  .artifact-panel {
+    width: 100vw;
+    right: -100vw;
+  }
+  body.artifact-panel-open {
+    padding-right: 0;
+  }
+}
+
 /* CHECKLIST */
 .checklist-progress { padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
 .progress-bar { flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
@@ -2025,6 +2114,18 @@ body.vibe-anime .input-area button { background: linear-gradient(135deg, #c77dff
     <div class="projects-label" data-i18n="projects_label">Prova un progetto</div>
     <div class="projects-grid" id="projectsGrid"></div>
   </div>
+</div>
+
+<!-- ARTIFACT SIDE PANEL -->
+<div id="artifactPanel" class="artifact-panel">
+  <div class="artifact-panel-header">
+    <span class="artifact-panel-title" id="artifactPanelTitle">Mini Game</span>
+    <div class="artifact-panel-actions">
+      <button class="artifact-panel-btn" id="artifactFullscreenBtn" onclick="toggleArtifactFullscreen()" title="Fullscreen">⛶</button>
+      <button class="artifact-panel-btn" onclick="closeArtifactPanel()" title="Chiudi">✕</button>
+    </div>
+  </div>
+  <div class="artifact-panel-body" id="artifactPanelBody"></div>
 </div>
 
 <script>
@@ -2738,7 +2839,7 @@ const ARTIFACT_INSTRUCTIONS = 'ARTIFACTS - Quando è appropriato, puoi creare co
 '<' + 'script>/* game logic - usa addEventListener per i click */</' + 'script>\n:::\n\n' +
 'CODE (per codice con syntax highlighting - specifica sempre il linguaggio):\n:::artifact:code\nlang=lua\nlocal x = 10\nprint(x)\n:::\n\n' +
 'CHECKLIST (per liste di cose da fare/progetto):\n:::artifact:checklist\n{"title":"Titolo Progetto","items":["Passo 1","Passo 2","Passo 3"]}\n:::\n\n' +
-'REGOLE: Il JSON deve essere valido. Non usare artifact per risposte semplici. Nei GAME usa SEMPRE tag <' + 'script> normali (non usare mai spazi nei tag).';
+'REGOLE: Il JSON deve essere valido. Non usare artifact per risposte semplici. Nei GAME usa SEMPRE tag <' + 'script> normali (non usare mai spazi nei tag). Nei GAME non usare MAI eval(), new Function(), setTimeout con stringhe, setInterval con stringhe, o alert()/prompt()/confirm(). Per i messaggi usa elementi DOM invece di alert. Per i timer usa setTimeout/setInterval solo con funzioni (freccia o riferimento).';
 
 const vibes = {
   roblox: {
@@ -3274,25 +3375,71 @@ function renderGame(htmlContent) {
   const gameId = 'game-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
   // Fix: correggi eventuali <scr ipt> con spazio generati dall'AI
   let fixed = htmlContent.replace(/<scr\s+ipt/gi, '<script').replace(/<\/scr\s+ipt>/gi, '<\/script>');
-  // Salva il contenuto HTML per iniezione post-DOM
+  const fullHtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:sans-serif;overflow:hidden;background:#222;color:#fff;}</style></head><body>' + fixed + '</body></html>';
+  // Salva il contenuto HTML per iniezione post-DOM e per il pannello
   window._pendingGames = window._pendingGames || {};
-  window._pendingGames[gameId] = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:sans-serif;overflow:hidden;background:#222;color:#fff;}</style></head><body>' + fixed + '</body></html>';
+  window._pendingGames[gameId] = fullHtml;
+  // Salva anche per il pannello laterale
+  window._gameHtmlStore = window._gameHtmlStore || {};
+  window._gameHtmlStore[gameId] = fullHtml;
   return `<div class="artifact artifact-game">
-    <div class="artifact-header">Mini Game</div>
-    <iframe id="${gameId}" sandbox="allow-scripts" class="game-iframe" style="width:100%;height:300px;border:none;border-radius:0 0 12px 12px;background:#111;"></iframe>
+    <div class="artifact-header" style="display:flex;justify-content:space-between;align-items:center;">
+      <span>Mini Game</span>
+      <button onclick="openArtifactPanel('${gameId}','Mini Game')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:'Baloo 2',cursive;font-size:0.8rem;">Apri pannello ▸</button>
+    </div>
+    <iframe id="${gameId}" sandbox="allow-scripts allow-modals allow-popups" class="game-iframe" style="width:100%;height:300px;border:none;border-radius:0 0 12px 12px;background:#111;"></iframe>
   </div>`;
 }
 
 // Inietta srcdoc in tutti gli iframe game pendenti (chiamato dopo appendChild)
 function activatePendingGames() {
   if (!window._pendingGames) return;
-  Object.keys(window._pendingGames).forEach(id => {
+  const gameIds = Object.keys(window._pendingGames);
+  gameIds.forEach(id => {
     const iframe = document.getElementById(id);
     if (iframe) {
       iframe.srcdoc = window._pendingGames[id];
       delete window._pendingGames[id];
     }
   });
+  // Apri automaticamente il pannello laterale per l'ultimo gioco creato
+  if (gameIds.length > 0) {
+    const lastGameId = gameIds[gameIds.length - 1];
+    if (window._gameHtmlStore && window._gameHtmlStore[lastGameId]) {
+      openArtifactPanel(lastGameId, 'Mini Game');
+    }
+  }
+}
+
+// --- ARTIFACT SIDE PANEL ---
+function openArtifactPanel(gameId, title) {
+  const panel = document.getElementById('artifactPanel');
+  const body = document.getElementById('artifactPanelBody');
+  const titleEl = document.getElementById('artifactPanelTitle');
+  titleEl.textContent = title || 'Artifact';
+  const htmlContent = window._gameHtmlStore && window._gameHtmlStore[gameId];
+  if (!htmlContent) return;
+  // Crea iframe nel pannello
+  body.innerHTML = '';
+  const iframe = document.createElement('iframe');
+  iframe.sandbox = 'allow-scripts allow-modals allow-popups';
+  iframe.style.cssText = 'width:100%;height:100%;border:none;background:#111;';
+  body.appendChild(iframe);
+  iframe.srcdoc = htmlContent;
+  panel.classList.add('open');
+  document.body.classList.add('artifact-panel-open');
+}
+
+function closeArtifactPanel() {
+  const panel = document.getElementById('artifactPanel');
+  panel.classList.remove('open', 'fullscreen');
+  document.body.classList.remove('artifact-panel-open', 'artifact-panel-fullscreen');
+}
+
+function toggleArtifactFullscreen() {
+  const panel = document.getElementById('artifactPanel');
+  panel.classList.toggle('fullscreen');
+  document.body.classList.toggle('artifact-panel-fullscreen');
 }
 
 // --- CODE ---
