@@ -383,6 +383,163 @@ body.vibes-minimized .vibe-btn:hover::after {
 .input-area button:hover:not(:disabled) { transform: scale(1.06); filter: brightness(1.2); }
 .input-area button:disabled { opacity: 0.4; cursor: not-allowed; }
 
+.draw-btn {
+  background: linear-gradient(135deg, #ff6b9d, #c44dff) !important;
+  font-size: 1.3rem !important;
+  padding: 11px 16px !important;
+  min-width: 48px;
+}
+
+/* DRAWING CANVAS OVERLAY */
+.draw-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  background: rgba(0,0,0,0.85);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease;
+}
+.draw-overlay.active { display: flex; }
+
+.draw-container {
+  background: #1a1a2e;
+  border-radius: 20px;
+  border: 2px solid #4d96ff;
+  padding: 16px;
+  max-width: 96vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+.draw-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.draw-title {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.3rem;
+  color: #f0f0ff;
+}
+
+.draw-close {
+  background: none;
+  border: none;
+  color: #9090bb;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.draw-close:hover { color: #ff6b6b; background: rgba(255,107,107,0.1); }
+
+.draw-toolbar {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.draw-toolbar button {
+  background: rgba(255,255,255,0.08);
+  border: 2px solid transparent;
+  color: #f0f0ff;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Baloo 2', cursive;
+}
+.draw-toolbar button:hover { background: rgba(255,255,255,0.15); }
+.draw-toolbar button.active { border-color: #4d96ff; background: rgba(77,150,255,0.15); }
+
+.draw-colors {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.draw-color-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.draw-color-btn:hover { transform: scale(1.15); }
+.draw-color-btn.active { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+
+.draw-size-slider {
+  width: 80px;
+  accent-color: #4d96ff;
+}
+
+#drawCanvas {
+  border-radius: 14px;
+  cursor: crosshair;
+  background: #ffffff;
+  touch-action: none;
+}
+
+.draw-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.draw-send-btn {
+  background: linear-gradient(135deg, #4d96ff, #5e60ce) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 50px !important;
+  padding: 12px 28px !important;
+  font-size: 1rem !important;
+  font-family: 'Boogaloo', cursive !important;
+  cursor: pointer !important;
+  letter-spacing: 1px;
+  transition: all 0.2s !important;
+}
+.draw-send-btn:hover { transform: scale(1.06) !important; filter: brightness(1.2) !important; }
+
+.draw-clear-btn {
+  background: rgba(255,255,255,0.08) !important;
+  color: #f0f0ff !important;
+  border: 2px solid #2a2a4a !important;
+  border-radius: 50px !important;
+  padding: 12px 20px !important;
+  font-size: 0.9rem !important;
+  font-family: 'Baloo 2', cursive !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+}
+.draw-clear-btn:hover { border-color: #ff6b6b !important; color: #ff6b6b !important; }
+
+/* Drawing preview in chat */
+.msg .draw-preview {
+  max-width: 240px;
+  border-radius: 12px;
+  border: 2px solid rgba(255,255,255,0.1);
+  margin-top: 6px;
+}
+
+@media (max-width: 600px) {
+  .draw-container { padding: 10px; border-radius: 14px; }
+  #drawCanvas { width: 320px !important; height: 280px !important; }
+  .draw-toolbar { gap: 4px; }
+  .draw-toolbar button { padding: 6px 8px; font-size: 0.75rem; }
+  .draw-color-btn { width: 24px; height: 24px; }
+}
+
 /* PROJECT SUGGESTIONS — minimal flat */
 .projects-area {
   padding: 10px 16px 12px;
@@ -2108,6 +2265,7 @@ body.artifact-panel-fullscreen {
   </div>
   <div class="input-area">
     <input type="text" id="userInput" data-i18n-placeholder="chat_placeholder" placeholder="scrivi qui bro..." onkeydown="if(event.key==='Enter') send()" />
+    <button class="draw-btn" onclick="openDrawCanvas()" title="Disegna">✏️</button>
     <button id="sendBtn" onclick="send()" data-i18n="chat_send">INVIA</button>
   </div>
   <div class="projects-area">
@@ -2176,6 +2334,11 @@ const translations = {
     vibes_label: "🎮 scegli la tua vibe 🎮",
     chat_placeholder: "scrivi qui bro...",
     chat_send: "INVIA",
+    draw_title: "Disegna o scrivi!",
+    draw_pen: "Penna",
+    draw_eraser: "Gomma",
+    draw_clear: "Cancella",
+    draw_send: "INVIA DISEGNO",
     chat_welcome: "Yo bro! Scegli la vibe e chiedimi qualsiasi cosa!",
     chat_welcome_strong: "Non ho paura di nulla fr fr",
     chat_blocked_warning: "Ehi bro, questo messaggio contiene parole che non vanno bene. Proviamo a essere più gentili!",
@@ -2260,6 +2423,11 @@ const translations = {
     vibes_label: "🎮 choose your vibe 🎮",
     chat_placeholder: "type here bro...",
     chat_send: "SEND",
+    draw_title: "Draw or write!",
+    draw_pen: "Pen",
+    draw_eraser: "Eraser",
+    draw_clear: "Clear",
+    draw_send: "SEND DRAWING",
     chat_welcome: "Yo bro! Pick a vibe and ask me anything!",
     chat_welcome_strong: "I'm not afraid of anything fr fr",
     chat_blocked_warning: "Hey bro, this message contains words that aren't ok. Let's be nicer!",
@@ -2344,6 +2512,11 @@ const translations = {
     vibes_label: "🎮 vælg din vibe 🎮",
     chat_placeholder: "skriv her bro...",
     chat_send: "SEND",
+    draw_title: "Tegn eller skriv!",
+    draw_pen: "Pen",
+    draw_eraser: "Viskelæder",
+    draw_clear: "Ryd",
+    draw_send: "SEND TEGNING",
     chat_welcome: "Yo bro! Vælg en vibe og spørg mig om hvad som helst!",
     chat_welcome_strong: "Jeg er ikke bange for noget fr fr",
     chat_blocked_warning: "Hey bro, denne besked indeholder ord, der ikke er ok. Lad os være pænere!",
@@ -2428,6 +2601,11 @@ const translations = {
     vibes_label: "🎮 välj din vibe 🎮",
     chat_placeholder: "skriv här bro...",
     chat_send: "SKICKA",
+    draw_title: "Rita eller skriv!",
+    draw_pen: "Penna",
+    draw_eraser: "Suddgummi",
+    draw_clear: "Rensa",
+    draw_send: "SKICKA RITNING",
     chat_welcome: "Yo bro! Välj en vibe och fråga mig vad som helst!",
     chat_welcome_strong: "Jag är inte rädd för nåt fr fr",
     chat_blocked_warning: "Hej bro, det här meddelandet innehåller ord som inte är ok. Låt oss vara snällare!",
@@ -3752,5 +3930,321 @@ function hideLegal(type) {
   }
 }
 </script>
+
+<!-- DRAWING CANVAS OVERLAY -->
+<div class="draw-overlay" id="drawOverlay">
+  <div class="draw-container">
+    <div class="draw-header">
+      <span class="draw-title">✏️ <span data-i18n="draw_title">Disegna o scrivi!</span></span>
+      <button class="draw-close" onclick="closeDrawCanvas()">&times;</button>
+    </div>
+    <div class="draw-toolbar">
+      <button id="drawToolPen" class="active" onclick="setDrawTool('pen')">🖊️ <span data-i18n="draw_pen">Penna</span></button>
+      <button id="drawToolEraser" onclick="setDrawTool('eraser')">🧹 <span data-i18n="draw_eraser">Gomma</span></button>
+      <div class="draw-colors">
+        <div class="draw-color-btn active" style="background:#222222" onclick="setDrawColor('#222222', this)"></div>
+        <div class="draw-color-btn" style="background:#ff4444" onclick="setDrawColor('#ff4444', this)"></div>
+        <div class="draw-color-btn" style="background:#4d96ff" onclick="setDrawColor('#4d96ff', this)"></div>
+        <div class="draw-color-btn" style="background:#44cc77" onclick="setDrawColor('#44cc77', this)"></div>
+        <div class="draw-color-btn" style="background:#ff85a1" onclick="setDrawColor('#ff85a1', this)"></div>
+        <div class="draw-color-btn" style="background:#ffd93d" onclick="setDrawColor('#ffd93d', this)"></div>
+        <div class="draw-color-btn" style="background:#c77dff" onclick="setDrawColor('#c77dff', this)"></div>
+      </div>
+      <input type="range" class="draw-size-slider" id="drawSize" min="2" max="20" value="4" oninput="setDrawSize(this.value)">
+    </div>
+    <canvas id="drawCanvas" width="460" height="340"></canvas>
+    <div class="draw-actions">
+      <button class="draw-clear-btn" onclick="clearDrawCanvas()">🗑️ <span data-i18n="draw_clear">Cancella</span></button>
+      <button class="draw-send-btn" onclick="sendDrawing()">📤 <span data-i18n="draw_send">INVIA DISEGNO</span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== DRAWING CANVAS ====================
+let drawCtx, drawColor = '#222222', drawSize = 4, drawTool = 'pen';
+let isDrawing = false, lastX = 0, lastY = 0;
+let drawCanvasEmpty = true;
+
+function openDrawCanvas() {
+  const overlay = document.getElementById('drawOverlay');
+  overlay.classList.add('active');
+  const canvas = document.getElementById('drawCanvas');
+  drawCtx = canvas.getContext('2d');
+
+  // Responsive canvas size
+  const isMobile = window.innerWidth < 600;
+  canvas.width = isMobile ? 320 : 460;
+  canvas.height = isMobile ? 280 : 340;
+
+  clearDrawCanvas();
+
+  // Mouse events
+  canvas.addEventListener('mousedown', drawStart);
+  canvas.addEventListener('mousemove', drawMove);
+  canvas.addEventListener('mouseup', drawEnd);
+  canvas.addEventListener('mouseleave', drawEnd);
+
+  // Touch events
+  canvas.addEventListener('touchstart', drawTouchStart, { passive: false });
+  canvas.addEventListener('touchmove', drawTouchMove, { passive: false });
+  canvas.addEventListener('touchend', drawEnd);
+}
+
+function closeDrawCanvas() {
+  document.getElementById('drawOverlay').classList.remove('active');
+}
+
+function setDrawTool(tool) {
+  drawTool = tool;
+  document.getElementById('drawToolPen').classList.toggle('active', tool === 'pen');
+  document.getElementById('drawToolEraser').classList.toggle('active', tool === 'eraser');
+}
+
+function setDrawColor(color, btn) {
+  drawColor = color;
+  setDrawTool('pen');
+  document.querySelectorAll('.draw-color-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function setDrawSize(size) {
+  drawSize = parseInt(size);
+}
+
+function clearDrawCanvas() {
+  const canvas = document.getElementById('drawCanvas');
+  drawCtx.fillStyle = '#ffffff';
+  drawCtx.fillRect(0, 0, canvas.width, canvas.height);
+  drawCanvasEmpty = true;
+}
+
+function getCanvasPos(canvas, e) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: (e.clientX - rect.left) * (canvas.width / rect.width),
+    y: (e.clientY - rect.top) * (canvas.height / rect.height)
+  };
+}
+
+function drawStart(e) {
+  isDrawing = true;
+  drawCanvasEmpty = false;
+  const pos = getCanvasPos(e.target, e);
+  lastX = pos.x;
+  lastY = pos.y;
+}
+
+function drawMove(e) {
+  if (!isDrawing) return;
+  const pos = getCanvasPos(e.target, e);
+  drawCtx.beginPath();
+  drawCtx.moveTo(lastX, lastY);
+  drawCtx.lineTo(pos.x, pos.y);
+  drawCtx.strokeStyle = drawTool === 'eraser' ? '#ffffff' : drawColor;
+  drawCtx.lineWidth = drawTool === 'eraser' ? drawSize * 3 : drawSize;
+  drawCtx.lineCap = 'round';
+  drawCtx.lineJoin = 'round';
+  drawCtx.stroke();
+  lastX = pos.x;
+  lastY = pos.y;
+}
+
+function drawEnd() {
+  isDrawing = false;
+}
+
+function drawTouchStart(e) {
+  e.preventDefault();
+  const touch = e.touches[0];
+  const canvas = e.target;
+  const rect = canvas.getBoundingClientRect();
+  isDrawing = true;
+  drawCanvasEmpty = false;
+  lastX = (touch.clientX - rect.left) * (canvas.width / rect.width);
+  lastY = (touch.clientY - rect.top) * (canvas.height / rect.height);
+}
+
+function drawTouchMove(e) {
+  e.preventDefault();
+  if (!isDrawing) return;
+  const touch = e.touches[0];
+  const canvas = e.target;
+  const rect = canvas.getBoundingClientRect();
+  const x = (touch.clientX - rect.left) * (canvas.width / rect.width);
+  const y = (touch.clientY - rect.top) * (canvas.height / rect.height);
+  drawCtx.beginPath();
+  drawCtx.moveTo(lastX, lastY);
+  drawCtx.lineTo(x, y);
+  drawCtx.strokeStyle = drawTool === 'eraser' ? '#ffffff' : drawColor;
+  drawCtx.lineWidth = drawTool === 'eraser' ? drawSize * 3 : drawSize;
+  drawCtx.lineCap = 'round';
+  drawCtx.lineJoin = 'round';
+  drawCtx.stroke();
+  lastX = x;
+  lastY = y;
+}
+
+async function sendDrawing() {
+  if (drawCanvasEmpty) return;
+
+  const canvas = document.getElementById('drawCanvas');
+  const imageData = canvas.toDataURL('image/png');
+  const base64 = imageData.split(',')[1];
+
+  closeDrawCanvas();
+
+  const msgs = document.getElementById('messages');
+  const welcome = msgs.querySelector('.welcome');
+  if (welcome) welcome.remove();
+
+  // Show drawing preview in chat
+  const uMsg = document.createElement('div');
+  uMsg.className = 'msg user';
+  const preview = document.createElement('img');
+  preview.src = imageData;
+  preview.className = 'draw-preview';
+  uMsg.appendChild(preview);
+  msgs.appendChild(uMsg);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // Loading
+  const loading = document.createElement('div');
+  loading.className = 'msg loading';
+  loading.innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(loading);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  isLoading = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  try {
+    let reply;
+    const v = vibes[currentVibe];
+    const drawPrompt = 'Il bambino ha disegnato o scritto qualcosa a mano. Guarda l\'immagine e rispondi nella tua personalità. Se è una domanda di matematica o un problema, risolvilo! Se è un disegno, commentalo e incoraggia la creatività. Se è una parola/frase scritta a mano, leggila e rispondi.';
+
+    if (apiAvailable && userApiKey) {
+      if (userApiKeyProvider === 'openai') {
+        // OpenAI Vision
+        const openaiMessages = [
+          { role: 'system', content: v.system },
+          ...sessionMessages,
+          { role: 'user', content: [
+            { type: 'text', text: drawPrompt },
+            { type: 'image_url', image_url: { url: imageData, detail: 'high' } }
+          ]}
+        ];
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + userApiKey
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o',
+            max_tokens: 2048,
+            messages: openaiMessages
+          })
+        });
+        const data = await response.json();
+        if (data.choices && data.choices[0] && data.choices[0].message) {
+          reply = data.choices[0].message.content;
+          sessionMessages.push({ role: 'user', content: drawPrompt + ' [disegno allegato]' });
+          sessionMessages.push({ role: 'assistant', content: reply });
+        } else {
+          reply = fakeDrawReply();
+        }
+      } else {
+        // Anthropic Claude Vision
+        const claudeMessages = [
+          ...sessionMessages,
+          { role: 'user', content: [
+            { type: 'image', source: { type: 'base64', media_type: 'image/png', data: base64 } },
+            { type: 'text', text: drawPrompt }
+          ]}
+        ];
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': userApiKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 2048,
+            system: v.system,
+            messages: claudeMessages
+          })
+        });
+        const data = await response.json();
+        if (data.content && data.content[0]) {
+          reply = data.content[0].text;
+          sessionMessages.push({ role: 'user', content: drawPrompt + ' [disegno allegato]' });
+          sessionMessages.push({ role: 'assistant', content: reply });
+        } else {
+          reply = fakeDrawReply();
+        }
+      }
+    } else {
+      // No API: fake reply
+      await new Promise(r => setTimeout(r, 800 + Math.random() * 1200));
+      reply = fakeDrawReply();
+    }
+
+    loading.remove();
+
+    const aMsg = document.createElement('div');
+    aMsg.className = 'msg ai';
+    const segments = parseArtifacts(reply);
+    if (segments.length === 1 && segments[0].type === 'text') {
+      aMsg.textContent = reply;
+    } else {
+      aMsg.innerHTML = segments.map(s => renderArtifact(s)).join('');
+    }
+    msgs.appendChild(aMsg);
+    activatePendingGames();
+
+    saveChatEntry({ vibe: currentVibe, user: '[disegno]', ai: reply });
+
+    // Particles
+    const v2 = vibes[currentVibe];
+    for (let i = 0; i < 4; i++) {
+      setTimeout(() => {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.textContent = v2.particles[Math.floor(Math.random() * v2.particles.length)];
+        p.style.left = (200 + Math.random() * 300) + 'px';
+        p.style.top = (window.innerHeight * 0.7) + 'px';
+        p.style.fontSize = '1rem';
+        document.body.appendChild(p);
+      }, i * 200);
+    }
+  } catch (err) {
+    loading.remove();
+    const errMsg = document.createElement('div');
+    errMsg.className = 'msg ai';
+    errMsg.textContent = 'Oops! Errore con il disegno... riprova! 🎨';
+    msgs.appendChild(errMsg);
+  }
+
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function fakeDrawReply() {
+  const replies = {
+    roblox: "BRO che disegno FIRE fr fr 🎮💎 ngl hai delle skill artistiche pazzesche bro! W disegno! Sembra un concept art per un gioco Roblox no cap 🔥",
+    mochinut: "OMG BESTIE questo disegno è literally SO CUTE uwu 🌸💖 hai un talento incredibile!! L'estetica è perfetta, mi ricorda Pinterest!! 🍩✨ Keep drawing bestie!!",
+    brainrot: "TRALALELO TRALALA! Questo disegno... BOMBARDIRO CROCODILO lo approva! 🐊💥 È bellissimo fratello! Brr brr patapim che arte! 🤌🍌",
+    minecraft: "Bro questo disegno è come un diamante raro nella tua grotta ⛏️💎 Hai craftato un capolavoro! Sembra la mappa di un mondo Minecraft survival! GG ez! 🌲",
+    anime: "NANI?! Questo disegno... SUGOI!! ✨💫 Senpai noterebbe sicuramente il tuo talento! È come un frame da un anime shonen!! Ganbatte, continua a disegnare nakama! 🎌"
+  };
+  return replies[currentVibe] || replies.roblox;
+}
+</script>
+
 </body>
 </html>
