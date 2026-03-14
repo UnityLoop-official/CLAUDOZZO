@@ -1,0 +1,24 @@
+{
+  "name": "CLAUDOZZO - La Chat dei Bro",
+  "short_name": "CLAUDOZZO",
+  "description": "Chat AI divertente e sicura per bambini",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0d0d1a",
+  "theme_color": "#4d96ff",
+  "orientation": "any",
+  "lang": "it",
+  "categories": ["kids", "education", "entertainment"],
+  "icons": [
+    {
+      "src": "claudozzo_mascot_v1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "claudozzo_mascot_v1.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

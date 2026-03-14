@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="claudozzo_mascot_v1.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4d96ff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="claudozzo_mascot_v1.png">
 <title>CLAUDOZZO - La Chat dei Bro</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Boogaloo&family=Baloo+2:wght@400;600;700;800&display=swap');
@@ -604,6 +609,307 @@ body.vibes-minimized .vibe-btn:hover::after {
   .draw-toolbar { gap: 4px; }
   .draw-toolbar button { padding: 6px 8px; font-size: 0.75rem; }
   .draw-color-btn { width: 24px; height: 24px; }
+}
+
+/* ==================== STICKER PICKER ==================== */
+.sticker-btn {
+  background: linear-gradient(135deg, #ffd93d, #ff6b9d) !important;
+  font-size: 1.3rem !important;
+  padding: 11px 16px !important;
+  min-width: 48px;
+  color: #000 !important;
+}
+.sticker-picker {
+  display: none;
+  position: absolute;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(13,13,26,0.96);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+  z-index: 500;
+  max-width: 340px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+.sticker-picker.active { display: block; }
+.sticker-picker-header {
+  font-family: 'Boogaloo', cursive;
+  font-size: 0.9rem;
+  color: #9090bb;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.sticker-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+.sticker-item {
+  font-size: 1.8rem;
+  text-align: center;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255,255,255,0.04);
+}
+.sticker-item:hover { background: rgba(255,255,255,0.12); transform: scale(1.2); }
+
+/* ==================== GALLERY ==================== */
+.gallery-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  background: rgba(0,0,0,0.9);
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding: 20px;
+}
+.gallery-overlay.active { display: flex; }
+.gallery-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: 16px;
+}
+.gallery-title {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.6rem;
+  color: #f0f0ff;
+}
+.gallery-close {
+  background: none;
+  border: none;
+  color: #9090bb;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+.gallery-close:hover { color: #ff6b6b; }
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  width: 100%;
+  max-width: 700px;
+}
+.gallery-card {
+  background: rgba(20,20,40,0.95);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.gallery-card:hover { transform: scale(1.03); border-color: rgba(255,255,255,0.25); }
+.gallery-card img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+.gallery-card-info {
+  padding: 8px 10px;
+  font-size: 0.7rem;
+  color: #9090bb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.gallery-card-delete {
+  background: none;
+  border: none;
+  color: #9090bb;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.gallery-card-delete:hover { color: #ff6b6b; }
+.gallery-empty {
+  color: #9090bb;
+  text-align: center;
+  padding: 40px;
+  font-size: 1rem;
+}
+.gallery-btn {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  z-index: 10002;
+  background: rgba(13,13,26,0.85);
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.3rem;
+  transition: all 0.2s;
+  color: #f0f0ff;
+}
+.gallery-btn:hover { transform: scale(1.1); border-color: #4d96ff; }
+
+/* ==================== ACHIEVEMENTS ==================== */
+.achievements-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  background: rgba(0,0,0,0.9);
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding: 20px;
+}
+.achievements-overlay.active { display: flex; }
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  width: 100%;
+  max-width: 700px;
+}
+.achievement-card {
+  background: rgba(20,20,40,0.95);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 16px;
+  text-align: center;
+  transition: all 0.2s;
+}
+.achievement-card.unlocked {
+  border-color: #ffd93d;
+  background: rgba(255,217,61,0.08);
+}
+.achievement-card.locked { opacity: 0.4; filter: grayscale(1); }
+.achievement-emoji { font-size: 2.2rem; margin-bottom: 6px; }
+.achievement-name { font-family: 'Boogaloo', cursive; font-size: 0.95rem; color: #f0f0ff; margin-bottom: 4px; }
+.achievement-desc { font-size: 0.7rem; color: #9090bb; line-height: 1.3; }
+.achievement-progress { margin-top: 8px; }
+.achievement-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.achievement-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd93d, #ff6b9d);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.achievement-count { font-size: 0.65rem; color: #9090bb; margin-top: 4px; }
+.achievements-btn {
+  position: fixed;
+  bottom: 16px;
+  left: 66px;
+  z-index: 10002;
+  background: rgba(13,13,26,0.85);
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.3rem;
+  transition: all 0.2s;
+  color: #f0f0ff;
+}
+.achievements-btn:hover { transform: scale(1.1); border-color: #ffd93d; }
+
+/* Achievement popup toast */
+.achievement-toast {
+  position: fixed;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, rgba(255,217,61,0.95), rgba(255,107,157,0.95));
+  color: #000;
+  padding: 14px 24px;
+  border-radius: 16px;
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.1rem;
+  z-index: 30000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 40px rgba(255,217,61,0.3);
+  transition: top 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.achievement-toast.show { top: 20px; }
+.achievement-toast .toast-emoji { font-size: 1.6rem; }
+
+/* ==================== USAGE TIMER ==================== */
+.timer-display {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 10003;
+  background: rgba(13,13,26,0.85);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 6px 14px;
+  font-family: 'Boogaloo', cursive;
+  font-size: 0.85rem;
+  color: #9090bb;
+  display: none;
+}
+.timer-display.active { display: flex; align-items: center; gap: 6px; }
+.timer-display.warning { border-color: #ffd93d; color: #ffd93d; }
+.timer-display.danger { border-color: #ff4444; color: #ff4444; animation: timerPulse 1s infinite; }
+@keyframes timerPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.timer-blocked-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 25000;
+  background: rgba(0,0,0,0.95);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+.timer-blocked-overlay.active { display: flex; }
+.timer-blocked-emoji { font-size: 4rem; margin-bottom: 16px; }
+.timer-blocked-title { font-family: 'Boogaloo', cursive; font-size: 1.8rem; color: #f0f0ff; margin-bottom: 10px; }
+.timer-blocked-text { color: #9090bb; font-size: 1rem; max-width: 400px; line-height: 1.5; }
+
+/* Timer config in parent panel */
+.timer-config {
+  margin-top: 16px;
+  padding: 14px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.timer-config label {
+  display: block;
+  font-size: 0.85rem;
+  color: #9090bb;
+  margin-bottom: 8px;
+}
+.timer-config select {
+  background: #0a0a16;
+  color: #f0f0ff;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.9rem;
+  width: 100%;
 }
 
 /* PROJECT SUGGESTIONS — minimal flat */
@@ -2250,6 +2556,18 @@ body.artifact-panel-fullscreen {
     <button class="modal-btn danger" onclick="clearHistory()" data-i18n="panel_clear">CANCELLA CRONOLOGIA</button>
     <button class="modal-btn danger" onclick="resetPin()" data-i18n="panel_change_pin">CAMBIA PIN</button>
   </div>
+  <div class="timer-config">
+    <label data-i18n="timer_label">⏱️ Limite tempo giornaliero:</label>
+    <select id="timerLimitSelect" onchange="setTimerLimit(this.value)">
+      <option value="0" data-i18n="timer_off">Nessun limite</option>
+      <option value="15">15 min</option>
+      <option value="30">30 min</option>
+      <option value="45">45 min</option>
+      <option value="60">60 min</option>
+      <option value="90">90 min</option>
+      <option value="120">120 min</option>
+    </select>
+  </div>
   <div id="parentLog"></div>
 </div>
 
@@ -2329,10 +2647,16 @@ body.artifact-panel-fullscreen {
       <strong style="color:#00b4d8"><span data-i18n="chat_welcome_strong">Non ho paura di nulla fr fr</span> 💀</strong>
     </div>
   </div>
-  <div class="input-area">
+  <div class="input-area" style="position:relative;">
     <input type="text" id="userInput" data-i18n-placeholder="chat_placeholder" placeholder="scrivi qui bro..." onkeydown="if(event.key==='Enter') send()" />
+    <button class="sticker-btn" onclick="toggleStickerPicker()" title="Sticker">🎭</button>
     <button class="draw-btn" onclick="openDrawCanvas()" title="Disegna">✏️</button>
     <button id="sendBtn" onclick="send()" data-i18n="chat_send">INVIA</button>
+    <!-- Sticker Picker -->
+    <div class="sticker-picker" id="stickerPicker">
+      <div class="sticker-picker-header" data-i18n="sticker_title">Sticker</div>
+      <div class="sticker-grid" id="stickerGrid"></div>
+    </div>
   </div>
   <div class="projects-area">
     <div class="projects-label" data-i18n="projects_label">Prova un progetto</div>
@@ -2407,6 +2731,14 @@ const translations = {
     draw_send: "INVIA DISEGNO",
     draw_api_notice: "Per far leggere il disegno all'AI, inserisci una API key Claude o OpenAI.",
     draw_api_notice_link: "Inserisci chiave",
+    sticker_title: "Sticker",
+    gallery_title: "I miei disegni",
+    gallery_empty: "Nessun disegno ancora! Usa la penna per disegnare qualcosa.",
+    achievements_title: "Achievement",
+    timer_label: "⏱️ Limite tempo giornaliero:",
+    timer_off: "Nessun limite",
+    timer_blocked_title: "Tempo scaduto!",
+    timer_blocked_text: "Hai usato tutto il tempo di oggi. Torna domani per altre avventure! Chiedi ai tuoi genitori se vuoi più tempo.",
     chat_welcome: "Yo bro! Scegli la vibe e chiedimi qualsiasi cosa!",
     chat_welcome_strong: "Non ho paura di nulla fr fr",
     chat_blocked_warning: "Ehi bro, questo messaggio contiene parole che non vanno bene. Proviamo a essere più gentili!",
@@ -2498,6 +2830,14 @@ const translations = {
     draw_send: "SEND DRAWING",
     draw_api_notice: "To let the AI read your drawing, add a Claude or OpenAI API key.",
     draw_api_notice_link: "Add key",
+    sticker_title: "Stickers",
+    gallery_title: "My drawings",
+    gallery_empty: "No drawings yet! Use the pen to draw something.",
+    achievements_title: "Achievements",
+    timer_label: "⏱️ Daily time limit:",
+    timer_off: "No limit",
+    timer_blocked_title: "Time's up!",
+    timer_blocked_text: "You've used all your time for today. Come back tomorrow for more adventures! Ask your parents if you want more time.",
     chat_welcome: "Yo bro! Pick a vibe and ask me anything!",
     chat_welcome_strong: "I'm not afraid of anything fr fr",
     chat_blocked_warning: "Hey bro, this message contains words that aren't ok. Let's be nicer!",
@@ -2589,6 +2929,14 @@ const translations = {
     draw_send: "SEND TEGNING",
     draw_api_notice: "For at AI'en kan læse din tegning, skal du tilføje en Claude eller OpenAI API-nøgle.",
     draw_api_notice_link: "Tilføj nøgle",
+    sticker_title: "Klistermærker",
+    gallery_title: "Mine tegninger",
+    gallery_empty: "Ingen tegninger endnu! Brug pennen til at tegne noget.",
+    achievements_title: "Præstationer",
+    timer_label: "⏱️ Daglig tidsgrænse:",
+    timer_off: "Ingen grænse",
+    timer_blocked_title: "Tiden er udløbet!",
+    timer_blocked_text: "Du har brugt al din tid i dag. Kom tilbage i morgen for flere eventyr! Spørg dine forældre, hvis du vil have mere tid.",
     chat_welcome: "Yo bro! Vælg en vibe og spørg mig om hvad som helst!",
     chat_welcome_strong: "Jeg er ikke bange for noget fr fr",
     chat_blocked_warning: "Hey bro, denne besked indeholder ord, der ikke er ok. Lad os være pænere!",
@@ -2680,6 +3028,14 @@ const translations = {
     draw_send: "SKICKA RITNING",
     draw_api_notice: "För att AI:n ska kunna läsa din ritning, lägg till en Claude eller OpenAI API-nyckel.",
     draw_api_notice_link: "Lägg till nyckel",
+    sticker_title: "Klistermärken",
+    gallery_title: "Mina ritningar",
+    gallery_empty: "Inga ritningar än! Använd pennan för att rita något.",
+    achievements_title: "Prestationer",
+    timer_label: "⏱️ Daglig tidsgräns:",
+    timer_off: "Ingen gräns",
+    timer_blocked_title: "Tiden är slut!",
+    timer_blocked_text: "Du har använt all din tid idag. Kom tillbaka imorgon för fler äventyr! Fråga dina föräldrar om du vill ha mer tid.",
     chat_welcome: "Yo bro! Välj en vibe och fråga mig vad som helst!",
     chat_welcome_strong: "Jag är inte rädd för nåt fr fr",
     chat_blocked_warning: "Hej bro, det här meddelandet innehåller ord som inte är ok. Låt oss vara snällare!",
@@ -4005,6 +4361,43 @@ function hideLegal(type) {
 }
 </script>
 
+<!-- GALLERY BUTTON -->
+<button class="gallery-btn" onclick="openGallery()" title="Galleria disegni">🖼️</button>
+
+<!-- ACHIEVEMENTS BUTTON -->
+<button class="achievements-btn" onclick="openAchievements()" title="Achievements">🏆</button>
+
+<!-- TIMER DISPLAY -->
+<div class="timer-display" id="timerDisplay">
+  <span>⏱️</span>
+  <span id="timerText">30:00</span>
+</div>
+
+<!-- TIMER BLOCKED -->
+<div class="timer-blocked-overlay" id="timerBlocked">
+  <div class="timer-blocked-emoji">😴</div>
+  <div class="timer-blocked-title" data-i18n="timer_blocked_title">Tempo scaduto!</div>
+  <div class="timer-blocked-text" data-i18n="timer_blocked_text">Hai usato tutto il tempo di oggi. Torna domani per altre avventure! Chiedi ai tuoi genitori se vuoi più tempo.</div>
+</div>
+
+<!-- GALLERY OVERLAY -->
+<div class="gallery-overlay" id="galleryOverlay">
+  <div class="gallery-header">
+    <span class="gallery-title">🖼️ <span data-i18n="gallery_title">I miei disegni</span></span>
+    <button class="gallery-close" onclick="closeGallery()">&times;</button>
+  </div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</div>
+
+<!-- ACHIEVEMENTS OVERLAY -->
+<div class="achievements-overlay" id="achievementsOverlay">
+  <div class="gallery-header">
+    <span class="gallery-title">🏆 <span data-i18n="achievements_title">Achievement</span></span>
+    <button class="gallery-close" onclick="closeAchievements()">&times;</button>
+  </div>
+  <div class="achievements-grid" id="achievementsGrid"></div>
+</div>
+
 <!-- DRAWING CANVAS OVERLAY -->
 <div class="draw-overlay" id="drawOverlay">
   <div class="draw-container">
@@ -4181,6 +4574,11 @@ async function sendDrawing() {
   const imageData = canvas.toDataURL('image/png');
   const base64 = imageData.split(',')[1];
 
+  // Save to gallery
+  if (typeof saveDrawingToGallery === 'function') {
+    saveDrawingToGallery(imageData);
+  }
+
   closeDrawCanvas();
 
   const msgs = document.getElementById('messages');
@@ -4354,6 +4752,394 @@ function showDrawFullscreen(imgId) {
   overlay.innerHTML = `<img src="${img.src}" alt="Disegno ingrandito" />`;
   overlay.classList.add('active');
 }
+
+// ==================== INDEXEDDB ====================
+let claudozzoDB = null;
+function openDB() {
+  return new Promise((resolve, reject) => {
+    if (claudozzoDB) { resolve(claudozzoDB); return; }
+    const req = indexedDB.open('claudozzo', 2);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('drawings')) {
+        db.createObjectStore('drawings', { keyPath: 'id', autoIncrement: true });
+      }
+      if (!db.objectStoreNames.contains('chatHistory')) {
+        db.createObjectStore('chatHistory', { keyPath: 'id', autoIncrement: true });
+      }
+      if (!db.objectStoreNames.contains('stats')) {
+        db.createObjectStore('stats', { keyPath: 'key' });
+      }
+    };
+    req.onsuccess = (e) => { claudozzoDB = e.target.result; resolve(claudozzoDB); };
+    req.onerror = (e) => reject(e);
+  });
+}
+
+async function dbPut(store, data) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(store, 'readwrite');
+    const s = tx.objectStore(store);
+    const req = s.put(data);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = (e) => reject(e);
+  });
+}
+
+async function dbGetAll(store) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(store, 'readonly');
+    const s = tx.objectStore(store);
+    const req = s.getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = (e) => reject(e);
+  });
+}
+
+async function dbGet(store, key) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(store, 'readonly');
+    const s = tx.objectStore(store);
+    const req = s.get(key);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = (e) => reject(e);
+  });
+}
+
+async function dbDelete(store, key) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(store, 'readwrite');
+    const s = tx.objectStore(store);
+    const req = s.delete(key);
+    req.onsuccess = () => resolve();
+    req.onerror = (e) => reject(e);
+  });
+}
+
+// ==================== GALLERY ====================
+async function saveDrawingToGallery(imageData) {
+  await dbPut('drawings', {
+    image: imageData,
+    date: new Date().toISOString(),
+    vibe: currentVibe
+  });
+  await incrementStat('drawings_count');
+  checkAchievements();
+}
+
+async function openGallery() {
+  const overlay = document.getElementById('galleryOverlay');
+  overlay.classList.add('active');
+  const grid = document.getElementById('galleryGrid');
+  const drawings = await dbGetAll('drawings');
+
+  if (drawings.length === 0) {
+    grid.innerHTML = `<div class="gallery-empty">${t('gallery_empty')}</div>`;
+    return;
+  }
+
+  grid.innerHTML = drawings.reverse().map(d => `
+    <div class="gallery-card">
+      <img src="${d.image}" alt="Disegno" onclick="showDrawFullscreen('gallery-img-${d.id}')" id="gallery-img-${d.id}" />
+      <div class="gallery-card-info">
+        <span>${new Date(d.date).toLocaleDateString()} ${d.vibe || ''}</span>
+        <button class="gallery-card-delete" onclick="event.stopPropagation();deleteDrawing(${d.id})" title="Elimina">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function closeGallery() {
+  document.getElementById('galleryOverlay').classList.remove('active');
+}
+
+async function deleteDrawing(id) {
+  await dbDelete('drawings', id);
+  openGallery(); // refresh
+}
+
+// ==================== STICKERS ====================
+const vibeStickers = {
+  roblox: ['🎮','🕹️','⚔️','💎','🏆','💀','🎯','🛡️','👾','🔥','💪','🎲','🏅','⭐','🚀','🤖','🎪','💥','🌟','🗡️'],
+  mochinut: ['🍩','🌸','💖','🦄','🧋','🎀','🍡','💕','🌷','🍰','🌈','💝','🎪','🦋','🌺','🍭','💐','🧁','🎠','✨'],
+  brainrot: ['🐊','💣','🤌','🍌','🐘','🍕','🐍','🦅','💥','🌍','🎺','🤡','🦆','🌶️','🎪','🐸','🦧','🗿','🔔','🎭'],
+  minecraft: ['⛏️','💎','🌲','🐄','💣','🏠','⚔️','🪨','🔥','🧱','🐷','🐑','🎣','🪣','🛡️','🏹','🍎','🧪','🗡️','🌾'],
+  anime: ['🎌','⭐','🌸','💫','🔮','👁️','💜','🗡️','🌙','✨','🦊','🐉','🔥','💠','🌀','⚡','🎭','🏯','🌊','💮']
+};
+
+function toggleStickerPicker() {
+  const picker = document.getElementById('stickerPicker');
+  const isActive = picker.classList.contains('active');
+  picker.classList.toggle('active');
+
+  if (!isActive) {
+    const stickers = vibeStickers[currentVibe] || vibeStickers.roblox;
+    document.getElementById('stickerGrid').innerHTML = stickers.map(s =>
+      `<div class="sticker-item" onclick="sendSticker('${s}')">${s}</div>`
+    ).join('');
+  }
+}
+
+async function sendSticker(emoji) {
+  document.getElementById('stickerPicker').classList.remove('active');
+
+  const msgs = document.getElementById('messages');
+  const welcome = msgs.querySelector('.welcome');
+  if (welcome) welcome.remove();
+
+  const uMsg = document.createElement('div');
+  uMsg.className = 'msg user';
+  uMsg.style.fontSize = '3rem';
+  uMsg.style.textAlign = 'center';
+  uMsg.textContent = emoji;
+  msgs.appendChild(uMsg);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  await incrementStat('stickers_sent');
+  await incrementStat('messages_sent');
+  checkAchievements();
+
+  // AI reaction to sticker
+  const loading = document.createElement('div');
+  loading.className = 'msg loading';
+  loading.innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(loading);
+
+  await new Promise(r => setTimeout(r, 600 + Math.random() * 800));
+  loading.remove();
+
+  const reactions = {
+    roblox: [`${emoji} Bro quello sticker è W fr fr! 🔥`, `${emoji} No cap, sticker FIRE bro! 💎`, `${emoji} Gg ez, quello è il mio sticker preferito! 🏆`],
+    mochinut: [`${emoji} OMG bestie è SO CUTE uwu!! 💖`, `${emoji} Literally adorable bestie!! 🌸`, `${emoji} L'estetica è PERFETTA! ✨`],
+    brainrot: [`${emoji} TRALALELO! Bombardiro approva! 🐊`, `${emoji} Brr brr patapim! Bellissimo! 💥`, `${emoji} TUNG TUNG TUNG! Che sticker! 🤌`],
+    minecraft: [`${emoji} Come trovare un diamante bro! 💎`, `${emoji} GG! Sticker craftato bene! ⛏️`, `${emoji} Questo sticker è raro come il netherite! 🔥`],
+    anime: [`${emoji} SUGOI!! Che sticker nakama! ✨`, `${emoji} NANI?! Bellissimo senpai! 💫`, `${emoji} Yatta! Lo adoro!! 🎌`]
+  };
+  const pool = reactions[currentVibe] || reactions.roblox;
+  const reply = pool[Math.floor(Math.random() * pool.length)];
+
+  const aMsg = document.createElement('div');
+  aMsg.className = 'msg ai';
+  aMsg.textContent = reply;
+  msgs.appendChild(aMsg);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  saveChatEntry({ vibe: currentVibe, user: emoji, ai: reply });
+}
+
+// ==================== ACHIEVEMENTS ====================
+const ACHIEVEMENTS = [
+  { id: 'first_msg', emoji: '💬', name: 'Primo Messaggio', desc: 'Invia il tuo primo messaggio', stat: 'messages_sent', target: 1 },
+  { id: 'msg_10', emoji: '🗣️', name: 'Chiacchierone', desc: 'Invia 10 messaggi', stat: 'messages_sent', target: 10 },
+  { id: 'msg_50', emoji: '📢', name: 'Super Chiacchierone', desc: 'Invia 50 messaggi', stat: 'messages_sent', target: 50 },
+  { id: 'msg_100', emoji: '🎙️', name: 'Leggenda Chat', desc: 'Invia 100 messaggi', stat: 'messages_sent', target: 100 },
+  { id: 'first_draw', emoji: '🎨', name: 'Primo Disegno', desc: 'Fai il tuo primo disegno', stat: 'drawings_count', target: 1 },
+  { id: 'draw_5', emoji: '🖌️', name: 'Artista', desc: 'Fai 5 disegni', stat: 'drawings_count', target: 5 },
+  { id: 'draw_20', emoji: '🖼️', name: 'Maestro d\'Arte', desc: 'Fai 20 disegni', stat: 'drawings_count', target: 20 },
+  { id: 'sticker_5', emoji: '🎭', name: 'Sticker Fan', desc: 'Invia 5 sticker', stat: 'stickers_sent', target: 5 },
+  { id: 'sticker_20', emoji: '🌟', name: 'Sticker Master', desc: 'Invia 20 sticker', stat: 'stickers_sent', target: 20 },
+  { id: 'vibe_all', emoji: '🌈', name: 'Esploratore', desc: 'Prova tutte e 5 le vibe', stat: 'vibes_used', target: 5 },
+  { id: 'quiz_1', emoji: '🧠', name: 'Quiz Lover', desc: 'Completa un quiz', stat: 'quizzes_done', target: 1 },
+  { id: 'quiz_10', emoji: '🏅', name: 'Quiz Champion', desc: 'Completa 10 quiz', stat: 'quizzes_done', target: 10 },
+];
+
+async function getStat(key) {
+  const record = await dbGet('stats', key);
+  return record ? record.value : 0;
+}
+
+async function incrementStat(key, amount) {
+  const current = await getStat(key);
+  await dbPut('stats', { key, value: current + (amount || 1) });
+}
+
+async function setStat(key, value) {
+  await dbPut('stats', { key, value });
+}
+
+async function checkAchievements() {
+  const unlocked = JSON.parse(localStorage.getItem('claudozzo_achievements') || '[]');
+  for (const ach of ACHIEVEMENTS) {
+    if (unlocked.includes(ach.id)) continue;
+    const val = await getStat(ach.stat);
+    if (val >= ach.target) {
+      unlocked.push(ach.id);
+      localStorage.setItem('claudozzo_achievements', JSON.stringify(unlocked));
+      showAchievementToast(ach);
+    }
+  }
+}
+
+function showAchievementToast(ach) {
+  const existing = document.querySelector('.achievement-toast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.className = 'achievement-toast';
+  toast.innerHTML = `<span class="toast-emoji">${ach.emoji}</span> <span>${ach.name} sbloccato!</span>`;
+  document.body.appendChild(toast);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => toast.classList.add('show'));
+  });
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 500);
+  }, 3500);
+}
+
+async function openAchievements() {
+  document.getElementById('achievementsOverlay').classList.add('active');
+  const grid = document.getElementById('achievementsGrid');
+  const unlocked = JSON.parse(localStorage.getItem('claudozzo_achievements') || '[]');
+
+  let html = '';
+  for (const ach of ACHIEVEMENTS) {
+    const isUnlocked = unlocked.includes(ach.id);
+    const val = await getStat(ach.stat);
+    const pct = Math.min(100, Math.round((val / ach.target) * 100));
+    html += `
+      <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
+        <div class="achievement-emoji">${ach.emoji}</div>
+        <div class="achievement-name">${ach.name}</div>
+        <div class="achievement-desc">${ach.desc}</div>
+        <div class="achievement-progress">
+          <div class="achievement-bar"><div class="achievement-bar-fill" style="width:${pct}%"></div></div>
+          <div class="achievement-count">${Math.min(val, ach.target)}/${ach.target}</div>
+        </div>
+      </div>`;
+  }
+  grid.innerHTML = html;
+}
+
+function closeAchievements() {
+  document.getElementById('achievementsOverlay').classList.remove('active');
+}
+
+// ==================== USAGE TIMER ====================
+let timerInterval = null;
+
+function getTimerLimit() {
+  return parseInt(localStorage.getItem('claudozzo_timer_limit') || '0');
+}
+
+function setTimerLimit(minutes) {
+  localStorage.setItem('claudozzo_timer_limit', minutes);
+  if (parseInt(minutes) === 0) {
+    document.getElementById('timerDisplay').classList.remove('active');
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    document.getElementById('timerBlocked').classList.remove('active');
+  } else {
+    startTimer();
+  }
+}
+
+function getTodayKey() {
+  return 'claudozzo_usage_' + new Date().toISOString().split('T')[0];
+}
+
+function getUsedSeconds() {
+  return parseInt(localStorage.getItem(getTodayKey()) || '0');
+}
+
+function startTimer() {
+  const limit = getTimerLimit();
+  if (limit === 0) return;
+
+  const display = document.getElementById('timerDisplay');
+  display.classList.add('active');
+
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    let used = getUsedSeconds() + 1;
+    localStorage.setItem(getTodayKey(), used);
+
+    const remaining = (limit * 60) - used;
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      document.getElementById('timerBlocked').classList.add('active');
+      display.classList.add('danger');
+      document.getElementById('timerText').textContent = '0:00';
+      return;
+    }
+
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+    document.getElementById('timerText').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+    display.classList.remove('warning', 'danger');
+    if (remaining < 120) display.classList.add('danger');
+    else if (remaining < 300) display.classList.add('warning');
+  }, 1000);
+}
+
+// ==================== TRACK VIBES FOR ACHIEVEMENTS ====================
+const originalSetVibe = window.setVibe;
+// We'll hook into vibe changes after DOM loads
+
+// ==================== INIT NEW FEATURES ====================
+document.addEventListener('DOMContentLoaded', async () => {
+  await openDB();
+
+  // Start timer if configured
+  const limit = getTimerLimit();
+  if (limit > 0) {
+    const used = getUsedSeconds();
+    if (used >= limit * 60) {
+      document.getElementById('timerBlocked').classList.add('active');
+    }
+    startTimer();
+    // Set select value in parent panel
+    const sel = document.getElementById('timerLimitSelect');
+    if (sel) sel.value = limit.toString();
+  }
+
+  // Check if blocked by timer
+  if (limit > 0 && getUsedSeconds() >= limit * 60) {
+    document.getElementById('timerBlocked').classList.add('active');
+  }
+
+  // Track vibe usage for achievements
+  const origSetVibeFn = window.setVibe;
+  if (origSetVibeFn) {
+    window.setVibe = async function(btn) {
+      origSetVibeFn(btn);
+      const vibesUsedSet = JSON.parse(localStorage.getItem('claudozzo_vibes_used') || '[]');
+      const v = btn.dataset.vibe;
+      if (!vibesUsedSet.includes(v)) {
+        vibesUsedSet.push(v);
+        localStorage.setItem('claudozzo_vibes_used', JSON.stringify(vibesUsedSet));
+        await setStat('vibes_used', vibesUsedSet.length);
+        checkAchievements();
+      }
+    };
+  }
+
+  // Register service worker for PWA
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+  }
+});
+
+// Hook into send() to track message count for achievements
+(function hookSend() {
+  const origSend = window.send;
+  if (!origSend) { setTimeout(hookSend, 100); return; }
+  window.send = async function() {
+    const input = document.getElementById('userInput');
+    if (input && input.value.trim()) {
+      incrementStat('messages_sent');
+      checkAchievements();
+    }
+    return origSend.apply(this, arguments);
+  };
+})();
 </script>
 
 </body>
