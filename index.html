@@ -516,6 +516,27 @@ body.vibes-minimized .vibe-btn:hover::after {
 }
 .draw-send-btn:hover { transform: scale(1.06) !important; filter: brightness(1.2) !important; }
 
+.draw-api-notice {
+  background: linear-gradient(135deg, rgba(255,107,61,0.15), rgba(255,59,48,0.1));
+  border: 1px solid rgba(255,107,61,0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: #ffd3b6;
+  line-height: 1.4;
+}
+.draw-api-notice .notice-icon { font-size: 1.4rem; flex-shrink: 0; }
+.draw-api-notice .notice-link {
+  color: #4d96ff;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 600;
+}
+.draw-api-notice .notice-link:hover { color: #7db5ff; }
+
 .draw-clear-btn {
   background: rgba(255,255,255,0.08) !important;
   color: #f0f0ff !important;
@@ -2384,6 +2405,8 @@ const translations = {
     draw_eraser: "Gomma",
     draw_clear: "Cancella",
     draw_send: "INVIA DISEGNO",
+    draw_api_notice: "Per far leggere il disegno all'AI, inserisci una API key Claude o OpenAI.",
+    draw_api_notice_link: "Inserisci chiave",
     chat_welcome: "Yo bro! Scegli la vibe e chiedimi qualsiasi cosa!",
     chat_welcome_strong: "Non ho paura di nulla fr fr",
     chat_blocked_warning: "Ehi bro, questo messaggio contiene parole che non vanno bene. Proviamo a essere più gentili!",
@@ -2473,6 +2496,8 @@ const translations = {
     draw_eraser: "Eraser",
     draw_clear: "Clear",
     draw_send: "SEND DRAWING",
+    draw_api_notice: "To let the AI read your drawing, add a Claude or OpenAI API key.",
+    draw_api_notice_link: "Add key",
     chat_welcome: "Yo bro! Pick a vibe and ask me anything!",
     chat_welcome_strong: "I'm not afraid of anything fr fr",
     chat_blocked_warning: "Hey bro, this message contains words that aren't ok. Let's be nicer!",
@@ -2562,6 +2587,8 @@ const translations = {
     draw_eraser: "Viskelæder",
     draw_clear: "Ryd",
     draw_send: "SEND TEGNING",
+    draw_api_notice: "For at AI'en kan læse din tegning, skal du tilføje en Claude eller OpenAI API-nøgle.",
+    draw_api_notice_link: "Tilføj nøgle",
     chat_welcome: "Yo bro! Vælg en vibe og spørg mig om hvad som helst!",
     chat_welcome_strong: "Jeg er ikke bange for noget fr fr",
     chat_blocked_warning: "Hey bro, denne besked indeholder ord, der ikke er ok. Lad os være pænere!",
@@ -2651,6 +2678,8 @@ const translations = {
     draw_eraser: "Suddgummi",
     draw_clear: "Rensa",
     draw_send: "SKICKA RITNING",
+    draw_api_notice: "För att AI:n ska kunna läsa din ritning, lägg till en Claude eller OpenAI API-nyckel.",
+    draw_api_notice_link: "Lägg till nyckel",
     chat_welcome: "Yo bro! Välj en vibe och fråga mig vad som helst!",
     chat_welcome_strong: "Jag är inte rädd för nåt fr fr",
     chat_blocked_warning: "Hej bro, det här meddelandet innehåller ord som inte är ok. Låt oss vara snällare!",
@@ -3997,6 +4026,10 @@ function hideLegal(type) {
       </div>
       <input type="range" class="draw-size-slider" id="drawSize" min="2" max="20" value="4" oninput="setDrawSize(this.value)">
     </div>
+    <div class="draw-api-notice" id="drawApiNotice" style="display:none;">
+      <span class="notice-icon">🔑</span>
+      <span><span data-i18n="draw_api_notice">Per far leggere il disegno all'AI, inserisci una API key Claude o OpenAI.</span> <span class="notice-link" onclick="closeDrawCanvas();openApiKeyModal();" data-i18n="draw_api_notice_link">Inserisci chiave</span></span>
+    </div>
     <canvas id="drawCanvas" width="460" height="340"></canvas>
     <div class="draw-actions">
       <button class="draw-clear-btn" onclick="clearDrawCanvas()">🗑️ <span data-i18n="draw_clear">Cancella</span></button>
@@ -4016,6 +4049,13 @@ function openDrawCanvas() {
   const overlay = document.getElementById('drawOverlay');
   if (!overlay) { console.error('drawOverlay not found'); return; }
   overlay.classList.add('active');
+
+  // Show API notice only if no key is configured
+  const notice = document.getElementById('drawApiNotice');
+  if (notice) {
+    notice.style.display = (!userApiKey && !apiAvailable) ? 'flex' : 'none';
+  }
+
   const canvas = document.getElementById('drawCanvas');
   if (!canvas) { console.error('drawCanvas not found'); return; }
   drawCtx = canvas.getContext('2d');
