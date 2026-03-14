@@ -400,9 +400,14 @@ body.vibes-minimized .vibe-btn:hover::after {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  animation: fadeIn 0.25s ease;
+  animation: drawFadeIn 0.25s ease;
 }
 .draw-overlay.active { display: flex; }
+
+@keyframes drawFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
 .draw-container {
   background: #1a1a2e;
@@ -524,12 +529,52 @@ body.vibes-minimized .vibe-btn:hover::after {
 }
 .draw-clear-btn:hover { border-color: #ff6b6b !important; color: #ff6b6b !important; }
 
-/* Drawing preview in chat */
-.msg .draw-preview {
-  max-width: 240px;
-  border-radius: 12px;
-  border: 2px solid rgba(255,255,255,0.1);
-  margin-top: 6px;
+/* Drawing artifact in chat */
+.artifact-drawing {
+  margin: 10px 0;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(10, 10, 30, 0.95);
+  overflow: hidden;
+}
+.artifact-drawing .artifact-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.artifact-drawing .draw-preview-wrap {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  background: rgba(255,255,255,0.03);
+}
+.artifact-drawing .draw-preview-img {
+  max-width: 100%;
+  max-height: 260px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.artifact-drawing .draw-preview-img:hover {
+  transform: scale(1.02);
+}
+.draw-fullscreen-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 25000;
+  background: rgba(0,0,0,0.92);
+  justify-content: center;
+  align-items: center;
+  cursor: zoom-out;
+}
+.draw-fullscreen-overlay.active { display: flex; }
+.draw-fullscreen-overlay img {
+  max-width: 92vw;
+  max-height: 90vh;
+  border-radius: 16px;
+  border: 2px solid rgba(255,255,255,0.15);
 }
 
 @media (max-width: 600px) {
@@ -3965,11 +4010,14 @@ function hideLegal(type) {
 let drawCtx, drawColor = '#222222', drawSize = 4, drawTool = 'pen';
 let isDrawing = false, lastX = 0, lastY = 0;
 let drawCanvasEmpty = true;
+let drawCanvasInitialized = false;
 
 function openDrawCanvas() {
   const overlay = document.getElementById('drawOverlay');
+  if (!overlay) { console.error('drawOverlay not found'); return; }
   overlay.classList.add('active');
   const canvas = document.getElementById('drawCanvas');
+  if (!canvas) { console.error('drawCanvas not found'); return; }
   drawCtx = canvas.getContext('2d');
 
   // Responsive canvas size
@@ -3979,16 +4027,17 @@ function openDrawCanvas() {
 
   clearDrawCanvas();
 
-  // Mouse events
-  canvas.addEventListener('mousedown', drawStart);
-  canvas.addEventListener('mousemove', drawMove);
-  canvas.addEventListener('mouseup', drawEnd);
-  canvas.addEventListener('mouseleave', drawEnd);
-
-  // Touch events
-  canvas.addEventListener('touchstart', drawTouchStart, { passive: false });
-  canvas.addEventListener('touchmove', drawTouchMove, { passive: false });
-  canvas.addEventListener('touchend', drawEnd);
+  // Bind events only once
+  if (!drawCanvasInitialized) {
+    drawCanvasInitialized = true;
+    canvas.addEventListener('mousedown', drawStart);
+    canvas.addEventListener('mousemove', drawMove);
+    canvas.addEventListener('mouseup', drawEnd);
+    canvas.addEventListener('mouseleave', drawEnd);
+    canvas.addEventListener('touchstart', drawTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', drawTouchMove, { passive: false });
+    canvas.addEventListener('touchend', drawEnd);
+  }
 }
 
 function closeDrawCanvas() {
@@ -4098,13 +4147,19 @@ async function sendDrawing() {
   const welcome = msgs.querySelector('.welcome');
   if (welcome) welcome.remove();
 
-  // Show drawing preview in chat
+  // Show drawing as artifact card in chat
   const uMsg = document.createElement('div');
   uMsg.className = 'msg user';
-  const preview = document.createElement('img');
-  preview.src = imageData;
-  preview.className = 'draw-preview';
-  uMsg.appendChild(preview);
+  const drawId = 'draw-' + Date.now();
+  uMsg.innerHTML = `<div class="artifact artifact-drawing">
+    <div class="artifact-header">
+      <span>✏️ ${t('draw_title')}</span>
+      <button onclick="showDrawFullscreen('${drawId}')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:'Baloo 2',cursive;font-size:0.8rem;">🔍 Zoom</button>
+    </div>
+    <div class="draw-preview-wrap">
+      <img src="${imageData}" class="draw-preview-img" id="${drawId}" onclick="showDrawFullscreen('${drawId}')" alt="Disegno" />
+    </div>
+  </div>`;
   msgs.appendChild(uMsg);
   msgs.scrollTop = msgs.scrollHeight;
 
@@ -4243,6 +4298,21 @@ function fakeDrawReply() {
     anime: "NANI?! Questo disegno... SUGOI!! ✨💫 Senpai noterebbe sicuramente il tuo talento! È come un frame da un anime shonen!! Ganbatte, continua a disegnare nakama! 🎌"
   };
   return replies[currentVibe] || replies.roblox;
+}
+
+function showDrawFullscreen(imgId) {
+  const img = document.getElementById(imgId);
+  if (!img) return;
+  let overlay = document.getElementById('drawFullscreenOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'drawFullscreenOverlay';
+    overlay.className = 'draw-fullscreen-overlay';
+    overlay.onclick = function() { this.classList.remove('active'); };
+    document.body.appendChild(overlay);
+  }
+  overlay.innerHTML = `<img src="${img.src}" alt="Disegno ingrandito" />`;
+  overlay.classList.add('active');
 }
 </script>
 
