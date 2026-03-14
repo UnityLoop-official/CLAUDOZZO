@@ -611,6 +611,31 @@ body.vibes-minimized .vibe-btn:hover::after {
   .draw-color-btn { width: 24px; height: 24px; }
 }
 
+/* ==================== DOWNLOAD BUTTONS ==================== */
+.artifact-download-bar {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.03);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  flex-wrap: wrap;
+}
+.artifact-dl-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #c0c0e0;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 0.72rem;
+  font-family: 'Baloo 2', cursive;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.artifact-dl-btn:hover { background: rgba(77,150,255,0.2); border-color: #4d96ff; color: #fff; }
+
 /* ==================== STICKER PICKER ==================== */
 .sticker-btn {
   background: linear-gradient(135deg, #ffd93d, #ff6b9d) !important;
@@ -3940,7 +3965,10 @@ function renderQuiz(json) {
     const data = JSON.parse(json);
     const quizId = 'quiz-' + Date.now();
     let html = `<div class="artifact artifact-quiz" id="${quizId}">
-      <div class="artifact-header">${escapeHtml(data.title || 'Quiz')}</div>`;
+      <div class="artifact-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>${escapeHtml(data.title || 'Quiz')}</span>
+        <button class="artifact-dl-btn" onclick="dlQuiz('${quizId}')">💾 HTML</button>
+      </div>`;
     data.questions.forEach((q, qi) => {
       html += `<div class="quiz-question" data-qi="${qi}">
         <div class="quiz-q">${qi + 1}. ${escapeHtml(q.q)}</div>
@@ -3972,10 +4000,138 @@ function checkQuiz(btn, isCorrect, quizId) {
   quiz.querySelector('.score-val').textContent = score;
 }
 
+// --- DOWNLOAD HELPERS ---
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function downloadText(content, filename, mime) {
+  downloadBlob(new Blob([content], { type: mime || 'text/plain' }), filename);
+}
+
+function downloadDataUrl(dataUrl, filename) {
+  const a = document.createElement('a');
+  a.href = dataUrl;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+// Store artifact content for downloads
+window._artifactContent = window._artifactContent || {};
+
+function dlSvg(id, format) {
+  const content = window._artifactContent[id];
+  if (!content) return;
+  if (format === 'svg') {
+    downloadText(content, 'claudozzo-disegno.svg', 'image/svg+xml');
+  } else if (format === 'png') {
+    const svgEl = document.querySelector('#' + id + ' svg');
+    if (!svgEl) return;
+    const canvas = document.createElement('canvas');
+    const bbox = svgEl.getBoundingClientRect();
+    canvas.width = bbox.width * 2;
+    canvas.height = bbox.height * 2;
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    const svgData = new XMLSerializer().serializeToString(svgEl);
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      downloadDataUrl(canvas.toDataURL('image/png'), 'claudozzo-disegno.png');
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+  }
+}
+
+function dlGame(gameId) {
+  const content = window._gameHtmlStore && window._gameHtmlStore[gameId];
+  if (!content) return;
+  downloadText(content, 'claudozzo-gioco.html', 'text/html');
+}
+
+function dlCode(id, lang) {
+  const code = document.querySelector('#' + id + ' code');
+  if (!code) return;
+  const ext = { lua: 'lua', python: 'py', javascript: 'js', html: 'html', css: 'css', java: 'java' }[lang] || 'txt';
+  downloadText(code.textContent, 'claudozzo-codice.' + ext, 'text/plain');
+}
+
+function dlChecklist(id) {
+  const items = document.querySelectorAll('#' + id + ' .checklist-item span');
+  const title = document.querySelector('#' + id + ' .artifact-header');
+  let text = (title ? title.textContent : 'Checklist') + '\n' + '='.repeat(30) + '\n\n';
+  items.forEach((item, i) => {
+    const checked = item.parentElement.querySelector('input').checked;
+    text += `${checked ? '[x]' : '[ ]'} ${item.textContent}\n`;
+  });
+  downloadText(text, 'claudozzo-checklist.txt', 'text/plain');
+}
+
+function dlQuiz(quizId) {
+  const el = document.getElementById(quizId);
+  if (!el) return;
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Claudozzo Quiz</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:sans-serif;background:#1a1a2e;color:#f0f0ff;padding:20px;max-width:600px;margin:0 auto}
+h1{text-align:center;margin:20px 0;font-size:1.5rem}.q{background:rgba(255,255,255,0.06);border-radius:12px;padding:16px;margin:12px 0}
+.q-title{font-weight:700;margin-bottom:10px}.opt{display:block;width:100%;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);
+border-radius:10px;padding:10px 16px;color:#f0f0ff;font-size:0.9rem;cursor:pointer;margin:6px 0;text-align:left}
+.opt:hover{border-color:#4d96ff;background:rgba(77,150,255,0.15)}.correct{background:rgba(107,203,119,0.2)!important;border-color:#6bcb77!important}
+.wrong{background:rgba(255,107,107,0.2)!important;border-color:#ff6b6b!important}</style></head><body>
+<h1>${escapeHtml(el.querySelector('.artifact-header span')?.textContent || 'Quiz')}</h1>`;
+  const questions = el.querySelectorAll('.quiz-question');
+  let body = '';
+  questions.forEach((q, i) => {
+    const qText = q.querySelector('.quiz-q').textContent;
+    body += `<div class="q"><div class="q-title">${escapeHtml(qText)}</div>`;
+    q.querySelectorAll('.quiz-opt').forEach(opt => {
+      const isCorrect = opt.dataset.correct === 'true';
+      body += `<button class="opt" onclick="this.classList.add(${isCorrect}?'correct':'wrong');if(${isCorrect})this.textContent+=' ✓'">${escapeHtml(opt.textContent)}</button>`;
+    });
+    body += '</div>';
+  });
+  downloadText(html + body + '</body></html>', 'claudozzo-quiz.html', 'text/html');
+}
+
+function dlDrawingFromChat(imgId, format) {
+  const img = document.getElementById(imgId);
+  if (!img) return;
+  if (format === 'png') {
+    downloadDataUrl(img.src, 'claudozzo-disegno.png');
+  } else if (format === 'jpg') {
+    const canvas = document.createElement('canvas');
+    const imgEl = new Image();
+    imgEl.onload = () => {
+      canvas.width = imgEl.naturalWidth;
+      canvas.height = imgEl.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(imgEl, 0, 0);
+      downloadDataUrl(canvas.toDataURL('image/jpeg', 0.92), 'claudozzo-disegno.jpg');
+    };
+    imgEl.src = img.src;
+  }
+}
+
 // --- SVG ---
 function renderSvg(svgContent) {
   const cleaned = svgContent.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/\bon\w+\s*=/gi, 'data-blocked=');
-  return `<div class="artifact artifact-svg">${cleaned}</div>`;
+  const svgId = 'svg-' + Date.now();
+  window._artifactContent[svgId] = cleaned;
+  return `<div class="artifact artifact-svg" id="${svgId}">${cleaned}
+    <div class="artifact-download-bar">
+      <button class="artifact-dl-btn" onclick="dlSvg('${svgId}','svg')">💾 SVG</button>
+      <button class="artifact-dl-btn" onclick="dlSvg('${svgId}','png')">🖼️ PNG</button>
+    </div>
+  </div>`;
 }
 
 // --- GAME ---
@@ -3993,7 +4149,10 @@ function renderGame(htmlContent) {
   return `<div class="artifact artifact-game">
     <div class="artifact-header" style="display:flex;justify-content:space-between;align-items:center;">
       <span>Mini Game</span>
-      <button onclick="openArtifactPanel('${gameId}','Mini Game')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:'Baloo 2',cursive;font-size:0.8rem;">Apri pannello ▸</button>
+      <div style="display:flex;gap:6px;">
+        <button class="artifact-dl-btn" onclick="dlGame('${gameId}')">💾 HTML</button>
+        <button onclick="openArtifactPanel('${gameId}','Mini Game')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:'Baloo 2',cursive;font-size:0.8rem;">Apri pannello ▸</button>
+      </div>
     </div>
     <iframe id="${gameId}" sandbox="allow-scripts allow-modals allow-popups" class="game-iframe" style="width:100%;height:300px;border:none;border-radius:0 0 12px 12px;background:#111;"></iframe>
   </div>`;
@@ -4059,10 +4218,14 @@ function renderCode(content) {
     lang = lines[0].replace('lang=', '').trim();
     code = lines.slice(1).join('\n');
   }
+  const codeId = 'code-' + Date.now();
   const highlighted = highlightSyntax(escapeHtml(code), lang);
-  return `<div class="artifact artifact-code">
+  return `<div class="artifact artifact-code" id="${codeId}">
     <div class="code-header"><span class="code-lang">${lang}</span>
-      <button class="code-copy" onclick="copyCode(this)">Copia</button></div>
+      <div style="display:flex;gap:6px;">
+        <button class="artifact-dl-btn" onclick="dlCode('${codeId}','${lang}')">💾 Scarica</button>
+        <button class="code-copy" onclick="copyCode(this)">Copia</button>
+      </div></div>
     <pre><code>${highlighted}</code></pre>
   </div>`;
 }
@@ -4094,7 +4257,10 @@ function renderChecklist(json) {
     const data = JSON.parse(json);
     const id = 'cl-' + Date.now();
     let html = `<div class="artifact artifact-checklist" id="${id}">
-      <div class="artifact-header">${escapeHtml(data.title || 'Checklist')}</div>
+      <div class="artifact-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>${escapeHtml(data.title || 'Checklist')}</span>
+        <button class="artifact-dl-btn" onclick="dlChecklist('${id}')">💾 TXT</button>
+      </div>
       <div class="checklist-progress"><div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
         <span class="progress-text">0/${data.items.length}</span></div>
       <div class="checklist-items">`;
@@ -4597,6 +4763,10 @@ async function sendDrawing() {
     <div class="draw-preview-wrap">
       <img src="${imageData}" class="draw-preview-img" id="${drawId}" onclick="showDrawFullscreen('${drawId}')" alt="Disegno" />
     </div>
+    <div class="artifact-download-bar">
+      <button class="artifact-dl-btn" onclick="dlDrawingFromChat('${drawId}','png')">💾 PNG</button>
+      <button class="artifact-dl-btn" onclick="dlDrawingFromChat('${drawId}','jpg')">🖼️ JPG</button>
+    </div>
   </div>`;
   msgs.appendChild(uMsg);
   msgs.scrollTop = msgs.scrollHeight;
@@ -4847,7 +5017,10 @@ async function openGallery() {
       <img src="${d.image}" alt="Disegno" onclick="showDrawFullscreen('gallery-img-${d.id}')" id="gallery-img-${d.id}" />
       <div class="gallery-card-info">
         <span>${new Date(d.date).toLocaleDateString()} ${d.vibe || ''}</span>
-        <button class="gallery-card-delete" onclick="event.stopPropagation();deleteDrawing(${d.id})" title="Elimina">🗑️</button>
+        <div style="display:flex;gap:4px;">
+          <button class="gallery-card-delete" onclick="event.stopPropagation();dlDrawingFromChat('gallery-img-${d.id}','png')" title="Scarica">💾</button>
+          <button class="gallery-card-delete" onclick="event.stopPropagation();deleteDrawing(${d.id})" title="Elimina">🗑️</button>
+        </div>
       </div>
     </div>
   `).join('');
